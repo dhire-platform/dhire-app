@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Squeeze as Hamburger } from 'hamburger-react';
 import Switch from '../../buttons/DarkModeSwitch';
+import Phantom from './Phantom';
 
 const Navbar = () => {
   const { isOpen, onToggle, onClose } = useDisclosure();
@@ -24,10 +25,10 @@ const Navbar = () => {
     <Center
       display='flex'
       flexDirection='column'
-      p={{ base: '1rem 2rem', sm: '1rem 2rem', md: '1rem 3rem' }}
+      p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
     >
       <Flex
-        maxW={'6xl'}
+        maxW={'7xl'}
         w={'100%'}
         h={20}
         alignItems={'center'}
@@ -126,10 +127,13 @@ const Navbar = () => {
                 </Center>
               </Link>
             </Center>
-            <Center display={{ base: 'none', lg: 'flex' }}>
+            {/* <Center display={{ base: 'none', lg: 'flex' }}>
               <Switch />
-            </Center>
-            <Button size={['sm', 'md']}>Connect Wallet</Button>
+            </Center> */}
+            <Button size={['sm', 'md']} display='flex' gap={'1rem'}>
+              Connect Wallet
+              <Phantom />
+            </Button>
           </Flex>
         </nav>
       </Flex>
@@ -138,10 +142,9 @@ const Navbar = () => {
           display={{ base: 'flex', lg: 'none' }}
           flexDirection='column'
           alignItems='start'
-          fontSize='lg'
-          p='2rem'
+          fontSize='22px'
+          p='2rem 1rem'
           gap='1.4rem'
-          fontWeight='500'
         >
           <Link href='/about'>
             <Box
@@ -154,7 +157,7 @@ const Navbar = () => {
               _hover={{
                 color: 'grey',
               }}
-              fontWeight={router.pathname === '/about' ? '600' : '400'}
+              fontWeight='500'
             >
               About
             </Box>
@@ -176,7 +179,7 @@ const Navbar = () => {
                 _hover={{
                   color: 'grey',
                 }}
-                fontWeight={router.pathname === '/job' ? '600' : '400'}
+                fontWeight='500'
               >
                 Job Hunt
               </Box>
@@ -202,7 +205,7 @@ const Navbar = () => {
               _hover={{
                 color: 'grey',
               }}
-              fontWeight={router.pathname === '/hire' ? '600' : '400'}
+              fontWeight='500'
             >
               Hire Talent
             </Box>
@@ -211,14 +214,14 @@ const Navbar = () => {
             display='flex'
             alignItems='center'
             justifyContent='space-between'
-            w='80vw'
+            w='84vw'
             as='button'
             transition={'all 0.3s ease'}
-            fontWeight={router.pathname === 'hire' ? '800' : '400'}
           >
-            {useColorModeValue('Dark Mode', 'Light Mode')}
-            <Switch />
+            {/* {useColorModeValue('Dark Mode', 'Light Mode')}
+            <Switch /> */}
           </Box>
+          <Box w='100%' h='0.09rem' bg='gray.500' />
         </Flex>
         <Divider />
       </Collapse>
