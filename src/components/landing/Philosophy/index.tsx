@@ -11,7 +11,7 @@ import React from 'react';
 
 const Philosophy = () => {
   return (
-    <Container maxW='6xl' py='8rem'>
+    <Container maxW='6xl' py='9rem'>
       <Center alignItems='center' gap='1rem' flexDirection={'column'}>
         <Heading
           maxW='4xl'

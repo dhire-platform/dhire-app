@@ -2,6 +2,7 @@ import { Box, Container, useColorModeValue } from '@chakra-ui/react';
 import Navbar from '../components/navigation/navbar/index';
 import { ChildInterface } from '@/interfaces/children/child.interface';
 import Background from './Background';
+import Footer from './navigation/footer';
 
 const Layout = ({ children }: ChildInterface) => {
   return (
@@ -17,6 +18,7 @@ const Layout = ({ children }: ChildInterface) => {
       <Background />
       <Navbar />
       {children}
+      <Footer />
     </Container>
   );
 };
