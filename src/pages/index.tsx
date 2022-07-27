@@ -5,6 +5,8 @@ import ChooseUs from 'src/components/landing/ChooseUs';
 import Hero from 'src/components/landing/Hero/Hero';
 import Scroll from 'src/components/landing/Hero/Scroll';
 import Philosophy from 'src/components/landing/Philosophy';
+import Section1 from 'src/components/landing/Sections/Section1';
+import Section2 from 'src/components/landing/Sections/Section2';
 import SEO from 'src/components/SEO/SEO';
 
 const Home: NextPage = () => {
@@ -20,6 +22,8 @@ const Home: NextPage = () => {
         <Scroll />
         <ChooseUs />
         <Philosophy />
+        <Section1 />
+        <Section2 />
       </Container>
     </div>
   );

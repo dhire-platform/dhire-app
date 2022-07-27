@@ -16,7 +16,6 @@ const Background = () => {
         maxW='130rem'
         position={'absolute'}
         zIndex='-1'
-        border='2px solid red'
         overflow='hidden'
         h='100%'
         pt='20rem'
@@ -70,7 +69,7 @@ const Background = () => {
         <Box
           bg='white'
           position={'absolute'}
-          top={['38%', '38%', '20%']}
+          top={['38%', '38%', '15%']}
           left={['20%', '20%', '-20%']}
           opacity='0.35'
           w={['105rem', '105rem', '130rem']}
@@ -80,8 +79,8 @@ const Background = () => {
         />
         <Box
           position='absolute'
-          top={['5%', '5%', '58%']}
-          left={['-165%', '-165%', '48%']}
+          top={['5%', '5%', '45%']}
+          left={['-165%', '-165%', '40%']}
           bg='white'
           opacity='0.35'
           w={['105rem', '105rem', '130rem']}
@@ -98,6 +97,75 @@ const Background = () => {
             width: '50rem',
             height: '70rem',
             opacity: '0.35',
+            borderRadius: '50%',
+            filter: 'blur(200px)',
+            zIndex: '-1',
+            border: '2px solid red',
+          }}
+        />
+        <Box
+          // blue blurr
+          _after={{
+            content: '""',
+            position: 'absolute',
+            background: '#F5CAFC',
+            top: `${isLargerThan720 ? 'calc(205vh - 10rem)' : '-12rem'}`,
+            left: `${isLargerThan720 ? '0' : '20rem'}`,
+            width: '30rem',
+            height: '30rem',
+            opacity: '0.4',
+            borderRadius: '50%',
+            filter: 'blur(100px)',
+            zIndex: '-1',
+          }}
+        ></Box>
+        <Box
+          _after={{
+            content: '""',
+            position: 'absolute',
+            background: '#7EF9FF', //
+            top: 'calc(205vh + 40rem)',
+            left: '10rem',
+            width: `${isLargerThan720 ? '40rem' : '30rem'}`,
+            height: `${isLargerThan720 ? '30rem' : '20rem'}`,
+            opacity: '0.35',
+            borderRadius: '50%',
+            filter: 'blur(130px)',
+            zIndex: '-1',
+            border: '2px solid red',
+          }}
+        />
+        <Box
+          bg='white'
+          position={'absolute'}
+          top={['38%', '38%', 'calc(15% + 200vh)']}
+          left={['20%', '20%', '-25%']}
+          opacity='0.35'
+          w={['105rem', '105rem', '130rem']}
+          h={['16rem', '16rem', '22rem']}
+          transform={['rotate(55deg)', 'rotate(55deg)', 'rotate(45deg)']}
+          // blur circle
+        />
+        <Box
+          position='absolute'
+          top={['5%', '5%', 'calc(45% + 200vh)']}
+          left={['-165%', '-165%', '35%']}
+          bg='white'
+          opacity='0.35'
+          w={['105rem', '105rem', '130rem']}
+          h={['16rem', '16rem', '22rem']}
+          transform={['rotate(55deg)', 'rotate(55deg)', 'rotate(45deg)']}
+        ></Box>
+        <Box
+          _after={{
+            content: '""',
+            position: 'absolute',
+            background: '#027FFE',
+            bottom: '5%',
+            right: '0',
+            width: '50rem',
+            height: '70rem',
+            opacity: '0.25',
             borderRadius: '50%',
             filter: 'blur(200px)',
             zIndex: '-1',
