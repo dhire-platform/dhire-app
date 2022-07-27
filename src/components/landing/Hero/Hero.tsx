@@ -6,10 +6,21 @@ import {
   Flex,
   Heading,
   HStack,
+  keyframes,
   Stack,
   Text,
   VStack,
 } from '@chakra-ui/react';
+
+const animationKeyframes = keyframes`
+  from {
+    background-position: 0 0;
+  to {
+    background-position: 100% 100%;
+  }
+`;
+const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
+const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 
 const Hero = () => {
   return (
@@ -25,8 +36,11 @@ const Hero = () => {
           Find a
           <Box
             as='span'
-            bgGradient='linear(to-l, #6AADF1, #6B79D2)'
+            bgGradient='linear( to-r, #6AADF1, #81F2F8, #7D8FFF, #6AADF1)'
             bgClip='text'
+            backgroundPosition={'-100%'}
+            backgroundSize={'300%'}
+            animation={animation1}
           >
             {' '}
             Job{' '}
@@ -34,8 +48,11 @@ const Hero = () => {
           that matches your{' '}
           <Box
             as='span'
-            bgGradient='linear(to-l, #6AADF1, #6B79D2)'
+            bgGradient='linear(to-l, #6AADF1, #81F2F8, #7D8FFF, #6AADF1)'
             bgClip='text'
+            backgroundPosition={'-100%'}
+            backgroundSize={'300%'}
+            animation={animation2}
           >
             Passion
           </Box>
