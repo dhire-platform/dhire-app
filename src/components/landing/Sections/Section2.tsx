@@ -44,7 +44,7 @@ const Section2 = () => {
           position='relative'
         >
           <Image
-            src='/assets/Saly.png'
+            src='/assets/Saly.webp'
             alt='saly'
             layout='fill'
             objectFit='contain'
