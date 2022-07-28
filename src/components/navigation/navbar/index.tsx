@@ -15,8 +15,10 @@ import { useRouter } from 'next/router';
 import { Slant as Hamburger } from 'hamburger-react';
 import Switch from '../../buttons/DarkModeSwitch';
 import Phantom from './Phantom';
+import { useState } from 'react';
 
 const Navbar = () => {
+  const [hover, setHover] = useState(0);
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   const router = useRouter();
@@ -89,8 +91,22 @@ const Navbar = () => {
                 <Box
                   as='button'
                   transition={'all 0.3s ease'}
-                  _hover={{
-                    color: 'grey',
+                  onMouseEnter={() => setHover(1)}
+                  onMouseLeave={() => setHover(0)}
+                  _before={{
+                    content: `''`,
+                    width: '5px',
+                    height: '5px',
+                    position: 'absolute',
+                    borderRadius: '50%',
+                    transform: `${
+                      hover === 1
+                        ? 'translate(1.4rem, 2.5rem)'
+                        : 'translate(1.4rem, 5rem)'
+                    }`,
+                    transition: 'all 0.1s ease',
+                    opacity: `${hover === 1 ? '1' : '0'}`,
+                    bg: 'black',
                   }}
                 >
                   About
@@ -101,8 +117,22 @@ const Navbar = () => {
                   <Box
                     as='button'
                     transition={'all 0.3s ease'}
-                    _hover={{
-                      color: 'grey',
+                    onMouseEnter={() => setHover(2)}
+                    onMouseLeave={() => setHover(0)}
+                    _before={{
+                      content: `''`,
+                      width: '5px',
+                      height: '5px',
+                      position: 'absolute',
+                      borderRadius: '50%',
+                      transform: `${
+                        hover === 2
+                          ? 'translate(2.5rem, 2.5rem)'
+                          : 'translate(2.5rem, 5rem)'
+                      }`,
+                      transition: 'all 0.1s ease',
+                      opacity: `${hover === 2 ? '1' : '0'}`,
+                      bg: 'black',
                     }}
                   >
                     Job Hunt
@@ -128,8 +158,22 @@ const Navbar = () => {
                   <Box
                     as='button'
                     transition={'all 0.3s ease'}
-                    _hover={{
-                      color: 'grey',
+                    onMouseEnter={() => setHover(3)}
+                    onMouseLeave={() => setHover(0)}
+                    _before={{
+                      content: `''`,
+                      width: '5px',
+                      height: '5px',
+                      position: 'absolute',
+                      borderRadius: '50%',
+                      transform: `${
+                        hover === 3
+                          ? 'translate(2.8rem, 2.5rem)'
+                          : 'translate(2.8rem, 5rem)'
+                      }`,
+                      transition: 'all 0.1s ease',
+                      opacity: `${hover === 3 ? '1' : '0'}`,
+                      bg: 'black',
                     }}
                   >
                     Hire Talent
