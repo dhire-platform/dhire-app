@@ -15,7 +15,7 @@ const Home: NextPage = () => {
       <SEO
         title={`${config.general.name}`}
         description={`${config.general.name} is a decentralized hiring platform`}
-        image={``}
+        image={`https://solana.ghost.io/content/images/2022/06/solana-network-upgrades.png`}
       />
       <Container maxW='full' p='0'>
         <Hero />
