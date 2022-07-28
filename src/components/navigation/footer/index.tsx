@@ -1,14 +1,41 @@
 import {
   Box,
   Center,
+  chakra,
   Container,
   Divider,
   Flex,
   Heading,
   HStack,
+  Stack,
   Text,
+  VisuallyHidden,
   VStack,
 } from '@chakra-ui/react';
+import { RiTwitterFill, RiLinkedinFill } from 'react-icons/ri';
+import { SiDiscord } from 'react-icons/si';
+
+const SocialButton = ({ children, label, href }: any) => {
+  return (
+    <chakra.button
+      w={['8', '10', '12']}
+      h={['8', '10', '12']}
+      cursor={'pointer'}
+      as={'a'}
+      href={href}
+      display={'inline-flex'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      transition={'all 0.3s ease'}
+      _hover={{
+        color: 'grey',
+      }}
+    >
+      <VisuallyHidden>{label}</VisuallyHidden>
+      {children}
+    </chakra.button>
+  );
+};
 
 const Footer = () => {
   return (
@@ -26,6 +53,17 @@ const Footer = () => {
             D-Hire is on a mission to enhance applicant’s experience and making
             it dead simple for leading recruiters to hire top tech talent.
           </Text>
+          <Stack direction={'row'} spacing='1rem'>
+            <SocialButton label={'Twitter'} href={'#'}>
+              <RiTwitterFill size={['30']} />
+            </SocialButton>
+            <SocialButton label={'Discord'} href={'#'}>
+              <SiDiscord size={30} />
+            </SocialButton>
+            <SocialButton as={'a'} label={'LinkedIn'} href={'#'}>
+              <RiLinkedinFill size={30} />
+            </SocialButton>
+          </Stack>
         </VStack>
         <Flex
           flexDirection={['column-reverse', 'column-reverse', 'row']}
