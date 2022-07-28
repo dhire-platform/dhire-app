@@ -55,7 +55,7 @@ const Footer = () => {
           </Text>
           <Stack direction={'row'} spacing='1rem'>
             <SocialButton label={'Twitter'} href={'#'}>
-              <RiTwitterFill size={['30']} />
+              <RiTwitterFill size={'30'} />
             </SocialButton>
             <SocialButton label={'Discord'} href={'#'}>
               <SiDiscord size={30} />
