@@ -8,11 +8,11 @@ import {
   useColorModeValue,
   Button,
   Badge,
-  Divider,
+  ScaleFade,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Squeeze as Hamburger } from 'hamburger-react';
+import { Slant as Hamburger } from 'hamburger-react';
 import Switch from '../../buttons/DarkModeSwitch';
 import Phantom from './Phantom';
 
@@ -42,6 +42,21 @@ const Navbar = () => {
             duration={0.4}
             rounded
           />
+
+          <ScaleFade initialScale={0} in={!isOpen}>
+            <Badge
+              px='0.4rem'
+              variant={'solid'}
+              rounded={'full'}
+              bg='#FD6444'
+              fontSize='sm'
+              position='absolute'
+              transform='translate(-0.75rem, -1.1rem)'
+              transition={'all 0.3s ease'}
+            >
+              2
+            </Badge>
+          </ScaleFade>
         </Center>
         <Link href='/'>
           <Box
@@ -92,16 +107,20 @@ const Navbar = () => {
                   >
                     Job Hunt
                   </Box>
-                  <Badge
-                    position='absolute'
-                    px='0.4rem'
-                    transform='translate(2.5rem, -1rem)'
-                    variant={'solid'}
-                    rounded={'full'}
-                    bg='#FD6444'
-                  >
-                    2
-                  </Badge>
+                  <ScaleFade initialScale={0} in={!isOpen}>
+                    <Badge
+                      px='0.35rem'
+                      variant={'solid'}
+                      rounded={'full'}
+                      bg='#FD6444'
+                      fontSize='xs'
+                      position='absolute'
+                      transform='translate(-0.1rem, -1.1rem)'
+                      transition={'all 0.3s ease'}
+                    >
+                      2
+                    </Badge>
+                  </ScaleFade>
                 </Center>
               </Link>
               <Link href='/hire'>
@@ -223,7 +242,6 @@ const Navbar = () => {
           </Box>
           <Box w='100%' h='0.09rem' bg='gray.500' />
         </Flex>
-        <Divider />
       </Collapse>
     </Center>
   );

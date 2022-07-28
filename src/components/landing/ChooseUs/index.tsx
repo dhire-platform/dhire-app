@@ -63,9 +63,13 @@ const ChooseUs = () => {
 
   return (
     <Container maxW='6xl' py='8rem'>
-      <Flex justify='space-between'>
+      <Flex
+        justify='space-between'
+        flexDirection={{ base: 'column', md: 'row' }}
+        alignItems='center'
+      >
         <Center
-          w={{ base: '15rem', md: '25rem' }}
+          w={{ base: '22rem', md: '25rem' }}
           minH='25rem'
           position='relative'
         >
@@ -77,8 +81,10 @@ const ChooseUs = () => {
           />
         </Center>
         <Center
+          p='1rem'
           ref={ref}
-          alignItems='start'
+          alignItems={{ base: 'center', md: 'start' }}
+          textAlign={{ base: 'center', md: 'start' }}
           gap='1.2rem'
           flexDirection={'column'}
         >
