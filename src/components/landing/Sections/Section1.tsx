@@ -14,17 +14,23 @@ const Section1 = () => {
   return (
     <Container maxW='6xl'>
       <Flex
-        flexDir={'row-reverse'}
+        flexDir={{ base: 'column', md: 'row-reverse' }}
         alignItems={'center'}
         justifyContent='space-around'
       >
-        <Center alignItems='start' gap='0.7rem' flexDirection={'column'}>
+        <Center
+          alignItems={{ base: 'center', md: 'start' }}
+          gap='0.7rem'
+          flexDirection={'column'}
+          p='2rem'
+          textAlign={{ base: 'center', md: 'start' }}
+        >
           <Heading fontSize={['32px', '42px', '42px']}>
             Access the work you love
           </Heading>
           <Text
             maxW='36rem'
-            fontSize={['', '', '26px']}
+            fontSize={['20px', '22px', '26px']}
             fontWeight='500'
             color='#686868'
           >
@@ -33,7 +39,7 @@ const Section1 = () => {
           <Button>Start Hunting</Button>
         </Center>
         <Center
-          w={{ base: '15rem', md: '20rem' }}
+          w={{ base: '20rem', md: '20rem' }}
           minH='20rem'
           position='relative'
         >

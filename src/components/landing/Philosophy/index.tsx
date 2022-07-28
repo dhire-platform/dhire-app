@@ -17,6 +17,7 @@ const Philosophy = () => {
           maxW='4xl'
           textAlign={'center'}
           fontSize={['34px', '38px', '60px']}
+          px='1rem'
         >
           D-Hire is based of key philosophies
         </Heading>
@@ -27,7 +28,12 @@ const Philosophy = () => {
           alignItems={'start'}
           py={['4rem', '5rem', '8rem']}
         >
-          <VStack p='3rem' alignItems={'start'} gap='0.3rem'>
+          <VStack
+            p='3rem'
+            alignItems={{ base: 'center', md: 'start' }}
+            textAlign={{ base: 'center', md: 'start' }}
+            gap='0.3rem'
+          >
             <Center w='3rem' h='3rem' mb='1rem'>
               <svg
                 viewBox='0 0 63 63'
@@ -150,13 +156,18 @@ const Philosophy = () => {
             >
               Decentralization
             </Heading>
-            <Text maxW={['20vw', '24rem', '24rem']}>
+            <Text maxW={['80vw', '24rem', '24rem']}>
               Your data/application will not be held on huge central servers
               owned by giant organisations, with D-Hire, your data/application
               will be stored on IPFS.
             </Text>
           </VStack>
-          <VStack p='3rem' alignItems={'start'} gap='0.3rem'>
+          <VStack
+            p='3rem'
+            alignItems={{ base: 'center', md: 'start' }}
+            textAlign={{ base: 'center', md: 'start' }}
+            gap='0.3rem'
+          >
             <Center w='2.5rem' h='2.5rem' mb='1rem'>
               <svg
                 viewBox='0 0 42 49'
@@ -228,7 +239,12 @@ const Philosophy = () => {
               business… not ours!
             </Text>
           </VStack>
-          <VStack p='3rem' alignItems={'start'} gap='0.3rem'>
+          <VStack
+            p='3rem'
+            alignItems={{ base: 'center', md: 'start' }}
+            textAlign={{ base: 'center', md: 'start' }}
+            gap='0.3rem'
+          >
             <Center w='3rem' h='3rem' mb='1rem'>
               <svg
                 viewBox='0 0 63 63'
@@ -357,7 +373,12 @@ const Philosophy = () => {
               will be stored on IPFS.
             </Text>
           </VStack>
-          <VStack p='3rem' alignItems={'start'} gap='0.3rem'>
+          <VStack
+            p='3rem'
+            alignItems={{ base: 'center', md: 'start' }}
+            textAlign={{ base: 'center', md: 'start' }}
+            gap='0.3rem'
+          >
             <Center w='3rem' h='3rem' mb='1rem'>
               <svg
                 viewBox='0 0 63 71'

@@ -25,7 +25,11 @@ const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 const Hero = () => {
   return (
     <Container maxW='6xl' py={['8rem', '11rem']}>
-      <VStack textAlign={'center'} gap={['1rem', '1.5rem', '2rem']}>
+      <VStack
+        px={{ base: '1rem', md: '0rem' }}
+        textAlign={'center'}
+        gap={['1rem', '1.5rem', '2rem']}
+      >
         <Heading
           maxW='60rem'
           fontWeight={'800'}

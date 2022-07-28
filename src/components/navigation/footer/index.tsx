@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   Container,
   Divider,
@@ -11,9 +12,14 @@ import {
 
 const Footer = () => {
   return (
-    <Container maxW='85rem' pt='6rem'>
-      <Divider />
-      <Flex flexDirection={['column', 'row']} justify='space-between' py='6rem'>
+    <Container maxW='85rem' pt='6rem' px='2rem'>
+      <Box w='100%' h='0.09rem' bg='gray.500' />
+      <Flex
+        gap='4rem'
+        flexDirection={['column', 'row']}
+        justify='space-between'
+        py='6rem'
+      >
         <VStack alignItems={'start'}>
           <Heading>D-Hire.</Heading>
           <Text color='#686868' maxW='25rem'>
@@ -21,7 +27,10 @@ const Footer = () => {
             it dead simple for leading recruiters to hire top tech talent.
           </Text>
         </VStack>
-        <Flex gap='4rem'>
+        <Flex
+          flexDirection={['column-reverse', 'column-reverse', 'row']}
+          gap={{ base: '2rem', md: '4rem' }}
+        >
           <VStack alignItems={'start'}>
             <Heading fontSize='2xl'>Candidates</Heading>
             <Text color='#686868'>Apply for job</Text>
