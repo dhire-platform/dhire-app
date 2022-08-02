@@ -105,6 +105,7 @@ const ChooseUs = () => {
             <Button>Learn More</Button>
           </MotionBox>
         </Center>
+        
       </Flex>
     </Container>
   );

@@ -19,7 +19,7 @@ const Philosophy = () => {
           fontSize={['34px', '38px', '60px']}
           px='1rem'
         >
-          D-Hire is based of key philosophies
+          D-Hire is based on key philosophies
         </Heading>
         <Flex
           align='center'

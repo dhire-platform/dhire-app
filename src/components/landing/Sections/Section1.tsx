@@ -26,7 +26,7 @@ const Section1 = () => {
           textAlign={{ base: 'center', md: 'start' }}
         >
           <Heading fontSize={['32px', '42px', '42px']}>
-            Access the work you love
+            Join the work you love
           </Heading>
           <Text
             maxW='36rem'
