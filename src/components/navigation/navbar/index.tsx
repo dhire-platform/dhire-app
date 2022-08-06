@@ -112,7 +112,7 @@ const Navbar = () => {
                   About
                 </Box>
               </Link>
-              <Link href='/job'>
+              <Link href='/jobs'>
                 <Center>
                   <Box
                     as='button'
@@ -225,7 +225,7 @@ const Navbar = () => {
               About
             </Box>
           </Link>
-          <Link href='/job'>
+          <Link href='/jobs'>
             <Flex
               direction={'row'}
               alignItems='center'
