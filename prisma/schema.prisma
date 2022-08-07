@@ -33,7 +33,7 @@ model UserProfile {
   expereince ExperienceType[]
   education  EducationType[]
   projects   ProjectType[]
-  social     SocialType
+  social     SocialType?
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
 }
