@@ -1,13 +1,8 @@
-import { Container } from '@chakra-ui/react'
-import React from 'react'
-import Layout from 'src/components/HOC/UserLayout.HOC'
+import { Container } from '@chakra-ui/react';
+import React from 'react';
 
 const index = () => {
-  return (
-      <Layout>
-          
-    </Layout>
-  )
-}
+  return <Container>Hello</Container>;
+};
 
-export default index
+export default index;

@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
@@ -74,7 +75,7 @@ const ChooseUs = () => {
           position='relative'
         >
           <Image
-            src='/assets/Saly.webp'
+            src='/assets/jobs.webp'
             alt='saly'
             layout='fill'
             objectFit='contain'

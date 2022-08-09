@@ -19,6 +19,8 @@ import {
 } from '@chakra-ui/react';
 import { prepareServerlessUrl } from 'next/dist/server/base-server';
 import { useInView } from 'react-intersection-observer';
+import { Redirect } from 'src/helpers/Redirect';
+import { useAuthStore } from 'src/app/authStore';
 
 interface IPayload {
   searchWord?: string;
@@ -34,7 +36,12 @@ const Jobs = () => {
     threshold: 0.55,
   });
 
+  const isAuth = useAuthStore((state: any) => state.isAuth);
   console.log(inView);
+
+  if (isAuth) {
+    Redirect('/dashboard');
+  }
 
   const PageSize: number = 4;
 
@@ -101,7 +108,7 @@ const Jobs = () => {
         direction={'row'}
         gap='1.5rem'
         p='1rem'
-ß      >
+      >
         <Stack spacing={'2rem'} minW='15rem' direction={'column'} p='1rem'>
           <Stack direction={'column'}>
             <Heading fontWeight='600' fontSize='xl'>
