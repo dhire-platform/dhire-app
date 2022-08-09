@@ -9,6 +9,15 @@ import {
   Button,
   Badge,
   ScaleFade,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Text,
+  Heading,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,12 +25,23 @@ import { Slant as Hamburger } from 'hamburger-react';
 import Switch from '../../buttons/DarkModeSwitch';
 import Phantom from './Phantom';
 import { useState } from 'react';
+import { useAuthStore } from 'src/app/authStore';
 
 const Navbar = () => {
   const [hover, setHover] = useState(0);
   const { isOpen, onToggle, onClose } = useDisclosure();
-
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
   const router = useRouter();
+  const setAuth = useAuthStore((state: any) => state.setAuth);
+
+  const handleClick = () => {
+    setAuth();
+    router.push('/setup');
+  };
 
   return (
     <Center
@@ -29,6 +49,35 @@ const Navbar = () => {
       flexDirection='column'
       p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
     >
+      <Modal isOpen={isModalOpen} onClose={onModalClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody justifyContent={'center'} textAlign='center' p='2rem'>
+            <Center py='3rem' flexDirection='column' gap='1rem'>
+              <Heading
+                mx='auto'
+                w='fit-content'
+                bg='gray.100'
+                fontSize='3xl'
+                rounded={'full'}
+                p='1rem 1.3rem'
+              >
+                🔮
+              </Heading>
+              <Text fontSize='3xl' fontWeight={'800'}>
+                Connect Your Wallet
+              </Text>
+              <Text maxW='20rem' color='gray.600'>
+                Hey 👋🏻 Connect Your Phantom Wallet to start the application
+              </Text>
+              <Button onClick={handleClick} mt='1rem'>
+                Connect with Phantom
+              </Button>
+            </Center>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
       <Flex
         maxW={'7xl'}
         w={'100%'}
@@ -72,7 +121,7 @@ const Navbar = () => {
             }}
             h='fit-content'
           >
-            D-Hire
+            dhire.
           </Box>
         </Link>
         <nav>
@@ -87,7 +136,7 @@ const Navbar = () => {
               maxW='36rem'
               fontWeight='600'
             >
-              <Link href='/about'>
+              {/* <Link href='/about'>
                 <Box
                   as='button'
                   transition={'all 0.3s ease'}
@@ -111,8 +160,8 @@ const Navbar = () => {
                 >
                   About
                 </Box>
-              </Link>
-              <Link href='/job'>
+              </Link> */}
+              <Link href='/jobs'>
                 <Center>
                   <Box
                     as='button'
@@ -193,7 +242,14 @@ const Navbar = () => {
             {/* <Center display={{ base: 'none', lg: 'flex' }}>
               <Switch />
             </Center> */}
-            <Button size={['sm', 'md']} display='flex' gap={'1rem'}>
+            <Button
+              onClick={() => {
+                //onModalOpen();
+              }}
+              size={['sm', 'md']}
+              display='flex'
+              gap={'1rem'}
+            >
               Connect Wallet
               <Phantom />
             </Button>
@@ -209,7 +265,7 @@ const Navbar = () => {
           p='2rem 1rem'
           gap='1.4rem'
         >
-          <Link href='/about'>
+          {/* <Link href='/about'>
             <Box
               display='flex'
               alignItems={'start'}
@@ -224,8 +280,8 @@ const Navbar = () => {
             >
               About
             </Box>
-          </Link>
-          <Link href='/job'>
+          </Link> */}
+          <Link href='/jobs'>
             <Flex
               direction={'row'}
               alignItems='center'

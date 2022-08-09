@@ -4,7 +4,7 @@ import { ChildInterface } from '@/interfaces/children/child.interface';
 import Background from './Background';
 import Footer from './navigation/footer';
 
-const Layout = ({ children }: ChildInterface) => {
+const WebsiteLayout = ({ children }: ChildInterface) => {
   return (
     <Container
       //minH='100vh'
@@ -23,4 +23,4 @@ const Layout = ({ children }: ChildInterface) => {
   );
 };
 
-export default Layout;
+export default WebsiteLayout;

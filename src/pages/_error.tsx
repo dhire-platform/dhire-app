@@ -11,7 +11,7 @@ const animationKeyframes = keyframes`
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 
-const index = () => {
+const Error = () => {
   return (
     <Container maxW='full' h='70vh'>
       <Center w='full' py='4rem' h='60vh'>
@@ -24,13 +24,13 @@ const index = () => {
         >
           <Box
             as='span'
-            bgGradient='linear(to-l, #6AADF1, #81F2F8, #7D8FFF, #6AADF1)'
+            bgGradient='linear(to-l,  #d34bc7, #f44c65, #7D8FFF, #d34bc7)'
             bgClip='text'
             backgroundPosition={'-100%'}
             backgroundSize={'300%'}
             animation={animation2}
           >
-            Coming Soon
+            Error 404
           </Box>
         </Heading>
       </Center>
@@ -38,4 +38,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Error;
