@@ -8,6 +8,7 @@ interface IProfile {
   name?: string;
   role?: roleEnum;
   bio?: string;
+  about?: string;
   achievements?: string;
   image?: string;
   skills?: string[];
@@ -17,6 +18,7 @@ interface IProfile {
 }
 interface IExperience {
   company?: string;
+  image?: string;
   designation?: string;
   from?: string;
   to?: string;

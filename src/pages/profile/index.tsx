@@ -11,6 +11,7 @@ import {
   TabPanel,
   useColorModeValue,
   Text,
+  Heading,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -23,8 +24,10 @@ import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent'
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
 
 const Profile = () => {
+  const { userProfile } = useProfileStore();
+
   return (
-    <Container maxW='full' py='5rem' bg={'white'} color={'black'} px='0'>
+    <Container maxW='full' py='4rem' bg={'#FBFBFB'} color={'black'} px='0'>
       <Container p='1rem' maxW='8xl' my='2rem'>
         <Tabs variant={'unstyled'} orientation='vertical'>
           <TabList alignItems={'start'}>
@@ -51,23 +54,49 @@ const Profile = () => {
           <TabPanels>
             <TabPanel>
               <Center w='full'>
-                <Flex
-                  mx='auto'
-                  bg={'white'}
-                  h='clamp(54rem,180vh, 60rem)'
-                  gap='2rem'
-                  flexWrap={'wrap'}
-                  alignItems='center'
-                  alignContent={'center'}
-                  justifyContent={'top'}
-                  flexDirection='column'
-                >
-                  <ProfileComponent />
-                  <Education />
-                  <SkillsComponent />
-                  <Achievement />
-                  {/* <Experience /> */}
-                </Flex>
+                {userProfile.name?.length ? (
+                  <Flex
+                    mx='auto'
+                    h='clamp(54rem,180vh, 60rem)'
+                    gap='2rem'
+                    flexWrap={'wrap'}
+                    alignItems='center'
+                    alignContent={'center'}
+                    justifyContent={'top'}
+                    flexDirection='column'
+                  >
+                    <ProfileComponent />
+                    <Education />
+                    <SkillsComponent />
+                    <Achievement />
+                    {/* <Experience /> */}
+                  </Flex>
+                ) : (
+                  <Center
+                    textAlign={'center'}
+                    flexDirection={'column'}
+                    w='100%'
+                    maxW='3xl'
+                    h='50vh'
+                  >
+                    <Heading
+                      mb='2rem'
+                      rounded='full'
+                      bg='gray.50'
+                      p='1rem 1.5rem'
+                      fontSize='6xl'
+                    >
+                      📝
+                    </Heading>
+                    <Text pb='1rem' fontSize='xl'>
+                      There is nothing to show
+                    </Text>
+                    <Text maxW='28rem' color={'gray.400'} fontSize='md'>
+                      You have not entered any data yet. Click on Edit button to
+                      enter data to show on your profile{' '}
+                    </Text>
+                  </Center>
+                )}
               </Center>
             </TabPanel>
             <TabPanel>

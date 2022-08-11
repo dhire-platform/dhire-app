@@ -35,6 +35,7 @@ import {
   useRef,
 } from 'react';
 import { useForm } from 'react-hook-form';
+import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
 import EditProfile from 'src/components/dashboard/Editprofile';
 import { IProfile } from 'src/definitions/IUser';
@@ -46,21 +47,35 @@ type Props = {
 
 const DashboardNavbar = ({ children }: Props) => {
   const setProfile = useProfileStore((state: any) => state.setProfile);
+  const { edit_mode, set_edit_mode } = useLocalStore();
   const { userProfile } = useProfileStore();
   const [tags, setTags] = useState(userProfile.skills);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
+  useEffect(() => {
+    if (edit_mode) {
+      onOpen();
+    }
+  }, [edit_mode]);
+
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: userProfile.name,
+      bio: userProfile.bio,
+      about: userProfile.about,
+      image: userProfile.image,
+    },
+  });
 
   function onSubmit(values: any) {
-    const { name, bio, achievements, image } = values;
-    const data: IProfile = { name, bio, achievements, image, skills: tags };
+    const { name, bio, image, about } = values;
+    const data: IProfile = { name, bio, about, image, skills: tags };
     setProfile(data);
     onClose();
   }
@@ -132,15 +147,25 @@ const DashboardNavbar = ({ children }: Props) => {
                 <FormLabel htmlFor='name'>Short Bio</FormLabel>
                 <Input id='bio' placeholder='Bio' {...register('bio')} />
               </FormControl>
+
               {/* About */}
               <FormControl>
-                <FormLabel htmlFor='name'>Achievements</FormLabel>
-                <Textarea
-                  id='achievements'
-                  placeholder='About Your Achievements'
-                  {...register('achievements')}
+                <FormLabel htmlFor='name'>About</FormLabel>
+                <Input
+                  id='about'
+                  placeholder='About You'
+                  {...register('about', {
+                    maxLength: {
+                      value: 200,
+                      message: 'Maximum length should be 200',
+                    },
+                  })}
                 />
+                <FormErrorMessage>
+                  {errors.about && errors.about.message}
+                </FormErrorMessage>
               </FormControl>
+
               {/* Skills */}
               <FormControl>
                 <FormLabel htmlFor='name'>Skills</FormLabel>

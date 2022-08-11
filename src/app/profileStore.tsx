@@ -18,6 +18,7 @@ interface IProfileStore {
   socials: ISocial;
   // setSkills?: (skills: string[]) => void;
   setProfile: (profile: IProfile) => void;
+  setExperience: (experience: IExperience[]) => void;
   setPubKey: (pubKey: string) => void;
 }
 
@@ -27,6 +28,7 @@ export const useProfileStore = create<IProfileStore>((set) => ({
     name: '',
     role: roleEnum.RECRUIT,
     bio: '',
+    about: '',
     achievements: '',
     image: '',
     skills: [],
@@ -52,10 +54,17 @@ export const useProfileStore = create<IProfileStore>((set) => ({
         name: data.name,
         bio: data.bio,
         skills: data.skills,
+        about: data.about,
+        image: data.image,
         ...prevState,
       },
     }));
   },
+
+  setExperience: (data: any) =>
+    set((prevState: IProfileStore) => ({
+      experience: [data, ...prevState.experience],
+    })),
 
   setPubKey: (publicKey: string) => set({ pubKey: publicKey }),
 

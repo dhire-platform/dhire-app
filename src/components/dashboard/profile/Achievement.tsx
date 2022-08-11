@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Center,
   Divider,
@@ -10,12 +11,16 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
 
 const Achievement = () => {
   const { userProfile } = useProfileStore();
+  const { set_edit_mode } = useLocalStore();
+
   return (
     <Center
+      bg='white'
       w='clamp(16rem, 42vw, 36rem)'
       rounded='lg'
       flexDirection={'column'}
@@ -24,7 +29,7 @@ const Achievement = () => {
       p='1.5rem'
       alignItems='start'
       border='1px solid'
-      color='gray.200'
+      color='blackAlpha.200'
     >
       {userProfile.achievement ? (
         <>
@@ -47,8 +52,8 @@ const Achievement = () => {
         <>
           <Stack
             border={'1px dashed'}
-            borderColor='gray.200'
-            p='1rem'
+            borderColor='blackAlpha.400'
+            p='3rem 1rem'
             rounded='md'
             align={'center'}
             direction={'column'}
@@ -57,12 +62,21 @@ const Achievement = () => {
             <Heading color={'black'} fontSize='xl'>
               Achievements
             </Heading>
-            <Text pb='1rem' color='gray.400'>
-              Edit profile to Enter Achievements
+            <Text pb='1.5rem' color='blackAlpha.400'>
+              You have not added any Achievements yet.
             </Text>
-            <Button fontSize={'xs'} my='1rem'>
-              Edit Profile
-            </Button>
+            <Box
+              onClick={() => set_edit_mode(true)}
+              as='button'
+              outline='1px solid gray'
+              p='0.2rem 0.6rem'
+              rounded='sm'
+              fontSize={'xs'}
+              my='1rem'
+              color='black'
+            >
+              Add Achievements
+            </Box>
           </Stack>
         </>
       )}

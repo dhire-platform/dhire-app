@@ -21,6 +21,7 @@ import { useProfileStore } from 'src/app/profileStore';
 
 const ProfileComponent = () => {
   const { userProfile } = useProfileStore();
+
   return (
     <Center
       bg={useColorModeValue('white', 'blackAlpha.600')}
@@ -34,48 +35,32 @@ const ProfileComponent = () => {
       borderColor={'gray.100'}
       color={'black'}
     >
-      {userProfile.name ? (
-        <>
-          <Stack direction={'row'} w='full'>
-            <Avatar
-              size='lg'
-              name={userProfile.name}
-              colorScheme='black'
-              src='https://www.whatsappprofiledpimages.com/whatsapp-profile-images/'
-            />
-            <Stack w='full' direction={'column'}>
-              <Heading color={'black'} fontSize='xl'>
-                {userProfile.name}
-              </Heading>
-              <Text color='gray.400'>{userProfile.bio}</Text>
-            </Stack>
+      <>
+        <Stack direction={'row'} gap='0.5rem' w='full'>
+          <Avatar
+            size='lg'
+            name={userProfile.name}
+            colorScheme='black'
+            src={userProfile.image}
+          />
+          <Stack w='full' direction={'column'}>
+            <Heading color={'black'} fontSize='xl'>
+              {userProfile.name}
+            </Heading>
+            <Text color='gray.400'>{userProfile.bio}</Text>
           </Stack>
-          <Text color={'black'} w='100%' maxW='36rem'>
-            Experienced UI/UX Designer with a strong bachground with marketing,
-            Communication and psychology.
-          </Text>
-        </>
-      ) : (
-        <Stack
-          border={'1px dashed'}
-          borderColor='gray.200'
-          p='1rem'
-          rounded='md'
-          align={'center'}
-          direction={'column'}
-          w='full'
-        >
-          <Heading color={'black'} fontSize='xl'>
-            Profile
-          </Heading>
-          <Text pb='1rem' color='gray.400'>
-            Edit profile to Enter details
-          </Text>
-          <Button fontSize={'xs'} my='1rem'>
-            Edit Profile
-          </Button>
         </Stack>
-      )}
+        <Heading
+          fontWeight='300'
+          fontSize={'md'}
+          noOfLines={3}
+          color={'black'}
+          w='100%'
+          maxW='36rem'
+        >
+          {userProfile.about}
+        </Heading>
+      </>
     </Center>
   );
 };
