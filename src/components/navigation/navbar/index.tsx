@@ -6,28 +6,34 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import DashboardNavbar from './DashboardNav';
 import LandingPageNavbar from './LandingPageNav';
 import { useProfileStore } from 'src/app/profileStore';
-import { IProfile } from 'src/definitions/IUser';
-import { Redirect } from 'src/helpers/Redirect';
+import { useLocalStore } from 'src/app/localStore';
 
 const Navbar = () => {
   const { setPubKey, pubKey } = useProfileStore();
   const [publicKey, setPublicKey] = useState(pubKey);
+  const { wallet_connected, set_wallet_connected } = useLocalStore();
+
   const wallet = useWallet();
   const router = useRouter();
 
   useEffect(() => {
-    console.log('pubkey - ', publicKey);
-    if (wallet.connected && wallet.publicKey) {
-      setPublicKey(wallet?.publicKey?.toBase58());
-      if (publicKey) {
+    if (wallet.connected) {
+      set_wallet_connected(true);
+      // if connected then save the value of pubKey and redirect to /profile
+      setPublicKey(wallet?.publicKey?.toBase58()!);
+
+      if (publicKey.length > 0) {
         setPubKey(publicKey);
-        router.push('/profile');
       }
+      router.replace('/profile');
     } else {
+      set_wallet_connected(false);
+      // if wallet disconnected then remove the value of pubkey and redirect to home page
       setPublicKey('');
-      router.push('/');
+      setPubKey(publicKey);
+      router.replace('/');
     }
-  }, [publicKey, wallet.connected, wallet.publicKey]);
+  }, [publicKey, wallet.connected]);
 
   return (
     <Container minW={'full'} p='0'>

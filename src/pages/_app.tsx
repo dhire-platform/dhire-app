@@ -1,10 +1,12 @@
 import type { AppProps } from 'next/app';
 import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react';
 import theme from '@/config/chakra.config';
-import WebsiteLayout from 'src/components/layout';
-import DashboardLayout from 'src/components/HOC/UserLayout.HOC';
 import dynamic from 'next/dynamic';
 import { useProfileStore } from 'src/app/profileStore';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Layout from 'src/components/HOC/Layout.HOC';
+
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const WalletConnectionProvider: any = dynamic(
@@ -15,8 +17,6 @@ const WalletConnectionProvider: any = dynamic(
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { pubKey, userProfile } = useProfileStore();
-  const publicKey = pubKey;
   return (
     <WalletConnectionProvider>
       <ChakraProvider theme={theme}>
@@ -25,15 +25,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             useSystemColorMode: true,
           }}
         >
-          {publicKey ? (
-            <DashboardLayout>
-              <Component {...pageProps} />
-            </DashboardLayout>
-          ) : (
-            <WebsiteLayout>
-              <Component {...pageProps} />
-            </WebsiteLayout>
-          )}
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ColorModeProvider>
       </ChakraProvider>
     </WalletConnectionProvider>

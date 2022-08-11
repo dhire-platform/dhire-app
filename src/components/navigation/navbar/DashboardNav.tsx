@@ -62,6 +62,7 @@ const DashboardNavbar = ({ children }: Props) => {
     const { name, bio, achievements, image } = values;
     const data: IProfile = { name, bio, achievements, image, skills: tags };
     setProfile(data);
+    onClose();
   }
 
   const handleTagsChange = useCallback(

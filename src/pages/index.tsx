@@ -1,6 +1,7 @@
 import config from '@/config/general.config';
 import { Button, Container } from '@chakra-ui/react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useProfileStore } from 'src/app/profileStore';
 import ChooseUs from 'src/components/landing/Home/ChooseUs';
@@ -13,13 +14,6 @@ import SEO from 'src/components/SEO/SEO';
 import { Redirect } from 'src/helpers/Redirect';
 
 const Home: NextPage = () => {
-  const { pubKey, userProfile } = useProfileStore();
-  useEffect(() => {
-    if (pubKey) {
-    //  Redirect('/profile');
-    }
-  }, [pubKey]);
-
   return (
     <>
       <SEO

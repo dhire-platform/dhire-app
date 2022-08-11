@@ -21,7 +21,6 @@ import { useProfileStore } from 'src/app/profileStore';
 
 const ProfileComponent = () => {
   const { userProfile } = useProfileStore();
-  console.log('profile data - ', userProfile);
   return (
     <Center
       bg={useColorModeValue('white', 'blackAlpha.600')}
