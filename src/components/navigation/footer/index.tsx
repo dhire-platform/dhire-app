@@ -17,7 +17,6 @@ import { RiTwitterFill, RiLinkedinFill } from 'react-icons/ri';
 import { SiDiscord } from 'react-icons/si';
 
 const SocialButton = ({ children, label, href }: any) => {
-  console.log();
   return (
     <chakra.button
       w={['8', '10', '12']}

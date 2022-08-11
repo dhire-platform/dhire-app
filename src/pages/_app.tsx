@@ -2,31 +2,41 @@ import type { AppProps } from 'next/app';
 import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react';
 import theme from '@/config/chakra.config';
 import WebsiteLayout from 'src/components/layout';
-import { redirect } from 'next/dist/server/api-utils';
 import DashboardLayout from 'src/components/HOC/UserLayout.HOC';
-import { useAuthStore } from 'src/app/authStore';
+import dynamic from 'next/dynamic';
+import { useProfileStore } from 'src/app/profileStore';
+require('@solana/wallet-adapter-react-ui/styles.css');
+
+const WalletConnectionProvider: any = dynamic(
+  () => import('../context/WalletConnectionProvider'),
+  {
+    ssr: false,
+  }
+);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const isAuth = useAuthStore((state: any) => state.isAuth);
-
+  const { pubKey, userProfile } = useProfileStore();
+  const publicKey = pubKey;
   return (
-    <ChakraProvider theme={theme}>
-      <ColorModeProvider
-        options={{
-          useSystemColorMode: true,
-        }}
-      >
-        {isAuth ? (
-          <DashboardLayout>
-            <Component {...pageProps} />
-          </DashboardLayout>
-        ) : (
-          <WebsiteLayout>
-            <Component {...pageProps} />
-          </WebsiteLayout>
-        )}
-      </ColorModeProvider>
-    </ChakraProvider>
+    <WalletConnectionProvider>
+      <ChakraProvider theme={theme}>
+        <ColorModeProvider
+          options={{
+            useSystemColorMode: true,
+          }}
+        >
+          {publicKey ? (
+            <DashboardLayout>
+              <Component {...pageProps} />
+            </DashboardLayout>
+          ) : (
+            <WebsiteLayout>
+              <Component {...pageProps} />
+            </WebsiteLayout>
+          )}
+        </ColorModeProvider>
+      </ChakraProvider>
+    </WalletConnectionProvider>
   );
 }
 
