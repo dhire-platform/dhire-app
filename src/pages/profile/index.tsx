@@ -13,6 +13,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useProfileStore } from 'src/app/profileStore';
 import Achievement from 'src/components/dashboard/profile/Achievement';
@@ -20,17 +21,8 @@ import Education from 'src/components/dashboard/profile/Education';
 import Experience from 'src/components/dashboard/profile/Education';
 import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent';
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
-import { Redirect } from 'src/helpers/Redirect';
 
 const Profile = () => {
-  const { pubKey } = useProfileStore();
-
-  useEffect(() => {
-    if (!pubKey) {
-      //  Redirect('/');
-    }
-  }, [pubKey]);
-
   return (
     <Container maxW='full' py='5rem' bg={'white'} color={'black'} px='0'>
       <Container p='1rem' maxW='8xl' my='2rem'>

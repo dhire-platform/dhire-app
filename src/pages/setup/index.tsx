@@ -34,7 +34,7 @@ const Dashboard = () => {
   }
 
   const onSubmit = (value: any) => {
-    console.log(value);
+    //console.log(value);
     //router.push('/profile');
   };
   return (
