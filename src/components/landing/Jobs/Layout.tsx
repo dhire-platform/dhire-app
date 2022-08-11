@@ -37,7 +37,7 @@ interface IPayload {
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 
 const Layout: React.FC<Props> = ({ children, data, setData }) => {
-  console.log(data.length);
+ // console.log(data.length);
   const HandleSetData = ({ searchWord, locationName }: IPayload) => {
     setData({ searchWord, locationName });
   };

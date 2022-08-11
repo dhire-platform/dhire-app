@@ -5,33 +5,39 @@ import {
   IProject,
   ISocial,
 } from 'src/definitions/IUser';
+import { roleEnum } from 'src/enums/enums';
 import create from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-export const useAuthStore = create((set) => ({
-  profile: {
+interface IProfileStore {
+  userProfile: IProfile;
+  pubKey: string;
+  experience: IExperience[];
+  projects: IProject[];
+  education: IEducation;
+  socials: ISocial;
+  // setSkills?: (skills: string[]) => void;
+  setProfile: (profile: IProfile) => void;
+  setPubKey: (pubKey: string) => void;
+}
+
+export const useProfileStore = create<IProfileStore>((set) => ({
+  userProfile: {
     id: '',
-    user: '',
-    userId: '',
+    name: '',
+    role: roleEnum.RECRUIT,
     bio: '',
+    achievements: '',
     image: '',
     skills: [],
     location: '',
     website: '',
     achievement: '',
   },
-  experiences: [],
+  pubKey: '',
+  experience: [],
   projects: [],
-  education: {
-    school: '',
-    degree: '',
-    fieldOfStudy: '',
-    from: '',
-    to: '',
-    current: true,
-    location: '',
-    description: '',
-  },
+  education: {},
   socials: {
     youtube: '',
     twitter: '',
@@ -40,13 +46,25 @@ export const useAuthStore = create((set) => ({
     instagram: '',
     github: '',
   },
-  setProfile: () => set((state: IProfile) => ({ profile: state })),
-  setEducation: () => set((state: IEducation) => ({ education: state })),
-  setProjects: (projects: IProject[]) =>
-    set((state: any) => ({ project: [projects, ...state.projects] })),
-  setExperience: (experiences: IExperience[]) =>
-    set((state: { experience: IExperience[] }) => ({
-      project: [experiences, ...state.experience],
-    })),
-  setSocials: () => set((state: ISocial) => ({ socials: state })),
+  setProfile: (data: IProfile) => {
+    set((prevState) => ({
+      userProfile: {
+        name: data.name,
+        bio: data.bio,
+        skills: data.skills,
+        ...prevState,
+      },
+    }));
+  },
+
+  setPubKey: (publicKey: string) => set({ pubKey: publicKey }),
+
+  // setEducation: () => set((state: IEducation) => ({ education: state })),
+  // setProjects: (projects: IProject[]) =>
+  //   set((state: any) => ({ project: [projects, ...state.projects] })),
+  // setExperience: (experiences: IExperience[]) =>
+  //   set((state: { experience: IExperience[] }) => ({
+  //     project: [experiences, ...state.experience],
+  //   })),
+  // setSocials: () => set((state: ISocial) => ({ socials: state })),
 }));

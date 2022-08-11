@@ -12,12 +12,9 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import Background from 'src/components/Background';
 import { Redirect } from 'src/helpers/Redirect';
 import { roleEnum } from 'src/enums/enums';
-import { useAuthStore } from 'src/app/authStore';
-import { useUserStore } from 'src/app/userStore';
-import { useRouter } from 'next/router';
+import { useProfileStore } from 'src/app/profileStore';
 
 type Inputs = {
   name: string;
@@ -25,26 +22,23 @@ type Inputs = {
 };
 
 const Dashboard = () => {
-  const isAuth = useAuthStore((state: any) => state.isAuth);
-  const user = useUserStore((state: any) => state.setUser);
-  const router = useRouter();
+  const { pubKey } = useProfileStore();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
-  if (!isAuth) {
+
+  if (!pubKey) {
     Redirect('/');
   }
 
   const onSubmit = (value: any) => {
     console.log(value);
-    user(value);
-    router.push('/profile');
+    //router.push('/profile');
   };
   return (
     <Container maxW='full' p='0'>
-      {isAuth}
       <Stack direction={'row'}>
         <Center
           minW='50vw'

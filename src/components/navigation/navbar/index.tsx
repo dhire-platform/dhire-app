@@ -1,349 +1,46 @@
-import {
-  Flex,
-  useColorMode,
-  Center,
-  Box,
-  Collapse,
-  useDisclosure,
-  useColorModeValue,
-  Button,
-  Badge,
-  ScaleFade,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Text,
-  Heading,
-} from '@chakra-ui/react';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { Container } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { Slant as Hamburger } from 'hamburger-react';
-import Switch from '../../buttons/DarkModeSwitch';
-import Phantom from './Phantom';
-import { useState } from 'react';
-import { useAuthStore } from 'src/app/authStore';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useWallet } from '@solana/wallet-adapter-react';
+import DashboardNavbar from './DashboardNav';
+import LandingPageNavbar from './LandingPageNav';
+import { useProfileStore } from 'src/app/profileStore';
+import { IProfile } from 'src/definitions/IUser';
+import { Redirect } from 'src/helpers/Redirect';
 
 const Navbar = () => {
-  const [hover, setHover] = useState(0);
-  const { isOpen, onToggle, onClose } = useDisclosure();
-  const {
-    isOpen: isModalOpen,
-    onOpen: onModalOpen,
-    onClose: onModalClose,
-  } = useDisclosure();
+  const { setPubKey, pubKey } = useProfileStore();
+  const [publicKey, setPublicKey] = useState(pubKey);
+  const wallet = useWallet();
   const router = useRouter();
-  const setAuth = useAuthStore((state: any) => state.setAuth);
 
-  const handleClick = () => {
-    setAuth();
-    router.push('/setup');
-  };
+  useEffect(() => {
+    console.log('pubkey - ', publicKey);
+    if (wallet.connected && wallet.publicKey) {
+      setPublicKey(wallet?.publicKey?.toBase58());
+      if (publicKey) {
+        setPubKey(publicKey);
+        router.push('/profile');
+      }
+    } else {
+      setPublicKey('');
+      router.push('/');
+    }
+  }, [publicKey, wallet.connected, wallet.publicKey]);
 
   return (
-    <Center
-      display='flex'
-      flexDirection='column'
-      p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
-    >
-      <Modal isOpen={isModalOpen} onClose={onModalClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody justifyContent={'center'} textAlign='center' p='2rem'>
-            <Center py='3rem' flexDirection='column' gap='1rem'>
-              <Heading
-                mx='auto'
-                w='fit-content'
-                bg='gray.100'
-                fontSize='3xl'
-                rounded={'full'}
-                p='1rem 1.3rem'
-              >
-                🔮
-              </Heading>
-              <Text fontSize='3xl' fontWeight={'800'}>
-                Connect Your Wallet
-              </Text>
-              <Text maxW='20rem' color='gray.600'>
-                Hey 👋🏻 Connect Your Phantom Wallet to start the application
-              </Text>
-              <Button onClick={handleClick} mt='1rem'>
-                Connect with Phantom
-              </Button>
-            </Center>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-      <Flex
-        maxW={'7xl'}
-        w={'100%'}
-        h={20}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-      >
-        <Center display={{ base: 'flex', lg: 'none' }}>
-          <Hamburger
-            toggled={isOpen}
-            toggle={onToggle}
-            size={30}
-            duration={0.4}
-            rounded
-          />
-
-          <ScaleFade initialScale={0} in={!isOpen}>
-            <Badge
-              px='0.4rem'
-              variant={'solid'}
-              rounded={'full'}
-              bg='#FD6444'
-              fontSize='sm'
-              position='absolute'
-              transform='translate(-0.75rem, -1.1rem)'
-              transition={'all 0.3s ease'}
-            >
-              2
-            </Badge>
-          </ScaleFade>
-        </Center>
-        <Link href='/'>
-          <Box
-            display={{ base: 'none', md: 'flex' }}
-            as='button'
-            fontSize={['xl', '3xl']}
-            fontWeight={'800'}
-            transition={'all 0.3s ease'}
-            _hover={{
-              color: 'grey',
-            }}
-            h='fit-content'
-          >
-            dhire.
-          </Box>
-        </Link>
-        <nav>
-          <Flex direction='row' gap='2rem'>
-            <Center
-              ml='auto'
-              display={{ base: 'none', lg: 'flex' }}
-              flexDirection='row'
-              fontSize='xl'
-              minH='100%'
-              gap={{ base: '0', md: '2vw', lg: '3vw' }}
-              maxW='36rem'
-              fontWeight='600'
-            >
-              {/* <Link href='/about'>
-                <Box
-                  as='button'
-                  transition={'all 0.3s ease'}
-                  onMouseEnter={() => setHover(1)}
-                  onMouseLeave={() => setHover(0)}
-                  _before={{
-                    content: `''`,
-                    width: '5px',
-                    height: '5px',
-                    position: 'absolute',
-                    borderRadius: '50%',
-                    transform: `${
-                      hover === 1
-                        ? 'translate(1.4rem, 2.5rem)'
-                        : 'translate(1.4rem, 5rem)'
-                    }`,
-                    transition: 'all 0.1s ease',
-                    opacity: `${hover === 1 ? '1' : '0'}`,
-                    bg: 'black',
-                  }}
-                >
-                  About
-                </Box>
-              </Link> */}
-              <Link href='/jobs'>
-                <Center>
-                  <Box
-                    as='button'
-                    transition={'all 0.3s ease'}
-                    onMouseEnter={() => setHover(2)}
-                    onMouseLeave={() => setHover(0)}
-                    _before={{
-                      content: `''`,
-                      width: '5px',
-                      height: '5px',
-                      position: 'absolute',
-                      borderRadius: '50%',
-                      transform: `${
-                        hover === 2
-                          ? 'translate(2.5rem, 2.5rem)'
-                          : 'translate(2.5rem, 5rem)'
-                      }`,
-                      transition: 'all 0.1s ease',
-                      opacity: `${hover === 2 ? '1' : '0'}`,
-                      bg: 'black',
-                    }}
-                  >
-                    Job Hunt
-                  </Box>
-                  <ScaleFade initialScale={0} in={!isOpen}>
-                    <Badge
-                      px='0.35rem'
-                      variant={'solid'}
-                      rounded={'full'}
-                      bg='#FD6444'
-                      fontSize='xs'
-                      position='absolute'
-                      transform='translate(-0.1rem, -1.1rem)'
-                      transition={'all 0.3s ease'}
-                    >
-                      2
-                    </Badge>
-                  </ScaleFade>
-                </Center>
-              </Link>
-              <Link href='/hire'>
-                <Center>
-                  <Box
-                    as='button'
-                    transition={'all 0.3s ease'}
-                    onMouseEnter={() => setHover(3)}
-                    onMouseLeave={() => setHover(0)}
-                    _before={{
-                      content: `''`,
-                      width: '5px',
-                      height: '5px',
-                      position: 'absolute',
-                      borderRadius: '50%',
-                      transform: `${
-                        hover === 3
-                          ? 'translate(2.8rem, 2.5rem)'
-                          : 'translate(2.8rem, 5rem)'
-                      }`,
-                      transition: 'all 0.1s ease',
-                      opacity: `${hover === 3 ? '1' : '0'}`,
-                      bg: 'black',
-                    }}
-                  >
-                    Hire Talent
-                  </Box>
-                  {/* <Badge
-                    position='absolute'
-                    px='0.4rem'
-                    transform='translate(3rem, -1rem)'
-                    variant={'solid'}
-                    rounded={'full'}
-                  >
-                    2
-                  </Badge> */}
-                </Center>
-              </Link>
-            </Center>
-            {/* <Center display={{ base: 'none', lg: 'flex' }}>
-              <Switch />
-            </Center> */}
-            <Button
-              onClick={() => {
-                //onModalOpen();
-              }}
-              size={['sm', 'md']}
-              display='flex'
-              gap={'1rem'}
-            >
-              Connect Wallet
-              <Phantom />
-            </Button>
-          </Flex>
-        </nav>
-      </Flex>
-      <Collapse in={isOpen} animateOpacity>
-        <Flex
-          display={{ base: 'flex', lg: 'none' }}
-          flexDirection='column'
-          alignItems='start'
-          fontSize='22px'
-          p='2rem 1rem'
-          gap='1.4rem'
-        >
-          {/* <Link href='/about'>
-            <Box
-              display='flex'
-              alignItems={'start'}
-              w='100%'
-              onClick={() => onClose()}
-              as='button'
-              transition={'all 0.3s ease'}
-              _hover={{
-                color: 'grey',
-              }}
-              fontWeight='500'
-            >
-              About
-            </Box>
-          </Link> */}
-          <Link href='/jobs'>
-            <Flex
-              direction={'row'}
-              alignItems='center'
-              justify={'space-between'}
-              w='100%'
-            >
-              <Box
-                display='flex'
-                alignItems={'start'}
-                w='100%'
-                onClick={() => onClose()}
-                as='button'
-                transition={'all 0.3s ease'}
-                _hover={{
-                  color: 'grey',
-                }}
-                fontWeight='500'
-              >
-                Job Hunt
-              </Box>
-              <Badge
-                px='0.4rem'
-                variant={'solid'}
-                rounded={'full'}
-                bg='#FD6444'
-                fontSize='md'
-              >
-                2
-              </Badge>
-            </Flex>
-          </Link>
-          <Link href='/hire'>
-            <Box
-              display='flex'
-              alignItems={'start'}
-              w='100%'
-              onClick={() => onClose()}
-              as='button'
-              transition={'all 0.3s ease'}
-              _hover={{
-                color: 'grey',
-              }}
-              fontWeight='500'
-            >
-              Hire Talent
-            </Box>
-          </Link>
-          <Box
-            display='flex'
-            alignItems='center'
-            justifyContent='space-between'
-            w='84vw'
-            as='button'
-            transition={'all 0.3s ease'}
-          >
-            {/* {useColorModeValue('Dark Mode', 'Light Mode')}
-            <Switch /> */}
-          </Box>
-          <Box w='100%' h='0.09rem' bg='gray.500' />
-        </Flex>
-      </Collapse>
-    </Center>
+    <Container minW={'full'} p='0'>
+      {publicKey ? (
+        <DashboardNavbar>
+          <WalletMultiButton />
+        </DashboardNavbar>
+      ) : (
+        <LandingPageNavbar>
+          <WalletMultiButton />
+        </LandingPageNavbar>
+      )}
+    </Container>
   );
 };
 export default Navbar;

@@ -20,7 +20,7 @@ import {
 import { prepareServerlessUrl } from 'next/dist/server/base-server';
 import { useInView } from 'react-intersection-observer';
 import { Redirect } from 'src/helpers/Redirect';
-import { useAuthStore } from 'src/app/authStore';
+import { useProfileStore } from 'src/app/profileStore';
 
 interface IPayload {
   searchWord?: string;
@@ -32,15 +32,15 @@ const Jobs = () => {
   const [filteredData, setFilteredData] = useState<IJob[]>(Data);
   const [modifiedArray, setModifiedArray] = useState<IJob[]>(Data);
   const [checked_value, setChecked_value] = useState<[]>([]);
+  const { pubKey } = useProfileStore();
   const { ref, inView, entry } = useInView({
     threshold: 0.55,
   });
 
-  const isAuth = useAuthStore((state: any) => state.isAuth);
-  console.log(inView);
+  // console.log(inView);
 
-  if (isAuth) {
-    Redirect('/dashboard');
+  if (pubKey) {
+    Redirect('/profile');
   }
 
   const PageSize: number = 4;
@@ -63,8 +63,8 @@ const Jobs = () => {
   // };
 
   const currentData = useMemo(() => {
-    console.log('useMemoCalled');
-    console.log(filteredData);
+    //console.log('useMemoCalled');
+    //console.log(filteredData);
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     const arr = filteredData.slice(firstPageIndex, lastPageIndex);
@@ -73,7 +73,7 @@ const Jobs = () => {
 
   const modifyData = ({ searchWord, locationName }: IPayload) => {
     // if both location and search are selected then filter array using two properties, if only one one is defined in params then only use one
-    console.log(searchWord, locationName);
+    //console.log(searchWord, locationName);
     if (!searchWord && locationName) {
       // handle when location is modified
       const newFilteredArray = Data?.filter((DataObject) => {
@@ -116,7 +116,7 @@ const Jobs = () => {
             </Heading>
             <CheckboxGroup
               onChange={(checked_fields: []) => {
-                console.log('checked_fields arr -', checked_fields);
+                //    console.log('checked_fields arr -', checked_fields);
                 setChecked_value(checked_fields);
                 // modifyArray();
               }}
@@ -166,7 +166,7 @@ const Jobs = () => {
               <Checkbox
                 value='2'
                 onChange={(event: any) => {
-                  console.log('2', event.target.checked);
+                  //   console.log('2', event.target.checked);
                 }}
               >
                 Intermediate Level

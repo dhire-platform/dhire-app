@@ -1,8 +1,8 @@
 import { Box, Container, useColorModeValue } from '@chakra-ui/react';
-import Navbar from '../components/navigation/navbar/index';
 import { ChildInterface } from '@/interfaces/children/child.interface';
 import Background from './Background';
 import Footer from './navigation/footer';
+import Navbar from './navigation/navbar';
 
 const WebsiteLayout = ({ children }: ChildInterface) => {
   return (
