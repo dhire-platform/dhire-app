@@ -26,7 +26,7 @@ const Section1 = () => {
           textAlign={{ base: 'center', md: 'start' }}
         >
           <Heading fontSize={['32px', '42px', '42px']}>
-            Access the work you love
+            Join the work you love
           </Heading>
           <Text
             maxW='36rem'
@@ -44,7 +44,7 @@ const Section1 = () => {
           position='relative'
         >
           <Image
-            src='/assets/Saly.webp'
+            src='/assets/Saly2.webp'
             alt='saly'
             layout='fill'
             objectFit='contain'
