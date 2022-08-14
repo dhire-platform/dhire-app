@@ -221,7 +221,7 @@ const Education = () => {
           setHover(false);
         }}
         bg='white'
-        w='clamp(16rem, 42vw, 36rem)'
+        w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
         rounded='lg'
         flexDirection={'column'}
         justifyContent='start'

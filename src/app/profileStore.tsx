@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   IEducation,
   IExperience,
@@ -17,7 +18,11 @@ interface IProfileStore {
   education: IEducation;
   socials: ISocial;
   // setSkills?: (skills: string[]) => void;
-  setProfile: (profile: IProfile) => void;
+  setProfile: (profile: IProfile, pubKey: string) => void;
+  updateProfile: (profile: any) => void;
+  setSkills: (skills: string[]) => void;
+  getUser: () => void;
+  deleteUser: () => void;
   setExperience: (experience: IExperience[]) => void;
   setPubKey: (pubKey: string) => void;
 }
@@ -25,9 +30,9 @@ interface IProfileStore {
 export const useProfileStore = create<IProfileStore>((set) => ({
   userProfile: {
     id: '',
+    userName: '',
     name: '',
     role: roleEnum.RECRUIT,
-    bio: '',
     about: '',
     achievements: '',
     image: '',
@@ -48,17 +53,89 @@ export const useProfileStore = create<IProfileStore>((set) => ({
     instagram: '',
     github: '',
   },
-  setProfile: (data: IProfile) => {
+
+  setSkills: async (skills: string[]) => {
+    set((state) => ({
+      ...state,
+      userProfile: {
+        ...state.userProfile,
+        skills,
+      },
+    }));
+  },
+
+  updateProfile: async (data: any) => {
+    // axios
+    //   .post('/api/user', {
+    //     name: data.name,
+    //     image: data.image,
+    //     about: data.about,
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
     set((prevState) => ({
       userProfile: {
         name: data.name,
-        bio: data.bio,
+        userName: data.name,
+        about: data.about,
+        image: data.image,
+        ...prevState,
+      },
+    }));
+  },
+
+  setProfile: async (data: IProfile, pubKey: string) => {
+    axios
+      .post('/api/user', {
+        name: data.name,
+        type: 'APPLICANT',
+        wallet: pubKey,
+        username: data.userName,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    set((prevState) => ({
+      userProfile: {
+        name: data.name,
+        userName: data.userName,
         skills: data.skills,
         about: data.about,
         image: data.image,
         ...prevState,
       },
     }));
+  },
+
+  getUser: async () => {
+    axios
+      .get('/api/user')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+
+  deleteUser: async () => {
+    axios
+      .delete('/api/user')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 
   setExperience: (data: any) =>

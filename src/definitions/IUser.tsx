@@ -5,9 +5,9 @@ interface IUseStore {
 }
 interface IProfile {
   id?: string;
-  name?: string;
+  userName: string;
+  name: string;
   role?: roleEnum;
-  bio?: string;
   about?: string;
   achievements?: string;
   image?: string;

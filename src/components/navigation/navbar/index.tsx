@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Container } from '@chakra-ui/react';
+import { useState, useEffect, useRef } from 'react';
+import { Container, Flex, Image, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -11,27 +11,47 @@ import { useLocalStore } from 'src/app/localStore';
 const Navbar = () => {
   const { setPubKey, pubKey } = useProfileStore();
   const [publicKey, setPublicKey] = useState(pubKey);
-  const { wallet_connected, set_wallet_connected } = useLocalStore();
+  const { set_wallet_connected } = useLocalStore();
 
   const wallet = useWallet();
-  const router = useRouter();
+
+  const wallet_connected_toast = useToast();
 
   useEffect(() => {
     if (wallet.connected) {
       set_wallet_connected(true);
-      // if connected then save the value of pubKey and redirect to /profile
+      console.log(wallet.wallet?.adapter.name);
       setPublicKey(wallet?.publicKey?.toBase58()!);
-
       if (publicKey.length > 0) {
         setPubKey(publicKey);
+        wallet_connected_toast({
+          icon: (
+            <Image
+              minW='2.5rem'
+              minH='2.5rem'
+              mr={'1rem'}
+              src={`${wallet.wallet?.adapter.icon}`}
+            />
+          ),
+          colorScheme: 'blackAlpha',
+          variant: 'success',
+          position: 'bottom',
+          title: `${wallet.wallet?.adapter.name} wallet Connected`,
+          description: ` Enter your details to get started`,
+          duration: 2500,
+          containerStyle: {
+            width: '360px',
+            maxWidth: '100%',
+            border: '1px solid gray',
+            borderRadius: '8px',
+          },
+        });
       }
-      router.replace('/profile');
-    } else {
+    } else if (!wallet.connected) {
       set_wallet_connected(false);
-      // if wallet disconnected then remove the value of pubkey and redirect to home page
       setPublicKey('');
       setPubKey(publicKey);
-      router.replace('/');
+      // wallet_disconnected_toast();
     }
   }, [publicKey, wallet.connected]);
 
@@ -43,7 +63,7 @@ const Navbar = () => {
         </DashboardNavbar>
       ) : (
         <LandingPageNavbar>
-          <WalletMultiButton />
+          <WalletMultiButton>Connect Wallet</WalletMultiButton>
         </LandingPageNavbar>
       )}
     </Container>

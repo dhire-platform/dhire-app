@@ -6,13 +6,21 @@ export const styles = {
       bg: mode('#FDFDFF', '#212121')(props),
       color: mode('#212121', '#FDFDFF')(props),
     },
-
+    text: {
+      marginTop: '0',
+    },
+    '.chakra-alert': {
+      gap: '1.2rem',
+      bg: 'black',
+      color: 'white',
+    },
     ':root': {
       '--chakra-colors-primary-400': mode('#7C82FB', '#94d3ac')(props),
       '--chakra-colors-primary-500': mode('#5F63FC', '#29c7ac')(props),
     },
+    '.wallet-adapter-button-trigger': {},
     '.wallet-adapter-button': {
-      padding: '0rem 2rem',
+      padding: '0rem 1.4rem',
       rounded: '6px',
       fontSize: '18px',
       lineHeight: '0',
@@ -62,7 +70,7 @@ export const styles = {
       },
     },
     '.wallet-adapter-button-end-icon, .wallet-adapter-button-start-icon, ': {
-     // display: 'none',
+      // display: 'none',
     },
     '.wallet-adapter-modal-list-more': {
       color: 'black',
