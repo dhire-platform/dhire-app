@@ -5,50 +5,83 @@ import {
   Heading,
   Stack,
   Text,
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
   useColorModeValue,
-  Textarea,
   IconButton,
-  Button,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { MdOutlineEdit } from 'react-icons/md';
+import { FiEdit2 } from 'react-icons/fi';
 import { useProfileStore } from 'src/app/profileStore';
+import EditProfileComponent from './ProfileEditModal';
 
 const ProfileComponent = () => {
+  const [hover, setHover] = useState(false);
   const { userProfile } = useProfileStore();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Center
-      bg={useColorModeValue('white', 'blackAlpha.600')}
-      w='clamp(16rem, 42vw, 36rem)'
-      rounded='lg'
-      flexDirection={'column'}
-      gap='1rem'
-      p='1.5rem'
-      alignItems='start'
-      border='1px solid'
-      borderColor={'gray.100'}
-      color={'black'}
-    >
-      <>
-        <Stack direction={'row'} gap='0.5rem' w='full'>
-          <Avatar
-            size='lg'
-            name={userProfile.name}
-            colorScheme='black'
-            src={userProfile.image}
-          />
-          <Stack w='full' direction={'column'}>
-            <Heading color={'black'} fontSize='xl'>
-              {userProfile.name}
-            </Heading>
-            <Text color='gray.400'>{userProfile.bio}</Text>
+    <>
+      <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <Center
+        onMouseEnter={() => {
+          setHover(true);
+        }}
+        onMouseLeave={() => {
+          setHover(false);
+        }}
+        bg={useColorModeValue('white', 'blackAlpha.600')}
+        w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
+        rounded='lg'
+        flexDirection={'column'}
+        p='1.5rem'
+        alignItems='start'
+        border='1px solid'
+        borderColor={'blackAlpha.200'}
+        color={'black'}
+      >
+        <Stack
+          direction={'row'}
+          justify='space-between'
+          align={'start'}
+          w='full'
+        >
+          <Stack direction={'row'} gap='0.7rem' w='full'>
+            <Avatar
+              size='lg'
+              name={userProfile.name}
+              colorScheme='black'
+              src={userProfile.image}
+            />
+            <Stack
+              gap='0'
+              justify={'center'}
+              align='start'
+              w='full'
+              direction={'column'}
+            >
+              <Heading color={'black'} fontSize='xl'>
+                {userProfile.name}
+              </Heading>
+              <Text marginBlock='0' margin='0.1rem' color='blackAlpha.500'>
+                @{userProfile.userName}
+              </Text>
+            </Stack>
           </Stack>
+          <IconButton
+            onClick={onOpen}
+            variant={'unstyled'}
+            _hover={{
+              bg: 'blackAlpha.100',
+            }}
+            p='0.1rem'
+            size='sm'
+            display={hover ? 'flex' : 'none'}
+            alignItems='center'
+            justifyContent={'center'}
+            color='blackAlpha.600'
+            aria-label='add experience'
+            icon={<FiEdit2 size='18px' />}
+          />
         </Stack>
         <Heading
           fontWeight='300'
@@ -57,11 +90,12 @@ const ProfileComponent = () => {
           color={'black'}
           w='100%'
           maxW='36rem'
+          mt={userProfile.about && '1rem'}
         >
           {userProfile.about}
         </Heading>
-      </>
-    </Center>
+      </Center>
+    </>
   );
 };
 

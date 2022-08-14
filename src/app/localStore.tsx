@@ -12,5 +12,8 @@ export const useLocalStore = create<ILocalStore>((set) => ({
   edit_mode: false,
   set_wallet_connected: (connected: boolean) =>
     set({ wallet_connected: connected }),
-  set_edit_mode: (edit: boolean) => set({ edit_mode: edit }),
+  set_edit_mode: (edit: boolean) => {
+    console.log('edit mode  -', edit);
+    set({ edit_mode: edit });
+  },
 }));

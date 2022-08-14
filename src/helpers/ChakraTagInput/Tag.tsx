@@ -36,7 +36,7 @@ export default function ChakraTagInputTag({
     [onRemove, onTagCloseButtonClick]
   );
   return (
-    <Tag {...props}>
+    <Tag background='blackAlpha.100' {...props}>
       <TagLabel {...tagLabelProps}>{children}</TagLabel>
       <TagCloseButton
         {...tagCloseButtonProps}

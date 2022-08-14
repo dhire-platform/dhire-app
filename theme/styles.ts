@@ -6,6 +6,9 @@ export const styles = {
       bg: mode('#FDFDFF', '#212121')(props),
       color: mode('#212121', '#FDFDFF')(props),
     },
+    text: {
+      marginTop: '0',
+    },
 
     ':root': {
       '--chakra-colors-primary-400': mode('#7C82FB', '#94d3ac')(props),
@@ -62,7 +65,7 @@ export const styles = {
       },
     },
     '.wallet-adapter-button-end-icon, .wallet-adapter-button-start-icon, ': {
-     // display: 'none',
+      // display: 'none',
     },
     '.wallet-adapter-modal-list-more': {
       color: 'black',

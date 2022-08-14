@@ -1,4 +1,4 @@
 export enum roleEnum {
-  RECRUITER = 'recruiter',
-  RECRUIT = 'recruit',
+  RECRUITER = 'RECRUITER',
+  RECRUIT = 'APPLICANT',
 }

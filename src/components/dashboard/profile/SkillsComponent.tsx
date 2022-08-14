@@ -10,23 +10,47 @@ import {
   Text,
   Box,
   useColorModeValue,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { useProfileStore } from 'src/app/profileStore';
 import { IProfile } from 'src/definitions/IUser';
-import { MdOutlineEdit } from 'react-icons/md';
+import { MdDone } from 'react-icons/md';
+import { FiEdit2 } from 'react-icons/fi';
 import { useLocalStore } from 'src/app/localStore';
+import ChakraTagInput from 'src/helpers/ChakraTagInput';
 
 const SkillsComponent = () => {
+  const [hover, setHover] = useState(false);
   const { userProfile } = useProfileStore();
-  const { set_edit_mode } = useLocalStore();
+  const setSkills = useProfileStore((state: any) => state.setSkills);
+  const [edit, setEdit] = useState(false);
+  const [tags, setTags] = useState(userProfile.skills);
   const skills: string[] = userProfile.skills!;
 
-  //console.log('skills -', skills);
+  const handleTagsChange = useCallback(
+    (_event: SyntheticEvent, tags: string[]) => {
+      setTags(tags);
+    },
+    []
+  );
+
+  const submitHandler = () => {
+    setSkills(tags);
+    setEdit(false);
+  };
+
   return (
     <Center
+      onMouseEnter={() => {
+        setHover(true);
+      }}
+      onMouseLeave={() => {
+        setHover(false);
+      }}
       bg='white'
-      w='clamp(16rem, 42vw, 36rem)'
+      w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
       rounded='lg'
       flexDirection={'column'}
       justifyContent='start'
@@ -36,12 +60,69 @@ const SkillsComponent = () => {
       border={'1px solid'}
       color='blackAlpha.200'
     >
-      {skills[0] ? (
+      {edit ? (
+        <Stack color='black' w='100%' direction={'row'} align='start'>
+          <FormControl>
+            <FormLabel htmlFor='name'>
+              <Stack
+                h='2rem'
+                w='full'
+                justifyContent='space-between'
+                direction={'row'}
+              >
+                <Heading pb='0.5rem' color={'black'} fontSize='xl'>
+                  Skills
+                </Heading>
+              </Stack>
+            </FormLabel>
+            <ChakraTagInput
+              tags={tags}
+              onTagsChange={handleTagsChange}
+              //  colorScheme='red'
+            />
+          </FormControl>
+          <IconButton
+            onClick={() => submitHandler()}
+            variant={'unstyled'}
+            _hover={{
+              bg: 'blackAlpha.100',
+            }}
+            p='0.1rem'
+            size='sm'
+            display={hover ? 'flex' : 'none'}
+            alignItems='center'
+            justifyContent={'center'}
+            color='blackAlpha.600'
+            aria-label='add experience'
+            icon={<MdDone size='18px' />}
+          />
+        </Stack>
+      ) : skills?.[0] ? (
         <>
-          <Stack w='full' justifyContent='space-between' direction={'row'}>
+          <Stack
+            h='2rem'
+            w='full'
+            justifyContent='space-between'
+            direction={'row'}
+          >
             <Heading color={'black'} fontSize='xl'>
               Skills
             </Heading>
+            <IconButton
+              onClick={() => setEdit(true)}
+              variant={'unstyled'}
+              _hover={{
+                bg: 'blackAlpha.100',
+              }}
+              p='0.1rem'
+              size='sm'
+              display={hover ? 'flex' : 'none'}
+              alignItems='center'
+              justifyContent={'center'}
+              color='blackAlpha.600'
+              aria-label='add experience'
+              icon={<FiEdit2 size='18px' />}
+            />
           </Stack>
           <Flex
             gap='0.7rem'
@@ -51,7 +132,9 @@ const SkillsComponent = () => {
             maxW='36rem'
           >
             {skills?.map((skill: string) => (
-              <Tag key={skill}>{skill}</Tag>
+              <Tag background='blackAlpha.50' p='0.4rem 0.8rem' fontWeight={'400'} key={skill}>
+                {skill}
+              </Tag>
             ))}
           </Flex>
         </>
@@ -79,7 +162,7 @@ const SkillsComponent = () => {
               Add Your Skills by editing your profile.
             </Text>
             <Box
-              onClick={() => set_edit_mode(true)}
+              onClick={() => setEdit(true)}
               as='button'
               outline='1px solid gray'
               p='0.2rem 0.6rem'
