@@ -69,7 +69,7 @@ async function updateUserProfile(
     skills,
     location,
     website,
-    expereince,
+    experience,
     education,
     projects,
     social,
@@ -79,7 +79,7 @@ async function updateUserProfile(
     skills: Skill[];
     location?: string;
     website?: string;
-    expereince?: JSON[];
+    experience?: JSON[];
     education?: JSON[];
     projects?: JSON[];
     social?: SocialType;
@@ -97,7 +97,7 @@ async function updateUserProfile(
         skills,
         location,
         website,
-        expereince,
+        experience,
         education,
         projects,
         social,

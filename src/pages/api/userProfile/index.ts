@@ -17,7 +17,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
     skills,
     location,
     website,
-    expereince,
+    experience,
     education,
     projects,
     social,
@@ -28,7 +28,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
     skills: Skill[];
     location?: string;
     website?: string;
-    expereince?: JSON[];
+    experience?: JSON[];
     education?: JSON[];
     projects?: JSON[];
     social?: SocialType;
@@ -42,7 +42,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
         skills,
         location,
         website,
-        expereince,
+        experience,
         education,
         projects,
         social,
