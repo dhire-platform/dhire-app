@@ -9,13 +9,18 @@ export const styles = {
     text: {
       marginTop: '0',
     },
-
+    '.chakra-alert': {
+      gap: '1.2rem',
+      bg: 'black',
+      color: 'white',
+    },
     ':root': {
       '--chakra-colors-primary-400': mode('#7C82FB', '#94d3ac')(props),
       '--chakra-colors-primary-500': mode('#5F63FC', '#29c7ac')(props),
     },
+    '.wallet-adapter-button-trigger': {},
     '.wallet-adapter-button': {
-      padding: '0rem 2rem',
+      padding: '0rem 1.4rem',
       rounded: '6px',
       fontSize: '18px',
       lineHeight: '0',

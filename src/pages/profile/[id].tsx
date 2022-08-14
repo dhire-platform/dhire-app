@@ -27,7 +27,7 @@ import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent'
 import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditModal';
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
 
-const Profile = () => {
+const User = () => {
   const { userProfile } = useProfileStore();
   const { set_edit_mode, edit_mode } = useLocalStore();
   const { wallet_connected } = useLocalStore();
@@ -37,6 +37,10 @@ const Profile = () => {
   useEffect(() => {
     if (!wallet_connected) {
       router.replace('/');
+    }
+
+    if (!userProfile.userName) {
+      router.replace('/profile');
     }
   }, [wallet_connected]);
 
@@ -75,59 +79,50 @@ const Profile = () => {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Center px='1rem' w='full'>
-                  <Center
-                    border='1px dashed'
-                    borderColor={'blackAlpha.300'}
-                    textAlign={'center'}
-                    flexDirection={'column'}
-                    w='100%'
-                    rounded='md'
-                    maxW='5xl'
-                    h='50vh'
+                <Center w='full'>
+                  <Flex
+                    mx='auto'
+                    h={{ base: 'full', md: 'clamp(54rem,180vh, 60rem)' }}
+                    gap='2rem'
+                    flexWrap={'wrap'}
+                    alignItems='center'
+                    alignContent={'center'}
+                    justifyContent={'top'}
+                    flexDirection={{ base: 'row', md: 'column' }}
                   >
-                    <Heading
-                      mb='2rem'
-                      rounded='full'
-                      bg='blackAlpha.50'
-                      p='1rem 1.5rem'
-                      fontSize='6xl'
-                    >
-                      📝
-                    </Heading>
-                    <Text pb='1rem' fontSize='xl'>
-                      There is nothing to show
-                    </Text>
-                    <Text maxW='28rem' color={'blackAlpha.400'} fontSize='md'>
-                      You have not entered any data yet. Click on Edit button to
-                      enter data to show on your profile{' '}
-                    </Text>
-                    <Button
-                      _hover={{
-                        bg: 'blackAlpha.100',
-                      }}
-                      rounded='md'
-                      border='1px solid'
-                      borderColor={'blackAlpha.400'}
-                      fontSize={'sm'}
-                      pl='1rem'
-                      pr='1rem'
-                      mt='1rem'
-                      variant='unstyled'
-                      onClick={onOpen}
-                      fontWeight='300'
-                    >
-                      Edit Profile
-                    </Button>
-                  </Center>
+                    <ProfileComponent />
+                    <Education />
+                    <SkillsComponent />
+                    <Achievement />
+                    {/* <Experience /> */}
+                  </Flex>
                 </Center>
+              </TabPanel>
+              <TabPanel>
+                <Text size='xl' fontWeight='600'>
+                  <Container minW='full' h='100vh'>
+                    Coming Soon
+                  </Container>
+                </Text>
+              </TabPanel>
+              <TabPanel>
+                <Text size='xl' fontWeight='600'>
+                  <Container minW='full' h='100vh'>
+                    Coming Soon
+                  </Container>
+                </Text>
               </TabPanel>
             </TabPanels>
           </Tabs>
+          <Stack
+            direction='row'
+            justify='space-between'
+            align={'start'}
+          ></Stack>
         </Container>
       </Container>
     </>
   );
 };
 
-export default Profile;
+export default User;

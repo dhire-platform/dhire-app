@@ -25,6 +25,8 @@ import {
   InputGroup,
   InputLeftAddon,
   useDisclosure,
+  useToast,
+  Toast,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -33,13 +35,34 @@ import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
 import { IProfile } from 'src/definitions/IUser';
 import { ErrorMessage } from '@hookform/error-message';
+import { useRouter } from 'next/router';
 
 const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   const setProfile = useProfileStore((state: any) => state.setProfile);
   const { userProfile, pubKey } = useProfileStore();
   const { edit_mode, set_edit_mode } = useLocalStore();
+  const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
+
+  const toast_profile_created = useToast({
+    status: 'success',
+    position: 'bottom',
+    title: 'Profile Created Successfully',
+    containerStyle: {
+      width: '800px',
+      maxWidth: '100%',
+    },
+  });
+  const toast_profile_updated = useToast({
+    status: 'success',
+    position: 'bottom',
+    title: 'Profile Updated Successfully',
+    containerStyle: {
+      width: '800px',
+      maxWidth: '100%',
+    },
+  });
 
   const {
     handleSubmit,
@@ -55,22 +78,36 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     },
   });
 
-  console.log('edit more from profile component -', edit_mode);
-
   useEffect(() => {
-    console.log('editMode state changed', edit_mode);
     if (edit_mode) {
-      console.log('editMode set to true');
       isOpen;
     }
   }, [edit_mode]);
 
   function onSubmit(values: any) {
     const { name, userName, image, about } = values;
-    const data: IProfile = { name, userName, about, image };
-    setProfile(data, pubKey);
+    if (router.pathname === '/profile') {
+      const data: IProfile = { name, userName, about, image };
+      setProfile(data, pubKey);
+      toast_profile_created({
+        containerStyle: {
+          // border: '20px solid red',
+        },
+      });
+      router.push(`/profile/${userName}`);
+      onClose();
+    } else {
+      const data = { name, userName, about, image };
+      setProfile(data, pubKey);
+      toast_profile_updated({
+        containerStyle: {
+          // border: '20px solid red',
+        },
+      });
+      onClose();
+    }
+
     set_edit_mode(false);
-    onClose();
   }
 
   return (
@@ -122,38 +159,42 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
             </FormControl>
 
             {/*userName */}
-            <FormControl isRequired>
-              <FormLabel htmlFor='name'>User Name</FormLabel>
-              <InputGroup>
-                <InputLeftAddon>@</InputLeftAddon>
-                <Input
-                  isRequired
-                  type='text'
-                  id='userName'
-                  placeholder='User Name'
-                  {...register('userName', {
-                    required: 'This is Required',
-                    minLength: {
-                      value: 5,
-                      message: 'minimum number of character for username is 5',
-                    },
-                    pattern: {
-                      value: /^\w[a-zA-Z@#0-9.]*$/,
-                      message: 'User Name can not contain white spacing',
-                    },
-                  })}
+            {router.pathname === '/profile' && (
+              <FormControl isRequired>
+                <FormLabel htmlFor='name'>User Name</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon>@</InputLeftAddon>
+                  <Input
+                    defaultValue={userProfile.userName}
+                    isRequired
+                    type='text'
+                    id='userName'
+                    placeholder='User Name'
+                    {...register('userName', {
+                      required: 'This is Required',
+                      minLength: {
+                        value: 5,
+                        message:
+                          'minimum number of character for username is 5',
+                      },
+                      pattern: {
+                        value: /^\w[a-zA-Z@#0-9.]*$/,
+                        message: 'User Name can not contain white spacing',
+                      },
+                    })}
+                  />
+                </InputGroup>
+                <ErrorMessage
+                  errors={errors}
+                  name='userName'
+                  render={({ message }) => (
+                    <Text fontSize='sm' color='red.500' py='0.5rem'>
+                      {message}
+                    </Text>
+                  )}
                 />
-              </InputGroup>
-              <ErrorMessage
-                errors={errors}
-                name='userName'
-                render={({ message }) => (
-                  <Text fontSize='sm' color='red.500' py='0.5rem'>
-                    {message}
-                  </Text>
-                )}
-              />
-            </FormControl>
+              </FormControl>
+            )}
 
             {/*Profile Picture URL */}
             <FormControl>

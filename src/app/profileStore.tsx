@@ -19,6 +19,7 @@ interface IProfileStore {
   socials: ISocial;
   // setSkills?: (skills: string[]) => void;
   setProfile: (profile: IProfile, pubKey: string) => void;
+  updateProfile: (profile: any) => void;
   setSkills: (skills: string[]) => void;
   getUser: () => void;
   deleteUser: () => void;
@@ -53,12 +54,37 @@ export const useProfileStore = create<IProfileStore>((set) => ({
     github: '',
   },
 
-  setSkills: (skills: string[]) => {
+  setSkills: async (skills: string[]) => {
     set((state) => ({
       ...state,
       userProfile: {
         ...state.userProfile,
         skills,
+      },
+    }));
+  },
+
+  updateProfile: async (data: any) => {
+    // axios
+    //   .post('/api/user', {
+    //     name: data.name,
+    //     image: data.image,
+    //     about: data.about,
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    set((prevState) => ({
+      userProfile: {
+        name: data.name,
+        userName: data.name,
+        about: data.about,
+        image: data.image,
+        ...prevState,
       },
     }));
   },
