@@ -40,7 +40,8 @@ const User = () => {
     }
 
     if (!userProfile.userName) {
-      router.replace('/profile');
+      //  router.replace('/profile');
+      console.log('flash');
     }
   }, [wallet_connected]);
 

@@ -7,57 +7,32 @@ import DashboardNavbar from './DashboardNav';
 import LandingPageNavbar from './LandingPageNav';
 import { useProfileStore } from 'src/app/profileStore';
 import { useLocalStore } from 'src/app/localStore';
+import { usePersistanceStore } from 'src/app/persistanceStore';
+import { IProfileStore } from 'src/definitions/definitions';
 
 const Navbar = () => {
-  const { setPubKey, pubKey } = useProfileStore();
-  const [publicKey, setPublicKey] = useState(pubKey);
-  const { set_wallet_connected } = useLocalStore();
+  const setPubKey = useProfileStore((state: any) => state.setPubKey);
+  const user = useProfileStore((state: IProfileStore) => state.user);
+  const { userId, userName, setUserName, setUserId } = usePersistanceStore();
 
   const wallet = useWallet();
 
   const wallet_connected_toast = useToast();
-
   useEffect(() => {
     if (wallet.connected) {
-      set_wallet_connected(true);
-      console.log(wallet.wallet?.adapter.name);
-      setPublicKey(wallet?.publicKey?.toBase58()!);
-      if (publicKey.length > 0) {
-        setPubKey(publicKey);
-        wallet_connected_toast({
-          icon: (
-            <Image
-              minW='2.5rem'
-              minH='2.5rem'
-              mr={'1rem'}
-              src={`${wallet.wallet?.adapter.icon}`}
-            />
-          ),
-          colorScheme: 'blackAlpha',
-          variant: 'success',
-          position: 'bottom',
-          title: `${wallet.wallet?.adapter.name} wallet Connected`,
-          description: ` Enter your details to get started`,
-          duration: 2500,
-          containerStyle: {
-            width: '360px',
-            maxWidth: '100%',
-            border: '1px solid gray',
-            borderRadius: '8px',
-          },
-        });
-      }
+      console.log('wallet connected 💰');
+      //setPubKey(wallet.publicKey?.toBase58);
+      // request to backend for data
+    } else if (wallet.disconnecting) {
+      console.log('wallet is disconnecting 💰');
     } else if (!wallet.connected) {
-      set_wallet_connected(false);
-      setPublicKey('');
-      setPubKey(publicKey);
-      // wallet_disconnected_toast();
+      console.log('wallet not connected 💰');
     }
-  }, [publicKey, wallet.connected]);
+  }, [wallet.connected]);
 
   return (
     <Container minW={'full'} p='0'>
-      {publicKey ? (
+      {user.wallet ? (
         <DashboardNavbar>
           <WalletMultiButton />
         </DashboardNavbar>

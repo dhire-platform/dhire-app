@@ -36,11 +36,16 @@ import { useProfileStore } from 'src/app/profileStore';
 import { IProfile } from 'src/definitions/IUser';
 import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
+import { usePersistanceStore } from 'src/app/persistanceStore';
 
 const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
-  const setProfile = useProfileStore((state: any) => state.setProfile);
+  const editProfile = useProfileStore((state: any) => state.editProfile);
+  const createUser = useProfileStore((state: any) => state.createUser);
+
   const { userProfile, pubKey } = useProfileStore();
   const { edit_mode, set_edit_mode } = useLocalStore();
+  const { userId, userName, setUserId, setUserName } = usePersistanceStore();
+
   const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -50,7 +55,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     position: 'bottom',
     title: 'Profile Created Successfully',
     containerStyle: {
-      width: '800px',
+      width: '300px',
       maxWidth: '100%',
     },
   });
@@ -59,7 +64,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     position: 'bottom',
     title: 'Profile Updated Successfully',
     containerStyle: {
-      width: '800px',
+      width: '300px',
       maxWidth: '100%',
     },
   });
@@ -84,31 +89,50 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     }
   }, [edit_mode]);
 
-  function onSubmit(values: any) {
+  async function onSubmit(values: any) {
     const { name, userName, image, about } = values;
+
     if (router.pathname === '/profile') {
       const data: IProfile = { name, userName, about, image };
-      setProfile(data, pubKey);
-      toast_profile_created({
-        containerStyle: {
-          // border: '20px solid red',
-        },
-      });
-      router.push(`/profile/${userName}`);
-      onClose();
+      const url = '/profile/' + userName;
+      createUser(data)
+        .then((res: any) => {
+          router
+            .push(url)
+            .then(() => {
+              toast_profile_created();
+              onClose();
+            })
+            .catch((err: any) => console.log(err));
+        })
+        .catch((err: any) => {
+          console.log('Error From Server - ', err.message);
+        });
     } else {
-      const data = { name, userName, about, image };
-      setProfile(data, pubKey);
-      toast_profile_updated({
-        containerStyle: {
-          // border: '20px solid red',
-        },
-      });
+      console.log('route is not profiles');
+      const data = { name, userName: userProfile.userName, about, image };
+      console.log('data from modal to edit component = ', values);
+      editProfile(data)
+        .then((res: any) => {
+          console.log('res', res);
+          toast_profile_updated();
+        })
+        .catch((err: any) => {
+          console.log('error, ', err);
+        });
       onClose();
     }
 
     set_edit_mode(false);
   }
+
+  useEffect(() => {
+    console.log('store data ', userProfile.id, userProfile.userName);
+    if (userProfile.id && userProfile.userName) {
+      setUserId(userProfile.id);
+      setUserName(userProfile.userName);
+    }
+  }, [userProfile]);
 
   return (
     <Modal

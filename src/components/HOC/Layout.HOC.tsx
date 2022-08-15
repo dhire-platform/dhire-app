@@ -12,11 +12,11 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
   const router = useRouter();
-  const { pubKey } = useProfileStore();
+  const { user } = useProfileStore();
 
   useEffect(() => {
-    console.log('public key - ', pubKey);
-  }, [pubKey, router]);
+    //    conle.log('public key - ', pubKey);
+  }, [user.wallet, router]);
 
   return (
     <Container
@@ -27,10 +27,10 @@ const Layout: React.FC<Props> = ({ children }) => {
       p='0'
       zIndex='1'
     >
-      {pubKey.length > 0 ? '' : <Background />}
+      {user.wallet.length > 0 ? '' : <Background />}
       <Navbar />
       {children}
-      {pubKey.length > 0 ? '' : <Footer />}
+      {user.wallet.length > 0 ? '' : <Footer />}
     </Container>
   );
 };

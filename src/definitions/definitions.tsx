@@ -1,4 +1,40 @@
 import { roleEnum } from 'src/enums/enums';
+
+interface IPagination {
+  onPageChange: any;
+  totalCount: number;
+  siblingCount: number;
+  currentPage: number;
+  pageSize: number;
+}
+
+type IJob = {
+  job_title: string;
+  job_company: string;
+  job_company_image: string;
+  job_salary_min: number;
+  job_salary_max: number;
+  job_location: any;
+  job_description: string;
+  job_type: number;
+  job_experience_level: number;
+};
+
+interface IProfileStore {
+  user: IProfile;
+  experience: IExperience[];
+  projects: IProject[];
+  education: IEducation;
+  socials: ISocial;
+  editProfile: (profile: IProfile) => void;
+  createUser: (data: any) => any;
+  setSkills: (skills: string[]) => any;
+  getUser: () => void;
+  deleteUser: () => void;
+  setExperience: (experience: IExperience[]) => void;
+  setPubKey: (pubKey: string) => void;
+}
+
 interface IUseStore {
   isAuth: boolean;
   setAuth: (value: boolean) => any;
@@ -57,4 +93,20 @@ interface ISocial {
   github?: string;
 }
 
-export type { IProfile, IExperience, IEducation, ISocial, IProject, IUseStore };
+export enum SkillLevel {
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
+}
+
+export type {
+  IPagination,
+  IProfileStore,
+  IJob,
+  IProfile,
+  IExperience,
+  IEducation,
+  ISocial,
+  IProject,
+  IUseStore,
+};

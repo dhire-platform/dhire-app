@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useLocalStore } from 'src/app/localStore';
+import { usePersistanceStore } from 'src/app/persistanceStore';
 import { useProfileStore } from 'src/app/profileStore';
 import ChooseUs from 'src/components/landing/Home/ChooseUs';
 import Hero from 'src/components/landing/Home/Hero/Hero';
@@ -16,13 +17,19 @@ import { Redirect } from 'src/helpers/Redirect';
 
 const Home: NextPage = () => {
   const { wallet_connected } = useLocalStore();
+  const { userId, userName } = usePersistanceStore();
   const router = useRouter();
 
-  useEffect(() => {
-    if (wallet_connected) {
-      router.replace('/profile');
-    }
-  }, [router, wallet_connected]);
+  // if (userId) {
+  //   console.log('user exists in storage - redirecting to dashboard');
+  //   router.push(`/profile/${userName}`);
+  // }
+
+  // useEffect(() => {
+  //   if (wallet_connected) {
+  //     router.replace('/profile');
+  //   }
+  // }, [router, wallet_connected]);
 
   return (
     <>
