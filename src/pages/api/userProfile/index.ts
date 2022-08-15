@@ -11,7 +11,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
   });
 
   const {
-    userId,
+    walletId,
     bio,
     image,
     skills,
@@ -22,7 +22,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
     projects,
     social,
   } = req.body as {
-    userId: string;
+    walletId: string;
     bio?: string;
     image?: string;
     skills: Skill[];
@@ -36,7 +36,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
   try {
     const userProfile = await prisma.userProfile.create({
       data: {
-        userId,
+        walletId,
         bio,
         image,
         skills,
