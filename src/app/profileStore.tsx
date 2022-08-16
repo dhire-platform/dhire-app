@@ -1,21 +1,9 @@
 import axios from 'axios';
-import {
-  IEducation,
-  IExperience,
-  IProfile,
-  IProject,
-  ISocial,
-} from 'src/definitions/IUser';
+import { IProfile, skill } from 'src/definitions/definitions';
+import create from 'zustand';
 import { roleEnum } from 'src/enums/enums';
-import create, { StoreApi } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { IProfileStore, SkillLevel } from 'src/definitions/definitions';
-
-// const myMiddleware = (f: any) =>
-//   devtools(
-//     persist(f)
-//   );
 
 export const useProfileStore = create<IProfileStore>((set, get) => ({
   user: {
@@ -57,7 +45,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     })),
 
   // todo: manage this request in a better way
-  setSkills: async (skills: string[]) => {
+  setSkills: async (skills: skill[]) => {
     axios
       .put(`/api/user/${get().user.id}`, {
         skills: skills,
@@ -83,12 +71,11 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
      * @returns:   none
      * @route:    /api/user
      * Note: it also creates a user profile bu hitting the url /api/user/{id}
-     todo@1 : separate both the routes in backend and frontend
-     todo@2: add update skills and achievements/education inside this function & do both requests in one request
+     todo: add update skills and achievements/education inside this function & do both requests in one request
        */
 
   createUser: async (data: any): Promise<any> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       axios
         .post('/api/user', {
           name: data.name,
@@ -104,7 +91,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
               userName: res.data.username,
               about: get().user.about,
               image: data.image,
-              wallet: get().user.wallet,
+              wallet: data.wallet,
               role: get().user.role,
               skills: get().user.skills,
               location: get().user.location,
@@ -112,7 +99,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
               achievement: get().user.achievement,
             },
           }));
-          console.log('1 - res for user create ', res.statusText);
+
           axios
             .post('/api/userProfile', {
               walletId: data.wallet,
@@ -121,8 +108,11 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
               skills: get().user.skills,
             })
             .then((response: any) => {
-              console.log('2 - res for user profile create ', response.statusText);
-              resolve(response);
+              console.log(
+                '3 - res for user profile create ',
+                response.statusText
+              );
+              resolve(res);
             })
             .catch((e) => {
               resolve(e);
@@ -132,6 +122,24 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
           resolve(err);
         });
     });
+  },
+
+  setUser: async (data: IProfile) => {
+    set((prevState: any) => ({
+      user: {
+        id: data.id!,
+        name: data.name!,
+        userName: data.userName!,
+        about: data.about!,
+        image: data.image!,
+        wallet: data.wallet!,
+        role: data.role!,
+        skills: data.skills!,
+        location: data.location!,
+        website: data.website!,
+        achievement: data.achievement!,
+      },
+    }));
   },
 
   /**

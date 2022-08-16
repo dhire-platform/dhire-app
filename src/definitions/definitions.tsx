@@ -1,5 +1,15 @@
 import { roleEnum } from 'src/enums/enums';
 
+type skill = {
+  name: string;
+  level: SkillLevel;
+};
+
+interface IUseStore {
+  isAuth: boolean;
+  setAuth: (value: boolean) => any;
+}
+
 interface IPagination {
   onPageChange: any;
   totalCount: number;
@@ -27,9 +37,10 @@ interface IProfileStore {
   education: IEducation;
   socials: ISocial;
   setWallet: (pubKey: string) => void;
+  setUser: (data: IProfile) => void;
   editProfile: (data: IProfile) => Promise<any>;
   createUser: (data: any) => any;
-  setSkills: (skills: string[]) => any;
+  setSkills: (skills: skill[]) => any;
   getUser: () => void;
   deleteUser: () => void;
   setExperience: (experience: IExperience[]) => void;
@@ -40,10 +51,6 @@ interface IUseStore {
   setAuth: (value: boolean) => any;
 }
 
-type skill = {
-  name: string;
-  level: SkillLevel;
-};
 interface IProfile {
   id?: string;
   userName: string;
@@ -105,6 +112,7 @@ export enum SkillLevel {
 }
 
 export type {
+  skill,
   IPagination,
   IProfileStore,
   IJob,

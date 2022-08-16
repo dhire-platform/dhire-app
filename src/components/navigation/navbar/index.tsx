@@ -1,10 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import {
   Container,
-  Flex,
-  Image,
   useDisclosure,
-  useToast,
   Button,
   Modal,
   ModalOverlay,
@@ -19,63 +16,54 @@ import {
   FormControl,
   FormLabel,
   Text,
-  Textarea,
 } from '@chakra-ui/react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useWallet } from '@solana/wallet-adapter-react';
 import DashboardNavbar from './DashboardNav';
 import LandingPageNavbar from './LandingPageNav';
 import { useProfileStore } from 'src/app/profileStore';
-import { useLocalStore } from 'src/app/localStore';
 import { usePersistanceStore } from 'src/app/persistanceStore';
 import { IProfileStore } from 'src/definitions/definitions';
 import axios from 'axios';
 import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditModal';
 import { useForm } from 'react-hook-form';
 import { FiEdit2 } from 'react-icons/fi';
-import { IProfile } from 'src/definitions/IUser';
+import { IProfile } from 'src/definitions/definitions';
 import { ErrorMessage } from '@hookform/error-message';
 
 const Navbar = () => {
-  const { createUser } = useProfileStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const user = useProfileStore((state: IProfileStore) => state.user);
-  const setWallet = useProfileStore((state: IProfileStore) => state.setWallet);
+  const { user, setUser, setWallet, createUser } = useProfileStore();
+  const { userId, userWalletId, setPersistanceUser } = usePersistanceStore();
+
   const router = useRouter();
-  const wallet = useWallet();
+  const connected_wallet = useWallet();
 
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm({
-    criteriaMode: 'all',
-    defaultValues: {
-      name: user.name,
-      userName: user.userName,
-      about: user.about,
-      image: user.image,
-    },
-  });
+  } = useForm({});
 
-  const onSubmit = async (data: any) => {
-    const { name, userName } = data;
-
-    const Data = { name, userName, wallet: wallet.publicKey?.toBase58()! };
+  const onSubmit = async (submittedData: any) => {
+    const Data = {
+      name: submittedData.name,
+      userName: submittedData.userName,
+      image: submittedData.image,
+      wallet: connected_wallet.publicKey?.toBase58(),
+    };
 
     createUser(Data)
       .then((res: any) => {
-        console.log(
-          '3 - From profile component passed data - ',
-          res.statusText
-        );
-        // store do not give any response after connection so lets check for id in store and
         if (res.data.id) {
-          console.log(
-            '4 - Are we getting anything inside user - ',
-            res.data.id
-          );
+          const persistData = {
+            userId: res.data.id as string,
+            userName: res.data.username as string,
+            userWalletId: res.data.wallet as string,
+          };
+          console.log(persistData);
+          setPersistanceUser(persistData);
           router
             .push('/profile/' + res.data.id)
             .then(() => close())
@@ -90,34 +78,40 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (wallet.connected) {
-      console.log('wallet connected 💰');
-      // set the wallet key in user store  so that the top nav will change
-
-      // request to backend for data after wallet is connected before user is logged in
-      const userId = wallet.publicKey?.toBase58();
-
+    if (connected_wallet.connected) {
       //todo: reduce the lag | tha lag in loading the /profile route is due to api request taking time
-      axios
-        .get('/api/user/62fb5547fce175c4caf61e13')
-        .then((res) => {
-          console.log(res);
-          // if we get a okay response from the backend then we will connect the wallet and add the recieved data to the user profile store
-        })
-        .catch((err) => {
-          // if we get bakc error then the user does not exist and we need to create a user by opening the modal
-          onOpen();
-
-          // now we set the wallet address in local store in order to change the ui
-          setWallet(wallet.publicKey?.toBase58()!);
-        });
-    } else if (!wallet.connected) {
-      console.log('wallet not connected 💰');
+      if (userId.length > 0) {
+        axios
+          .get('/api/user/' + userId)
+          .then((res) => {
+            console.log('res.data', res.data);
+            if (res.data !== null && res.data.wallet === userWalletId) {
+              const Data = res.data;
+              setUser(Data);
+              router.push('/profile/' + userId);
+            } else if (res.data.wallet === userWalletId) {
+              console.log('user is connecting with a different wallet');
+            } else {
+              onOpen();
+              setWallet(connected_wallet.publicKey?.toBase58()!);
+            }
+            axios
+              .get('/api/userProfile/' + userId)
+              .then((res) => console.log('userprofile res- ', res))
+              .catch((e) => console.log(e));
+          })
+          .catch((err) => {
+            onOpen();
+            setWallet(connected_wallet.publicKey?.toBase58()!);
+          });
+      } else {
+        onOpen();
+      }
+    } else if (!connected_wallet.connected) {
       setWallet('');
-      // if wallet is not connected then redirect to home page
       router.push('/');
     }
-  }, [wallet.connected]);
+  }, [connected_wallet.connected]);
 
   return (
     <Container minW={'full'} p='0'>

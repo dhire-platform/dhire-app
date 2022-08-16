@@ -1,19 +1,10 @@
 import {
-  Avatar,
-  Center,
-  Heading,
-  Stack,
   Text,
-  FormErrorMessage,
   FormLabel,
   FormControl,
   Input,
-  useColorModeValue,
   Textarea,
-  IconButton,
   Button,
-  Drawer,
-  FormHelperText,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -23,16 +14,12 @@ import {
   ModalCloseButton,
   InputGroup,
   InputLeftAddon,
-  useDisclosure,
   useToast,
-  Toast,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiEdit2 } from 'react-icons/fi';
 import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
-import { IProfile } from 'src/definitions/IUser';
 import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
 import { usePersistanceStore } from 'src/app/persistanceStore';
@@ -43,7 +30,6 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
 
   const { user } = useProfileStore();
   const { edit_mode, set_edit_mode } = useLocalStore();
-  const { userId, userName, setUserId, setUserName } = usePersistanceStore();
 
   const router = useRouter();
   const initialRef = useRef(null);
@@ -124,14 +110,6 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
 
     set_edit_mode(false);
   }
-
-  useEffect(() => {
-    console.log('store data ', user.id, user.userName);
-    if (user.id && user.userName) {
-      setUserId(user.id);
-      setUserName(user.userName);
-    }
-  }, [user]);
 
   return (
     <Modal

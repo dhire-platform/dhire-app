@@ -1,21 +1,27 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
-
+type persistDataType = {
+  userId: string;
+  userWalletId: string;
+  userName: string;
+};
 interface IPersistanceStore {
   userId: string;
+  userWalletId: string;
   userName: string;
-  setUserId: (id: string) => void;
-  setUserName: (name: string) => void;
+  setPersistanceUser: (data: persistDataType) => void;
 }
 
 export const usePersistanceStore = create<IPersistanceStore>()(
   persist(
     (set) => ({
       userId: '' as string,
+      userWalletId: '' as string,
       userName: '' as string,
-      setUserId: (id: string) => set(() => ({ userId: id })),
-      setUserName: (name: string) => set(() => ({ userName: name })),
+      setPersistanceUser: (data: persistDataType) => {
+        set(data);
+      },
     }),
     { name: 'dhire' }
   )

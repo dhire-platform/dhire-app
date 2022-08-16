@@ -2,28 +2,11 @@ import config from '@/config/general.config';
 import {
   Button,
   Container,
-  Box,
-  Center,
-  Flex,
-  Stack,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
   Text,
-  Heading,
-  useMediaQuery,
-  Avatar,
-  FormErrorMessage,
   FormLabel,
   FormControl,
   Input,
-  useColorModeValue,
   Textarea,
-  IconButton,
-  Drawer,
-  FormHelperText,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -34,14 +17,10 @@ import {
   InputGroup,
   InputLeftAddon,
   useDisclosure,
-  useToast,
-  Toast,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
-import { useLocalStore } from 'src/app/localStore';
-import { usePersistanceStore } from 'src/app/persistanceStore';
+import { useRef } from 'react';
 import { useProfileStore } from 'src/app/profileStore';
 import ChooseUs from 'src/components/landing/Home/ChooseUs';
 import Hero from 'src/components/landing/Home/Hero/Hero';
@@ -50,7 +29,6 @@ import Philosophy from 'src/components/landing/Home/Philosophy';
 import Section1 from 'src/components/landing/Home/Sections/Section1';
 import Section2 from 'src/components/landing/Home/Sections/Section2';
 import SEO from 'src/components/SEO/SEO';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
@@ -67,33 +45,17 @@ const Home: NextPage = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm({
-    criteriaMode: 'all',
-    defaultValues: {
-      name: user.name,
-      userName: user.userName,
-      about: user.about,
-      image: user.image,
-    },
-  });
+  } = useForm({});
 
-  async function onSubmit(values: any) {
-    const { name, userName, image, about } = values;
-
-    const data = { name, userName, about, image };
-    const url = '/profile/' + userName;
-    createUser(data)
+  async function onSubmit({ name, userName, about, image }: any) {
+    createUser({ name, userName, about, image })
       .then((res: any) => {
-        router
-          .push(url)
-          .then(() => {
-            //onClose();
-          })
-          .catch((err: any) => console.log(err));
+        router.push('/profile/' + userName);
       })
       .catch((err: any) => {
-        console.log('Error From Server - ', err.message);
+        console.log('Error creating server /pages/index - ', err);
       });
+    onClose();
   }
 
   const ModalViewContainer = () => {

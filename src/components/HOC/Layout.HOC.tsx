@@ -1,6 +1,4 @@
-import { Container, useColorModeValue } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import { Container } from '@chakra-ui/react';
 import { useProfileStore } from 'src/app/profileStore';
 import Background from '../Background';
 import Footer from '../navigation/footer';
@@ -11,7 +9,6 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const router = useRouter();
   const { user } = useProfileStore();
 
   return (
