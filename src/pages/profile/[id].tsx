@@ -28,22 +28,9 @@ import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditMo
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
 
 const User = () => {
-  const { userProfile } = useProfileStore();
-  const { set_edit_mode, edit_mode } = useLocalStore();
-  const { wallet_connected } = useLocalStore();
+  const { user } = useProfileStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!wallet_connected) {
-      router.replace('/');
-    }
-
-    if (!userProfile.userName) {
-      //  router.replace('/profile');
-      console.log('flash');
-    }
-  }, [wallet_connected]);
 
   // use meidaQuery to get width of scrren
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -92,10 +79,10 @@ const User = () => {
                     flexDirection={{ base: 'row', md: 'column' }}
                   >
                     <ProfileComponent />
-                    <Education />
+                    {/* <Education />
                     <SkillsComponent />
-                    <Achievement />
-                    {/* <Experience /> */}
+                    <Achievement /> 
+                    <Experience /> */}
                   </Flex>
                 </Center>
               </TabPanel>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import {
   Avatar,
   Center,
@@ -42,7 +41,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   const editProfile = useProfileStore((state: any) => state.editProfile);
   const createUser = useProfileStore((state: any) => state.createUser);
 
-  const { userProfile, pubKey } = useProfileStore();
+  const { user } = useProfileStore();
   const { edit_mode, set_edit_mode } = useLocalStore();
   const { userId, userName, setUserId, setUserName } = usePersistanceStore();
 
@@ -76,10 +75,10 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   } = useForm({
     criteriaMode: 'all',
     defaultValues: {
-      name: userProfile.name,
-      userName: userProfile.userName,
-      about: userProfile.about,
-      image: userProfile.image,
+      name: user.name,
+      userName: user.userName,
+      about: user.about,
+      image: user.image,
     },
   });
 
@@ -93,7 +92,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     const { name, userName, image, about } = values;
 
     if (router.pathname === '/profile') {
-      const data: IProfile = { name, userName, about, image };
+      const data = { name, userName, about, image };
       const url = '/profile/' + userName;
       createUser(data)
         .then((res: any) => {
@@ -110,7 +109,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
         });
     } else {
       console.log('route is not profiles');
-      const data = { name, userName: userProfile.userName, about, image };
+      const data = { name, userName: user.userName, about, image };
       console.log('data from modal to edit component = ', values);
       editProfile(data)
         .then((res: any) => {
@@ -127,12 +126,12 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   }
 
   useEffect(() => {
-    console.log('store data ', userProfile.id, userProfile.userName);
-    if (userProfile.id && userProfile.userName) {
-      setUserId(userProfile.id);
-      setUserName(userProfile.userName);
+    console.log('store data ', user.id, user.userName);
+    if (user.id && user.userName) {
+      setUserId(user.id);
+      setUserName(user.userName);
     }
-  }, [userProfile]);
+  }, [user]);
 
   return (
     <Modal
@@ -189,7 +188,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                 <InputGroup>
                   <InputLeftAddon>@</InputLeftAddon>
                   <Input
-                    defaultValue={userProfile.userName}
+                    defaultValue={user.userName}
                     isRequired
                     type='text'
                     id='userName'

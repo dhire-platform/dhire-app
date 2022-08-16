@@ -48,7 +48,6 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
         social,
       },
     });
-    console.log('create user profile =', userProfile);
     res.status(200).json(userProfile);
   } catch (e) {
     res.status(400).json({ error: (e as Error).message });

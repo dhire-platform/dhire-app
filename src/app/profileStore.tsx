@@ -11,6 +11,7 @@ import create, { StoreApi } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { IProfileStore, SkillLevel } from 'src/definitions/definitions';
+
 // const myMiddleware = (f: any) =>
 //   devtools(
 //     persist(f)
@@ -26,7 +27,10 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     about: '',
     achievements: '',
     image: '',
-    skills: ['hello', 'world'],
+    skills: [
+      { name: 'hello', level: SkillLevel.ADVANCED },
+      { name: 'world', level: SkillLevel.BEGINNER },
+    ],
     location: '',
     website: '',
     achievement: '',
@@ -43,12 +47,12 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     github: '',
   },
 
-  setPubKey: (publicKey: string) =>
+  setWallet: (wallet?: string) =>
     set((state: { user: any }) => ({
       ...state,
       user: {
         ...state.user,
-        wallet: publicKey,
+        wallet,
       },
     })),
 
@@ -84,45 +88,50 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
        */
 
   createUser: async (data: any): Promise<any> => {
-    axios
-      .post('/api/user', {
-        name: data.name,
-        type: roleEnum.RECRUIT,
-        wallet: get().user.wallet,
-        username: data.userName,
-      })
-      .then((res) => {
-        console.log(res);
-        set((prevState: any) => ({
-          user: {
-            id: res.data.id,
-            name: res.data.name,
-            userName: res.data.username,
-            about: data.about,
-            image: data.image,
-            ...prevState,
-          },
-        }));
-        axios
-          .post('/api/user', {
-            userId: res.data.id,
-            bio: data.about,
-            image: data.image,
-            skills: get().user.skills,
-          })
-          .then((res: any) => {
-            console.log('update store response from server ', res);
-            return res;
-          })
-          .catch((e) => {
-            console.log('update store error from server ', e);
-            return e;
-          });
-      })
-      .catch((e) => {
-        console.log('store error ', e);
-        return e;
-      });
+    return new Promise((resolve, reject) => {
+      axios
+        .post('/api/user', {
+          name: data.name,
+          type: roleEnum.RECRUIT,
+          wallet: data.wallet,
+          username: data.userName,
+        })
+        .then((res) => {
+          set((prevState: any) => ({
+            user: {
+              id: res.data.id,
+              name: res.data.name,
+              userName: res.data.username,
+              about: get().user.about,
+              image: data.image,
+              wallet: get().user.wallet,
+              role: get().user.role,
+              skills: get().user.skills,
+              location: get().user.location,
+              website: get().user.website,
+              achievement: get().user.achievement,
+            },
+          }));
+          console.log('1 - res for user create ', res.statusText);
+          axios
+            .post('/api/userProfile', {
+              walletId: data.wallet,
+              bio: data.about,
+              image: data.image,
+              skills: get().user.skills,
+            })
+            .then((response: any) => {
+              console.log('2 - res for user profile create ', response.statusText);
+              resolve(response);
+            })
+            .catch((e) => {
+              resolve(e);
+            });
+        })
+        .catch((err) => {
+          resolve(err);
+        });
+    });
   },
 
   /**
@@ -134,7 +143,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
    * todo: handle error state & return type to the function
    */
 
-  editProfile: async (data: IProfile) => {
+  editProfile: async (data: any): Promise<any> => {
     set((prevState: any) => ({
       user: {
         id: get().user.id,
@@ -149,23 +158,21 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     const userData = {
       bio: get().user.about,
       image: get().user.image,
-      skills: [
-        { name: 'hello', level: SkillLevel.ADVANCED },
-        { name: 'world', level: SkillLevel.BEGINNER },
-      ],
+      skills: get().user.skills,
       experience: get().experience,
       education: get().education,
       projects: get().projects,
     };
-    console.log('data - ', userData, '\nuserid -', get().user.id);
 
     axios
       .put(`/api/user/${get().user.id}`, userData)
       .then((res) => {
         console.log('create user response from server - ', res);
+        return res;
       })
       .catch((err) => {
         console.log(err);
+        return err;
       });
   },
 
@@ -198,6 +205,5 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
 }));
 
 if (process.env.NODE_ENV === 'development') {
-  console.log(process.env.NODE_ENV);
   mountStoreDevtool('profileStore', useProfileStore);
 }

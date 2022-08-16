@@ -91,7 +91,6 @@ async function updateUserProfile(
         id: walletId,
       },
       data: {
-        walletId,
         bio,
         image,
         skills,

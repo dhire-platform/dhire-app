@@ -14,10 +14,6 @@ const Layout: React.FC<Props> = ({ children }) => {
   const router = useRouter();
   const { user } = useProfileStore();
 
-  useEffect(() => {
-    //    conle.log('public key - ', pubKey);
-  }, [user.wallet, router]);
-
   return (
     <Container
       display='flex'

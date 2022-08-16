@@ -26,19 +26,24 @@ interface IProfileStore {
   projects: IProject[];
   education: IEducation;
   socials: ISocial;
-  editProfile: (profile: IProfile) => void;
+  setWallet: (pubKey: string) => void;
+  editProfile: (data: IProfile) => Promise<any>;
   createUser: (data: any) => any;
   setSkills: (skills: string[]) => any;
   getUser: () => void;
   deleteUser: () => void;
   setExperience: (experience: IExperience[]) => void;
-  setPubKey: (pubKey: string) => void;
 }
 
 interface IUseStore {
   isAuth: boolean;
   setAuth: (value: boolean) => any;
 }
+
+type skill = {
+  name: string;
+  level: SkillLevel;
+};
 interface IProfile {
   id?: string;
   userName: string;
@@ -48,7 +53,7 @@ interface IProfile {
   about?: string;
   achievements?: string;
   image?: string;
-  skills?: string[];
+  skills?: skill[];
   location?: string;
   website?: string;
   achievement?: string;

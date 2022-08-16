@@ -16,7 +16,7 @@ import EditProfileComponent from './ProfileEditModal';
 
 const ProfileComponent = () => {
   const [hover, setHover] = useState(false);
-  const { userProfile } = useProfileStore();
+  const { user } = useProfileStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -48,9 +48,9 @@ const ProfileComponent = () => {
           <Stack direction={'row'} gap='0.7rem' w='full'>
             <Avatar
               size='lg'
-              name={userProfile.name}
+              name={user.name}
               colorScheme='black'
-              src={userProfile.image}
+              src={user.image}
             />
             <Stack
               gap='0'
@@ -60,10 +60,10 @@ const ProfileComponent = () => {
               direction={'column'}
             >
               <Heading color={'black'} fontSize='xl'>
-                {userProfile.name}
+                {user.name}
               </Heading>
               <Text marginBlock='0' margin='0.1rem' color='blackAlpha.500'>
-                @{userProfile.userName}
+                @{user.userName}
               </Text>
             </Stack>
           </Stack>
@@ -90,9 +90,9 @@ const ProfileComponent = () => {
           color={'black'}
           w='100%'
           maxW='36rem'
-          mt={userProfile.about && '1rem'}
+          mt={user.about && '1rem'}
         >
-          {userProfile.about}
+          {user.about}
         </Heading>
       </Center>
     </>

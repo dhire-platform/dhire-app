@@ -9,15 +9,37 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  Button,
   Text,
   Heading,
   useMediaQuery,
+  Avatar,
+  FormErrorMessage,
+  FormLabel,
+  FormControl,
+  Input,
+  useColorModeValue,
+  Textarea,
+  IconButton,
+  Button,
+  Drawer,
+  FormHelperText,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  InputGroup,
+  InputLeftAddon,
   useDisclosure,
+  useToast,
+  Toast,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
 import Achievement from 'src/components/dashboard/profile/Achievement';
@@ -26,26 +48,55 @@ import Experience from 'src/components/dashboard/profile/Education';
 import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent';
 import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditModal';
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
+import { ErrorMessage } from '@hookform/error-message';
 
 const Profile = () => {
-  const { userProfile } = useProfileStore();
-  const { set_edit_mode, edit_mode } = useLocalStore();
-  const { wallet_connected } = useLocalStore();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
+  const { user } = useProfileStore();
+  const editProfile = useProfileStore((state: any) => state.editProfile);
+  const createUser = useProfileStore((state: any) => state.createUser);
 
-  useEffect(() => {
-    if (!wallet_connected) {
-      router.replace('/');
-    }
-  }, [wallet_connected]);
+  const router = useRouter();
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    criteriaMode: 'all',
+    defaultValues: {
+      name: user.name,
+      userName: user.userName,
+      about: user.about,
+      image: user.image,
+    },
+  });
+
+  async function onSubmit(values: any) {
+    const { name, userName, image, about } = values;
+
+    const data = { name, userName, about, image };
+    const url = '/profile/' + userName;
+    createUser(data)
+      .then((res: any) => {
+        router
+          .push(url)
+          .then(() => {
+            //onClose();
+          })
+          .catch((err: any) => console.log(err));
+      })
+      .catch((err: any) => {
+        console.log('Error From Server - ', err.message);
+      });
+  }
 
   // use meidaQuery to get width of scrren
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
     <>
-      <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Container maxW='full' py='4rem' bg={'#FBFBFB'} color={'black'} px='0'>
         <Container p='1rem' maxW='8xl' my='2rem'>
           <Tabs
@@ -86,39 +137,112 @@ const Profile = () => {
                     maxW='5xl'
                     h='50vh'
                   >
-                    <Heading
-                      mb='2rem'
-                      rounded='full'
-                      bg='blackAlpha.50'
-                      p='1rem 1.5rem'
-                      fontSize='6xl'
-                    >
-                      📝
-                    </Heading>
-                    <Text pb='1rem' fontSize='xl'>
-                      There is nothing to show
-                    </Text>
-                    <Text maxW='28rem' color={'blackAlpha.400'} fontSize='md'>
-                      You have not entered any data yet. Click on Edit button to
-                      enter data to show on your profile{' '}
-                    </Text>
-                    <Button
-                      _hover={{
-                        bg: 'blackAlpha.100',
-                      }}
-                      rounded='md'
-                      border='1px solid'
-                      borderColor={'blackAlpha.400'}
-                      fontSize={'sm'}
-                      pl='1rem'
-                      pr='1rem'
-                      mt='1rem'
-                      variant='unstyled'
-                      onClick={onOpen}
-                      fontWeight='300'
-                    >
-                      Edit Profile
-                    </Button>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <Center flexDirection='column' gap='1rem' align={'start'}>
+                        {/* Full Name */}
+                        <FormControl isRequired>
+                          <FormLabel htmlFor='name'>Full name</FormLabel>
+                          <Input
+                            isRequired
+                            id='name'
+                            placeholder='Name'
+                            {...register('name', {
+                              required: 'This is required',
+                              minLength: {
+                                value: 4,
+                                message: 'Minimum length should be 4',
+                              },
+                              pattern: {
+                                value: /^[^\s]+(?:$|.*[^\s]+$)/,
+                                message:
+                                  'Entered value cant start/end or contain only white spacing',
+                              },
+                            })}
+                          />
+                          <ErrorMessage
+                            errors={errors}
+                            name='name'
+                            render={({ message }) => (
+                              <Text fontSize='sm' color='red.500' py='0.5rem'>
+                                {message}
+                              </Text>
+                            )}
+                          />
+                        </FormControl>
+                        {/*userName */}
+                        <FormControl isRequired>
+                          <FormLabel htmlFor='name'>User Name</FormLabel>
+                          <InputGroup>
+                            <InputLeftAddon>@</InputLeftAddon>
+                            <Input
+                              defaultValue={user.userName}
+                              isRequired
+                              type='text'
+                              id='userName'
+                              placeholder='User Name'
+                              {...register('userName', {
+                                required: 'This is Required',
+                                minLength: {
+                                  value: 5,
+                                  message:
+                                    'minimum number of character for username is 5',
+                                },
+                                pattern: {
+                                  value: /^\w[a-zA-Z@#0-9.]*$/,
+                                  message:
+                                    'User Name can not contain white spacing',
+                                },
+                              })}
+                            />
+                          </InputGroup>
+                          <ErrorMessage
+                            errors={errors}
+                            name='userName'
+                            render={({ message }) => (
+                              <Text fontSize='sm' color='red.500' py='0.5rem'>
+                                {message}
+                              </Text>
+                            )}
+                          />
+                        </FormControl>
+                        {/*Profile Picture URL */}
+                        <FormControl>
+                          <FormLabel htmlFor='image'>Profile Picture</FormLabel>
+                          <InputGroup>
+                            <InputLeftAddon>URL:</InputLeftAddon>
+                            <Input
+                              type='url'
+                              id='image'
+                              placeholder='Image URL'
+                              {...register('image', {
+                                pattern: {
+                                  value:
+                                    /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+                                  message: 'Enter a Valid URL',
+                                },
+                              })}
+                            />
+                          </InputGroup>
+                          <ErrorMessage
+                            errors={errors}
+                            name='image'
+                            render={({ message }) => (
+                              <Text fontSize='sm' color='red.500' py='0.5rem'>
+                                {message}
+                              </Text>
+                            )}
+                          />
+                        </FormControl>
+                        <Button
+                          isLoading={isSubmitting}
+                          type='submit'
+                          colorScheme='blue'
+                          mr={3}
+                        >
+                          Submit
+                        </Button>
+                      </Center>
+                    </form>
                   </Center>
                 </Center>
               </TabPanel>
