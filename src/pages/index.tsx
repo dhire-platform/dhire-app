@@ -1,10 +1,6 @@
 import config from '@/config/general.config';
-import { Button, Container } from '@chakra-ui/react';
+import { Container, useDisclosure } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useLocalStore } from 'src/app/localStore';
-import { useProfileStore } from 'src/app/profileStore';
 import ChooseUs from 'src/components/landing/Home/ChooseUs';
 import Hero from 'src/components/landing/Home/Hero/Hero';
 import Scroll from 'src/components/landing/Home/Hero/Scroll';
@@ -12,17 +8,10 @@ import Philosophy from 'src/components/landing/Home/Philosophy';
 import Section1 from 'src/components/landing/Home/Sections/Section1';
 import Section2 from 'src/components/landing/Home/Sections/Section2';
 import SEO from 'src/components/SEO/SEO';
-import { Redirect } from 'src/helpers/Redirect';
+import CreateUserModal from 'src/components/modals/CreateUser';
 
 const Home: NextPage = () => {
-  const { wallet_connected } = useLocalStore();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (wallet_connected) {
-      router.replace('/profile');
-    }
-  }, [router, wallet_connected]);
+  const { onClose, onOpen, isOpen } = useDisclosure();
 
   return (
     <>
@@ -32,6 +21,7 @@ const Home: NextPage = () => {
         image={`https://solana.ghost.io/content/images/2022/06/solana-network-upgrades.png`}
       />
       <Container maxW='full' p='0'>
+        <CreateUserModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
         <Hero />
         <Scroll />
         <ChooseUs />

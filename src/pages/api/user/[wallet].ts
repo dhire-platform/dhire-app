@@ -1,12 +1,15 @@
-import prisma from "prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
-import NextCors from "nextjs-cors";
-import { Role } from "@prisma/client";
+import prisma from 'prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
+import NextCors from 'nextjs-cors';
+import { Role } from '@prisma/client';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   await NextCors(req, res, {
-    methods: ["GET", "PUT", "DELETE"],
-    origin: "*",
+    methods: ['GET', 'PUT', 'DELETE'],
+    origin: '*',
     optionsSuccessStatus: 200,
   });
 
@@ -22,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).json({ error: "invalid wallet" });
     return;
   }
-  
+
   switch (req.method) {
     case "GET":
       await getUserById(req, res, wallet);
@@ -34,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await deleteUser(req, res, wallet);
       break;
     default:
-      res.status(400).json({ error: "invalid method" });
+      res.status(400).json({ error: 'invalid method' });
       break;
   }
 }
@@ -47,8 +50,7 @@ async function getUserById(req: NextApiRequest, res: NextApiResponse<any>, walle
       },
     });
     res.status(200).json(user);
-  }
-  catch (e) {
+  } catch (e) {
     res.status(400).json({ error: (e as Error).message });
   }
 }
@@ -64,9 +66,10 @@ async function updateUser(req: NextApiRequest, res: NextApiResponse, wallet: str
         name,
         type,
         wallet,
-        username
+        username,
       },
     });
+    console.log(user);
     res.status(200).json(user);
   } catch (e) {
     res.status(400).json({ error: (e as Error).message });

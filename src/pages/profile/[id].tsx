@@ -28,21 +28,9 @@ import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditMo
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
 
 const User = () => {
-  const { userProfile } = useProfileStore();
-  const { set_edit_mode, edit_mode } = useLocalStore();
-  const { wallet_connected } = useLocalStore();
+  const { user } = useProfileStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!wallet_connected) {
-      router.replace('/');
-    }
-
-    if (!userProfile.userName) {
-      router.replace('/profile');
-    }
-  }, [wallet_connected]);
 
   // use meidaQuery to get width of scrren
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -50,7 +38,15 @@ const User = () => {
   return (
     <>
       <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      <Container maxW='full' py='4rem' bg={'#FBFBFB'} color={'black'} px='0'>
+      <Container
+        maxW='full'
+        py='4rem'
+        bgGradient={
+          'linear-gradient(to bottom, #bcc0e65e , rgba(255,255,255,1) 100%)'
+        }
+        color={'black'}
+        px='0'
+      >
         <Container p='1rem' maxW='8xl' my='2rem'>
           <Tabs
             variant={'unstyled'}

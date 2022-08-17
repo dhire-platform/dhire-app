@@ -15,11 +15,12 @@ import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
 
 const Achievement = () => {
-  const { userProfile } = useProfileStore();
+  const { user } = useProfileStore();
   const { set_edit_mode } = useLocalStore();
 
   return (
     <Center
+    shadow={'lg'}
       bg='white'
       w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
       rounded='lg'
@@ -31,7 +32,7 @@ const Achievement = () => {
       border='1px solid'
       color='blackAlpha.200'
     >
-      {userProfile.achievement ? (
+      {user.achievement ? (
         <>
           <Stack alignContent={'start'} direction={'row'}>
             <Heading color={'black'} fontSize='xl'>
@@ -45,7 +46,7 @@ const Achievement = () => {
             color={'black'}
             maxW='36rem'
           >
-            <Text>{userProfile.achievement}</Text>
+            <Text>{user.achievement}</Text>
           </Flex>
         </>
       ) : (

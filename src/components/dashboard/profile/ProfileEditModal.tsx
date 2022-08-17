@@ -1,20 +1,10 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import {
-  Avatar,
-  Center,
-  Heading,
-  Stack,
   Text,
-  FormErrorMessage,
   FormLabel,
   FormControl,
   Input,
-  useColorModeValue,
   Textarea,
-  IconButton,
   Button,
-  Drawer,
-  FormHelperText,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -24,23 +14,23 @@ import {
   ModalCloseButton,
   InputGroup,
   InputLeftAddon,
-  useDisclosure,
   useToast,
-  Toast,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiEdit2 } from 'react-icons/fi';
 import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
-import { IProfile } from 'src/definitions/IUser';
 import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
+import { usePersistanceStore } from 'src/app/persistanceStore';
 
 const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
-  const setProfile = useProfileStore((state: any) => state.setProfile);
-  const { userProfile, pubKey } = useProfileStore();
+  const editProfile = useProfileStore((state: any) => state.editProfile);
+  const createUser = useProfileStore((state: any) => state.createUser);
+
+  const { user } = useProfileStore();
   const { edit_mode, set_edit_mode } = useLocalStore();
+
   const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -50,7 +40,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     position: 'bottom',
     title: 'Profile Created Successfully',
     containerStyle: {
-      width: '800px',
+      width: '300px',
       maxWidth: '100%',
     },
   });
@@ -59,7 +49,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     position: 'bottom',
     title: 'Profile Updated Successfully',
     containerStyle: {
-      width: '800px',
+      width: '300px',
       maxWidth: '100%',
     },
   });
@@ -68,15 +58,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm({
-    criteriaMode: 'all',
-    defaultValues: {
-      name: userProfile.name,
-      userName: userProfile.userName,
-      about: userProfile.about,
-      image: userProfile.image,
-    },
-  });
+  } = useForm({});
 
   useEffect(() => {
     if (edit_mode) {
@@ -84,28 +66,20 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     }
   }, [edit_mode]);
 
-  function onSubmit(values: any) {
+  async function onSubmit(values: any) {
     const { name, userName, image, about } = values;
-    if (router.pathname === '/profile') {
-      const data: IProfile = { name, userName, about, image };
-      setProfile(data, pubKey);
-      toast_profile_created({
-        containerStyle: {
-          // border: '20px solid red',
-        },
+
+    const data = { name, userName: user.userName, about, image };
+    console.log('data from modal to edit component = ', values);
+    editProfile(data)
+      .then((res: any) => {
+        console.log('res', res);
+        toast_profile_updated();
+      })
+      .catch((err: any) => {
+        console.log('error, ', err);
       });
-      router.push(`/profile/${userName}`);
-      onClose();
-    } else {
-      const data = { name, userName, about, image };
-      setProfile(data, pubKey);
-      toast_profile_updated({
-        containerStyle: {
-          // border: '20px solid red',
-        },
-      });
-      onClose();
-    }
+    onClose();
 
     set_edit_mode(false);
   }
@@ -165,7 +139,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                 <InputGroup>
                   <InputLeftAddon>@</InputLeftAddon>
                   <Input
-                    defaultValue={userProfile.userName}
+                    defaultValue={user.userName}
                     isRequired
                     type='text'
                     id='userName'

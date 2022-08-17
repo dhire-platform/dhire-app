@@ -1,22 +1,16 @@
-import { Container, useColorModeValue } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import { Container } from '@chakra-ui/react';
 import { useProfileStore } from 'src/app/profileStore';
 import Background from '../Background';
 import Footer from '../navigation/footer';
 import Navbar from '../navigation/navbar';
+import { IProfileStore } from 'src/definitions/definitions';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const router = useRouter();
-  const { pubKey } = useProfileStore();
-
-  useEffect(() => {
-    console.log('public key - ', pubKey);
-  }, [pubKey, router]);
+  const user = useProfileStore((state: IProfileStore) => state.user);
 
   return (
     <Container
@@ -27,10 +21,10 @@ const Layout: React.FC<Props> = ({ children }) => {
       p='0'
       zIndex='1'
     >
-      {pubKey.length > 0 ? '' : <Background />}
+      {user.walletId ? '' : <Background />}
       <Navbar />
       {children}
-      {pubKey.length > 0 ? '' : <Footer />}
+      {user.walletId ? '' : <Footer />}
     </Container>
   );
 };

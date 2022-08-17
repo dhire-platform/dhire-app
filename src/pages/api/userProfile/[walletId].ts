@@ -76,7 +76,7 @@ async function updateUserProfile(
   } = req.body as {
     bio?: string;
     image?: string;
-    skills: Skill[];
+    skills?: Skill[];
     location?: string;
     website?: string;
     experience?: JSON[];
@@ -86,12 +86,12 @@ async function updateUserProfile(
   };
 
   try {
+    console.log(req.body);
     const user = await prisma.userProfile.update({
       where: {
         id: walletId,
       },
       data: {
-        walletId,
         bio,
         image,
         skills,
@@ -103,8 +103,10 @@ async function updateUserProfile(
         social,
       },
     });
+    console.log('user update', user);
     res.status(200).json(user);
   } catch (e) {
+    console.log(e);
     res.status(400).json({ error: (e as Error).message });
   }
 }

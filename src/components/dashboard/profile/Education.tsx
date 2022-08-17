@@ -37,16 +37,20 @@ import {
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import { useProfileStore } from 'src/app/profileStore';
-import { IExperience } from 'src/definitions/IUser';
+import { IExperience, IProfileStore } from 'src/definitions/definitions';
 import { VscAdd } from 'react-icons/vsc';
 import { useForm } from 'react-hook-form';
 import { FiEdit2 } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
+import { formatWithOptions } from 'util';
 
 const Education = () => {
   const [hover, setHover] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { experience, setExperience, userProfile } = useProfileStore();
+  const { setExperience } = useProfileStore();
+  const experience: IExperience[] = useProfileStore(
+    (state: IProfileStore) => state.user.experience!
+  );
 
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -57,10 +61,13 @@ const Education = () => {
   } = useForm();
 
   function onSubmit(values: any) {
-    const { name, image, designation, from, to, description } = values;
-    console.log(values);
-    setExperience(values);
-    onClose();
+    const { company, image, designation, description }: IExperience = values;
+    const from: Date = new Date(values.from);
+    const to: Date = new Date(values.to);
+    setExperience([{ company, designation, from, to, description }])
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+      .finally(() => onClose());
   }
 
   function toMonthName(monthNumber: number) {
@@ -214,6 +221,7 @@ const Education = () => {
         </ModalContent>
       </Modal>
       <Center
+        shadow={'lg'}
         onMouseEnter={() => {
           setHover(true);
         }}
@@ -277,7 +285,7 @@ const Education = () => {
               }}
               p='0.1rem'
               size='sm'
-              display={hover && experience.length > 0 ? 'flex' : 'none'}
+              display={hover && experience?.length > 0 ? 'flex' : 'none'}
               alignItems='center'
               justifyContent={'center'}
               color='blackAlpha.600'
@@ -294,26 +302,15 @@ const Education = () => {
             color={'black'}
             maxW='36rem'
           >
-            {experience.length > 0 ? (
-              experience.map((experience: IExperience) => (
+            {experience?.length ? (
+              experience?.map((experience: IExperience) => (
                 <>
                   <Stack px='2rem' w='100%' py='0.5rem' direction={'row'}>
-                    <Avatar src={experience.image} size='md' bg='white' />
+                    <Avatar src={experience?.image} size='md' bg='white' />
                     <Stack w='full' direction={'column'}>
                       <Heading fontSize={'xl'}>{experience.company}</Heading>
                       <Text fontSize='md'>
-                        {toMonthName(experience?.from?.substring(5, 7) as any)}-
-                        {experience.from?.substring(0, 4)},{' '}
-                        {experience.current ? (
-                          'current'
-                        ) : (
-                          <Box as='span'>
-                            {toMonthName(
-                              experience?.to?.substring(5, 7) as any
-                            )}
-                            -{experience.to?.substring(0, 4)}
-                          </Box>
-                        )}
+                        <></>
                       </Text>
                       <Divider />
                       <Heading fontWeight={'500'} fontSize={'lg'}>
