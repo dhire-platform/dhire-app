@@ -32,16 +32,11 @@ const Jobs = () => {
   const [filteredData, setFilteredData] = useState<IJob[]>(Data);
   const [modifiedArray, setModifiedArray] = useState<IJob[]>(Data);
   const [checked_value, setChecked_value] = useState<[]>([]);
-  const { pubKey } = useProfileStore();
   const { ref, inView, entry } = useInView({
     threshold: 0.55,
   });
 
   // console.log(inView);
-
-  if (pubKey) {
-    Redirect('/profile');
-  }
 
   const PageSize: number = 4;
 
