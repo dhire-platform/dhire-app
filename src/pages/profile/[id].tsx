@@ -59,12 +59,12 @@ const User = () => {
                   fontWeight='600'
                   //  _selected={{ fontSize: 'xl', fontWeight: '800' }}
                 >
-                  Profile
+                  Dashboard
                 </Text>
               </Tab>
               <Tab isDisabled>
                 <Text fontSize='lg' fontWeight='600'>
-                  Dashboard
+                  Profile
                 </Text>
               </Tab>
               <Tab isDisabled>

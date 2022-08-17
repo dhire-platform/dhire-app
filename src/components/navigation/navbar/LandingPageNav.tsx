@@ -27,7 +27,7 @@ const LandingPageNavbar = ({ children }: Props) => {
       p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
     >
       <Flex
-        maxW={'7xl'}
+        maxW={'95rem'}
         w={'100%'}
         h={20}
         alignItems={'center'}
