@@ -4,17 +4,28 @@ import create from 'zustand';
 import { roleEnum } from 'src/enums/enums';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { IProfileStore, SkillLevel } from 'src/definitions/definitions';
+import Experience from 'src/components/dashboard/profile/Experience';
+import { persist } from 'zustand/middleware';
 
 export const useProfileStore = create<IProfileStore>((set, get) => ({
   user: {
     id: '',
     userName: '',
-    wallet: '',
+    walletId: '',
     name: '',
     role: roleEnum.RECRUIT,
     about: '',
     achievements: '',
     image: '',
+    experience: [
+      {
+        company: '',
+        title: '',
+        description: '',
+        from: new Date('2024-07-21'),
+        to: new Date('2024-07-21'),
+      },
+    ],
     skills: [
       { name: 'hello', level: SkillLevel.ADVANCED },
       { name: 'world', level: SkillLevel.BEGINNER },
@@ -23,7 +34,6 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     website: '',
     achievement: '',
   },
-  experience: [],
   projects: [],
   education: {},
   socials: {
@@ -40,50 +50,68 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
       ...state,
       user: {
         ...state.user,
-        wallet,
+        walletId: wallet,
       },
     })),
 
-  // todo: manage this request in a better way
-  setSkills: async (skills: skill[]) => {
+  setSkills: async (skills: string[]) => {
+    const skillsArr = skills.map((skill) => ({
+      name: skill,
+      level: SkillLevel.BEGINNER,
+    }));
+    set((state: { user: any }) => ({
+      ...state,
+      user: {
+        ...state.user,
+        skills: [...skillsArr],
+      },
+    }));
+    console.log(get().user);
     axios
-      .put(`/api/user/${get().user.id}`, {
-        skills: skills,
-      })
+      .put(`/api/userProfile/${get().user.id}`, get().user)
       .then((res) => {
         console.log('skills update response ', res);
-        set((state: { user: any }) => ({
-          ...state,
-          user: {
-            ...state.user,
-            skills,
-          },
-        }));
+
+        console.log('skills -', get().user.skills);
       })
       .catch((err) => {
         console.log(err);
       });
   },
 
-  /** 
+  /**
      * function:  creates a new user
      * @params:    newUserData
      * @returns:   none
      * @route:    /api/user
      * Note: it also creates a user profile bu hitting the url /api/user/{id}
      todo: add update skills and achievements/education inside this function & do both requests in one request
-       */
+    */
 
   createUser: async (data: any): Promise<any> => {
+    console.log(data);
     return new Promise((resolve) => {
       axios
         .post('/api/user', {
           name: data.name,
           type: roleEnum.RECRUIT,
-          wallet: data.wallet,
+          wallet: data.walletId,
           username: data.userName,
         })
         .then((res) => {
+          {
+            /*
+          res.data = {
+            createdAt: "2022-08-16T19:10:09.283Z"
+            id: "62fbeb9163a9e4f1652c1ddf"
+            name: "Irfan Asif"
+            type: "APPLICANT"
+            updatedAt: "2022-08-16T19:10:09.283Z"
+            username: "demonicirfan"
+            wallet: "FkaHjeKxxVj4gzXmzeq4vsJEgWNRKCEjefFDQvuy6sGi" }
+
+         */
+          }
           set((prevState: any) => ({
             user: {
               id: res.data.id,
@@ -91,7 +119,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
               userName: res.data.username,
               about: get().user.about,
               image: data.image,
-              wallet: data.wallet,
+              walletId: data.walletId,
               role: get().user.role,
               skills: get().user.skills,
               location: get().user.location,
@@ -102,7 +130,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
 
           axios
             .post('/api/userProfile', {
-              walletId: data.wallet,
+              walletId: data.walletId,
               bio: data.about,
               image: data.image,
               skills: get().user.skills,
@@ -124,20 +152,10 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     });
   },
 
-  setUser: async (data: IProfile) => {
+  setUser: async (data: any) => {
     set((prevState: any) => ({
       user: {
-        id: data.id!,
-        name: data.name!,
-        userName: data.userName!,
-        about: data.about!,
-        image: data.image!,
-        wallet: data.wallet!,
-        role: data.role!,
-        skills: data.skills!,
-        location: data.location!,
-        website: data.website!,
-        achievement: data.achievement!,
+        ...data,
       },
     }));
   },
@@ -152,36 +170,26 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
    */
 
   editProfile: async (data: any): Promise<any> => {
-    set((prevState: any) => ({
-      user: {
-        id: get().user.id,
-        userName: prevState.user.userName,
-        name: data.name,
-        about: data.about,
-        image: data.image,
-        ...prevState,
-      },
-    }));
+    return new Promise((resolve, reject) => {
+      set((prevState: any) => ({
+        user: {
+          ...prevState.user,
+          ...data,
+          skills: [
+            { name: 'hello', level: SkillLevel.ADVANCED },
+            { name: 'world', level: SkillLevel.BEGINNER },
+          ],
+        },
+      }));
 
-    const userData = {
-      bio: get().user.about,
-      image: get().user.image,
-      skills: get().user.skills,
-      experience: get().experience,
-      education: get().education,
-      projects: get().projects,
-    };
+      const userData = get().user as IProfile;
+      console.log('user - ', userData);
 
-    axios
-      .put(`/api/user/${get().user.id}`, userData)
-      .then((res) => {
-        console.log('create user response from server - ', res);
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        return err;
-      });
+      axios
+        .put(`/api/userProfile/${get().user.id}`, userData)
+        .then((res) => resolve(res))
+        .catch((err) => reject(err));
+    });
   },
 
   getUser: async () => {
@@ -206,10 +214,31 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
       });
   },
 
-  setExperience: (data: any) =>
-    set((prevState: IProfileStore) => ({
-      experience: [data, ...prevState.experience],
-    })),
+  setExperience: async (data: any): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      if (get().user.experience?.length) {
+        set((prevState: IProfileStore) => ({
+          user: {
+            ...prevState.user,
+            experience: [...data, ...prevState.user.experience!],
+          },
+        }));
+      } else {
+        set((prevState: IProfileStore) => ({
+          user: {
+            ...prevState.user,
+            experience: [...data],
+          },
+        }));
+      }
+
+      console.log('user data after adding experience ', get().user);
+      axios
+        .put('/api/userProfile/' + get().user.id, get().user)
+        .then((res) => resolve(res))
+        .catch((e) => reject(e));
+    });
+  },
 }));
 
 if (process.env.NODE_ENV === 'development') {

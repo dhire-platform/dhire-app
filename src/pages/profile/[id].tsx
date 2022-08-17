@@ -38,7 +38,15 @@ const User = () => {
   return (
     <>
       <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      <Container maxW='full' py='4rem' bg={'#FBFBFB'} color={'black'} px='0'>
+      <Container
+        maxW='full'
+        py='4rem'
+        bgGradient={
+          'linear-gradient(to bottom, #bcc0e65e , rgba(255,255,255,1) 100%)'
+        }
+        color={'black'}
+        px='0'
+      >
         <Container p='1rem' maxW='8xl' my='2rem'>
           <Tabs
             variant={'unstyled'}
@@ -79,10 +87,10 @@ const User = () => {
                     flexDirection={{ base: 'row', md: 'column' }}
                   >
                     <ProfileComponent />
-                    {/* <Education />
+                    <Education />
                     <SkillsComponent />
-                    <Achievement /> 
-                    <Experience /> */}
+                    <Achievement />
+                    {/* <Experience /> */}
                   </Flex>
                 </Center>
               </TabPanel>

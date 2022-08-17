@@ -32,7 +32,6 @@ type IJob = {
 
 interface IProfileStore {
   user: IProfile;
-  experience: IExperience[];
   projects: IProject[];
   education: IEducation;
   socials: ISocial;
@@ -40,10 +39,10 @@ interface IProfileStore {
   setUser: (data: IProfile) => void;
   editProfile: (data: IProfile) => Promise<any>;
   createUser: (data: any) => any;
-  setSkills: (skills: skill[]) => any;
+  setSkills: (skills: string[]) => any;
   getUser: () => void;
   deleteUser: () => void;
-  setExperience: (experience: IExperience[]) => void;
+  setExperience: (experience: IExperience[]) => Promise<any>;
 }
 
 interface IUseStore {
@@ -54,13 +53,14 @@ interface IUseStore {
 interface IProfile {
   id?: string;
   userName: string;
-  wallet: string;
+  walletId: string;
   name: string;
   role?: roleEnum;
   about?: string;
   achievements?: string;
   image?: string;
   skills?: skill[];
+  experience?: IExperience[];
   location?: string;
   website?: string;
   achievement?: string;
@@ -69,8 +69,8 @@ interface IExperience {
   company?: string;
   image?: string;
   designation?: string;
-  from?: string;
-  to?: string;
+  from?: Date;
+  to?: Date;
   current?: boolean;
   location?: string;
   description?: string;
@@ -80,8 +80,8 @@ interface IEducation {
   school?: string;
   degree?: string;
   fieldOfStudy?: string;
-  from?: string;
-  to?: string;
+  from?: Date;
+  to?: Date;
   current?: boolean;
   location?: string;
   description?: string;

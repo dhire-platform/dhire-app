@@ -23,6 +23,7 @@ const ProfileComponent = () => {
     <>
       <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Center
+        shadow={'lg'}
         onMouseEnter={() => {
           setHover(true);
         }}

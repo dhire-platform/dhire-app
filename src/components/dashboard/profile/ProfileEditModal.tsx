@@ -58,15 +58,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm({
-    criteriaMode: 'all',
-    defaultValues: {
-      name: user.name,
-      userName: user.userName,
-      about: user.about,
-      image: user.image,
-    },
-  });
+  } = useForm({});
 
   useEffect(() => {
     if (edit_mode) {
@@ -77,36 +69,17 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   async function onSubmit(values: any) {
     const { name, userName, image, about } = values;
 
-    if (router.pathname === '/profile') {
-      const data = { name, userName, about, image };
-      const url = '/profile/' + userName;
-      createUser(data)
-        .then((res: any) => {
-          router
-            .push(url)
-            .then(() => {
-              toast_profile_created();
-              onClose();
-            })
-            .catch((err: any) => console.log(err));
-        })
-        .catch((err: any) => {
-          console.log('Error From Server - ', err.message);
-        });
-    } else {
-      console.log('route is not profiles');
-      const data = { name, userName: user.userName, about, image };
-      console.log('data from modal to edit component = ', values);
-      editProfile(data)
-        .then((res: any) => {
-          console.log('res', res);
-          toast_profile_updated();
-        })
-        .catch((err: any) => {
-          console.log('error, ', err);
-        });
-      onClose();
-    }
+    const data = { name, userName: user.userName, about, image };
+    console.log('data from modal to edit component = ', values);
+    editProfile(data)
+      .then((res: any) => {
+        console.log('res', res);
+        toast_profile_updated();
+      })
+      .catch((err: any) => {
+        console.log('error, ', err);
+      });
+    onClose();
 
     set_edit_mode(false);
   }

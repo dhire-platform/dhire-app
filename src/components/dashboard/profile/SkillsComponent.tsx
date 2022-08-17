@@ -15,7 +15,12 @@ import {
 } from '@chakra-ui/react';
 import React, { useCallback, useState, SyntheticEvent } from 'react';
 import { useProfileStore } from 'src/app/profileStore';
-import { IProfile } from 'src/definitions/IUser';
+import {
+  IProfile,
+  IProfileStore,
+  skill,
+  SkillLevel,
+} from 'src/definitions/definitions';
 import { MdDone } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';
 import { useLocalStore } from 'src/app/localStore';
@@ -23,11 +28,14 @@ import ChakraTagInput from 'src/helpers/ChakraTagInput';
 
 const SkillsComponent = () => {
   const [hover, setHover] = useState(false);
-  const { userProfile } = useProfileStore();
+  const { user } = useProfileStore();
   const setSkills = useProfileStore((state: any) => state.setSkills);
   const [edit, setEdit] = useState(false);
-  const [tags, setTags] = useState(userProfile.skills);
-  const skills: string[] = userProfile.skills!;
+  const [tags, setTags] = useState(
+    user.skills?.map((skill: any) => skill.name)
+  );
+  const skillArr: string[] = user.skills?.map((skill: skill) => skill.name)!;
+  const skills: string[] = skillArr;
 
   const handleTagsChange = useCallback(
     (_event: SyntheticEvent, tags: string[]) => {
@@ -43,6 +51,7 @@ const SkillsComponent = () => {
 
   return (
     <Center
+      shadow={'lg'}
       onMouseEnter={() => {
         setHover(true);
       }}
@@ -132,7 +141,12 @@ const SkillsComponent = () => {
             maxW='36rem'
           >
             {skills?.map((skill: string) => (
-              <Tag background='blackAlpha.50' p='0.4rem 0.8rem' fontWeight={'400'} key={skill}>
+              <Tag
+                background='blackAlpha.50'
+                p='0.4rem 0.8rem'
+                fontWeight={'400'}
+                key={skill}
+              >
                 {skill}
               </Tag>
             ))}

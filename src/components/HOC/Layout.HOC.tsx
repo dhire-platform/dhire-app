@@ -3,13 +3,14 @@ import { useProfileStore } from 'src/app/profileStore';
 import Background from '../Background';
 import Footer from '../navigation/footer';
 import Navbar from '../navigation/navbar';
+import { IProfileStore } from 'src/definitions/definitions';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const { user } = useProfileStore();
+  const user = useProfileStore((state: IProfileStore) => state.user);
 
   return (
     <Container
@@ -20,10 +21,10 @@ const Layout: React.FC<Props> = ({ children }) => {
       p='0'
       zIndex='1'
     >
-      {user.wallet.length > 0 ? '' : <Background />}
+      {user.walletId ? '' : <Background />}
       <Navbar />
       {children}
-      {user.wallet.length > 0 ? '' : <Footer />}
+      {user.walletId ? '' : <Footer />}
     </Container>
   );
 };
