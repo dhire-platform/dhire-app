@@ -1,7 +1,7 @@
 import prisma from 'prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
-import { Skill, SocialType } from '@prisma/client';
+import { EducationType, ExperienceType, ProjectType, Skill, SocialType } from '@prisma/client';
 
 async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
   await NextCors(req, res, {
@@ -11,7 +11,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
   });
 
   const {
-    walletId,
+    userId,
     bio,
     image,
     skills,
@@ -22,21 +22,25 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
     projects,
     social,
   } = req.body as {
-    walletId: string;
+    userId: string;
     bio?: string;
     image?: string;
-    skills: Skill[];
+    skills?: Skill[];
     location?: string;
     website?: string;
-    experience?: JSON[];
-    education?: JSON[];
-    projects?: JSON[];
+    experience?: ExperienceType;
+    education?: EducationType;
+    projects?: ProjectType;
     social?: SocialType;
   };
   try {
     const userProfile = await prisma.userProfile.create({
       data: {
-        walletId,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
         bio,
         image,
         skills,
@@ -45,7 +49,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
         experience,
         education,
         projects,
-        social,
+        social
       },
     });
     res.status(200).json(userProfile);

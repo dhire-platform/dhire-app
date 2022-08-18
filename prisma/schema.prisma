@@ -24,8 +24,8 @@ model User {
 
 model UserProfile {
   id         String           @id @default(auto()) @map("_id") @db.ObjectId
-  wallet     User             @relation(fields: [walletId], references: [id])
-  walletId   String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId     String
   bio        String?
   image      String?
   skills     Skill[]

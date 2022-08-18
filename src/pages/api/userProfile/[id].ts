@@ -13,27 +13,27 @@ export default async function handler(
     optionsSuccessStatus: 200,
   });
 
-  const { walletId } = req.query as { walletId: string };
-  if (!walletId) {
+  const { id } = req.query as { id: string };
+  if (!id) {
     res.status(400).json({ error: 'id is required' });
     return;
   }
 
   // sanitize id to prevent SQL injection
-  if (walletId.match(/[^a-zA-Z0-9]/)) {
-    res.status(400).json({ error: 'invalid walletId' });
+  if (id.match(/[^a-zA-Z0-9]/)) {
+    res.status(400).json({ error: 'invalid id' });
     return;
   }
 
   switch (req.method) {
     case 'GET':
-      await getUserProfileById(req, res, walletId);
+      await getUserProfileById(req, res, id);
       break;
     case 'PUT':
-      await updateUserProfile(req, res, walletId);
+      await updateUserProfile(req, res, id);
       break;
     case 'DELETE':
-      await deleteUserProfile(req, res, walletId);
+      await deleteUserProfile(req, res, id);
       break;
     default:
       res.status(400).json({ error: 'invalid method' });
@@ -44,12 +44,12 @@ export default async function handler(
 async function getUserProfileById(
   req: NextApiRequest,
   res: NextApiResponse<any>,
-  walletId: string
+  id: string
 ) {
   try {
     const user = await prisma.userProfile.findUnique({
       where: {
-        id: walletId,
+        id: id,
       },
     });
     res.status(200).json(user);
@@ -61,7 +61,7 @@ async function getUserProfileById(
 async function updateUserProfile(
   req: NextApiRequest,
   res: NextApiResponse,
-  walletId: string
+  id: string
 ) {
   const {
     bio,
@@ -74,6 +74,7 @@ async function updateUserProfile(
     projects,
     social,
   } = req.body as {
+    walletId: string;
     bio?: string;
     image?: string;
     skills?: Skill[];
@@ -87,9 +88,10 @@ async function updateUserProfile(
 
   try {
     console.log(req.body);
+    console.log(id);
     const user = await prisma.userProfile.update({
       where: {
-        id: walletId,
+        id: id,
       },
       data: {
         bio,
@@ -114,12 +116,12 @@ async function updateUserProfile(
 async function deleteUserProfile(
   req: NextApiRequest,
   res: NextApiResponse,
-  walletId: string
+  id: string
 ) {
   try {
     const user = await prisma.userProfile.delete({
       where: {
-        id: walletId,
+        id: id,
       },
     });
     res.status(200).json(user);
