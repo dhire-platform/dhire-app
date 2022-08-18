@@ -49,7 +49,7 @@ async function getUserProfileById(
   try {
     const user = await prisma.userProfile.findUnique({
       where: {
-        id: id,
+        userId: id,
       },
     });
     res.status(200).json(user);
@@ -91,7 +91,7 @@ async function updateUserProfile(
     console.log(id);
     const user = await prisma.userProfile.update({
       where: {
-        id: id,
+        userId: id,
       },
       data: {
         bio,
@@ -121,7 +121,7 @@ async function deleteUserProfile(
   try {
     const user = await prisma.userProfile.delete({
       where: {
-        id: id,
+        userId: id,
       },
     });
     res.status(200).json(user);

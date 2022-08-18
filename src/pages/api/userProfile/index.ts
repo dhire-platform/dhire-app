@@ -28,9 +28,9 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
     skills?: Skill[];
     location?: string;
     website?: string;
-    experience?: ExperienceType;
-    education?: EducationType;
-    projects?: ProjectType;
+    experience?: ExperienceType[];
+    education?: EducationType[];
+    projects?: ProjectType[];
     social?: SocialType;
   };
   try {

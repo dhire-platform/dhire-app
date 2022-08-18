@@ -28,10 +28,15 @@ export const createUserProfile = async (userId: string) => {
       skills: [{
           name: "Javascript",
           level: "INTERMEDIATE",
-      }],
+      },
+      {
+          name: "Typescript",
+          level: "INTERMEDIATE",
+      },
+      ],
       location: "New York",
       website: "https://www.google.com",
-      experience: 
+      experience: [ 
         {
           designation: "Software Engineer",
           company: "Google",
@@ -41,7 +46,8 @@ export const createUserProfile = async (userId: string) => {
           current: false,
           description: "This is a test description",
         },
-      education: 
+      ],
+      education: [
         {
           school: "MIT",
           degree: "Bachelors",
@@ -51,12 +57,14 @@ export const createUserProfile = async (userId: string) => {
           current: false,
           description: "This is a test description",
         },
-      projects: 
+      ],
+      projects: [
         {
           title: "Test Project",
           description: "This is a test description",
           link: "https://www.google.com",
         },
+      ],
       social: {
         youtube: "https://www.youtube.com",
         twitter: "https://www.twitter.com",
@@ -79,5 +87,43 @@ return res;
   const id = await getUser(user.data.wallet);
   console.log(`User ID: ${JSON.stringify(id.data)}`);
   const res = await createUserProfile(id.data.id);
-  console.log(`User Profile: ${res.data}`);
+  console.log(`User Profile: ${JSON.stringify(res.data)}`);
+
+  // Update the user profile
+  const updateRes = await axios.put(`http://localhost:3000/api/userProfile/${id.data.id}`, {
+    bio: "This is a actual bio",
+    image: "https://www.dhire.xyz",
+    skills: [{
+        name: "Javascript",
+        level: "INTERMEDIATE",
+    },
+  ],
+  location: "India",
+  website: "https://www.abc.com",
+  experience: [ 
+        {
+          designation: "Software",
+          company: "Dhire",
+          location: "India",
+          from: new Date("2020-01-01"),
+          to: new Date("2020-01-01"),
+          current: false,
+          description: "This is nothing",
+        },
+      ]
+  });
+  console.log(`User Profile Updated: ${JSON.stringify(updateRes.data)}`);
+
+  // Get the user profile
+  const getRes = await axios.get(`http://localhost:3000/api/userProfile/${id.data.id}`);
+  console.log(`User Profile: ${JSON.stringify(getRes.data)}`);
+
+  // Delete the user profile
+  const deleteRes = await axios.delete(`http://localhost:3000/api/userProfile/${id.data.id}`);
+  console.log(`User Profile Deleted: ${JSON.stringify(deleteRes.data)}`);
+
+  // Delete the user
+  const deleteUser = await axios.delete(`http://localhost:3000/api/user/${user.data.wallet}`);
+  console.log(`User Deleted: ${JSON.stringify(deleteUser.data)}`);
+  
 })();
