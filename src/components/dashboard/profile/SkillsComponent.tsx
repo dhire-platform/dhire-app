@@ -34,6 +34,7 @@ const SkillsComponent = () => {
   const [tags, setTags] = useState(
     user.skills?.map((skill: any) => skill.name)
   );
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const skillArr: string[] = user.skills?.map((skill: skill) => skill.name)!;
   const skills: string[] = skillArr;
 

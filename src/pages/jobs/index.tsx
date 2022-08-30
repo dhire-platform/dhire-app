@@ -38,7 +38,7 @@ const Jobs = () => {
 
   // console.log(inView);
 
-  const PageSize: number = 4;
+  const PageSize = 4;
 
   // const modifyArray = (filter_name?: string, filter?: string) => {
   //   console.log('checked_value.length -', checked_value.length);
@@ -140,7 +140,6 @@ const Jobs = () => {
             <Heading fontWeight="600" fontSize="xl">
               Salary
             </Heading>
-            {/* eslint-disable-next-line jsx-a11y/aria-proptypes*/}
             <RangeSlider aria-label={['min', 'max']} defaultValue={[10, 30]}>
               <RangeSliderTrack>
                 <RangeSliderFilledTrack />

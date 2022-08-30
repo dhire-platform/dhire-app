@@ -1,13 +1,16 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "rules": {
-    "no-console": 1, // Means warning
-    "prettier/prettier": 1, // Means error
+    "no-console": 1,
+    "prettier/prettier": 1, 
     "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }],
-    "react-hooks/rules-of-hooks": 1,
     "no-useless-escape": 1,
     "prefer-const": 1
   }
