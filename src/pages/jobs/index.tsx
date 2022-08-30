@@ -97,16 +97,16 @@ const Jobs = () => {
     <Layout data={filteredData} setData={modifyData}>
       <Stack
         ref={ref}
-        position='sticky'
-        mx='auto'
-        maxW='fit-content'
+        position="sticky"
+        mx="auto"
+        maxW="fit-content"
         direction={'row'}
-        gap='1.5rem'
-        p='1rem'
+        gap="1.5rem"
+        p="1rem"
       >
-        <Stack spacing={'2rem'} minW='15rem' direction={'column'} p='1rem'>
+        <Stack spacing={'2rem'} minW="15rem" direction={'column'} p="1rem">
           <Stack direction={'column'}>
-            <Heading fontWeight='600' fontSize='xl'>
+            <Heading fontWeight="600" fontSize="xl">
               Job Type
             </Heading>
             <CheckboxGroup
@@ -116,28 +116,28 @@ const Jobs = () => {
                 // modifyArray();
               }}
             >
-              <Stack direction={'column'} p='1rem'>
-                <Checkbox value='1' size={'md'}>
+              <Stack direction={'column'} p="1rem">
+                <Checkbox value="1" size={'md'}>
                   Full Time Job
                 </Checkbox>
-                <Checkbox value='2' size={'md'}>
+                <Checkbox value="2" size={'md'}>
                   Part Time Job
                 </Checkbox>
-                <Checkbox value='3' size={'md'}>
+                <Checkbox value="3" size={'md'}>
                   Freelance Job
                 </Checkbox>
-                <Checkbox value='4' size={'md'}>
+                <Checkbox value="4" size={'md'}>
                   Remote Job
                 </Checkbox>
-                <Checkbox value='5' size={'md'}>
+                <Checkbox value="5" size={'md'}>
                   Internship
                 </Checkbox>
               </Stack>{' '}
             </CheckboxGroup>
           </Stack>
 
-          <Stack gap='1rem'>
-            <Heading fontWeight='600' fontSize='xl'>
+          <Stack gap="1rem">
+            <Heading fontWeight="600" fontSize="xl">
               Salary
             </Heading>
             {/* eslint-disable-next-line jsx-a11y/aria-proptypes*/}
@@ -151,53 +151,53 @@ const Jobs = () => {
           </Stack>
           <Stack direction={'column'}>
             {' '}
-            <Heading fontWeight='600' fontSize='xl'>
+            <Heading fontWeight="600" fontSize="xl">
               Experience
             </Heading>
-            <Stack direction={'column'} p='1rem'>
-              <Checkbox value='1' onSelect={() => console.log('1')}>
+            <Stack direction={'column'} p="1rem">
+              <Checkbox value="1" onSelect={() => console.log('1')}>
                 Entry Level
               </Checkbox>
               <Checkbox
-                value='2'
+                value="2"
                 onChange={(event: any) => {
                   //   console.log('2', event.target.checked);
                 }}
               >
                 Intermediate Level
               </Checkbox>
-              <Checkbox value='3' onClick={() => console.log('3')}>
+              <Checkbox value="3" onClick={() => console.log('3')}>
                 Senior Level
               </Checkbox>
             </Stack>
           </Stack>
         </Stack>
         <Center
-          minW='42rem'
-          gap='1.3rem'
-          p='1rem'
-          w='fit-content'
-          flexDirection='column'
+          minW="42rem"
+          gap="1.3rem"
+          p="1rem"
+          w="fit-content"
+          flexDirection="column"
         >
           <Stack
-            fontWeight='400'
+            fontWeight="400"
             direction={'row'}
-            justifyContent='space-between'
-            w='100%'
+            justifyContent="space-between"
+            w="100%"
           >
-            <Text color='gray.400'>Showing {filteredData.length} results</Text>
+            <Text color="gray.400">Showing {filteredData.length} results</Text>
             <Stack direction={'row'}>
-              <Text color='gray.400'>Sort by :</Text>
+              <Text color="gray.400">Sort by :</Text>
               <chakra.select
                 onChange={(event: any) => console.log(event.target.value)}
-                defaultValue='1'
-                bg='white'
-                name='cars'
-                id='cars'
+                defaultValue="1"
+                bg="white"
+                name="cars"
+                id="cars"
               >
-                <option value='1'>Newest First</option>
-                <option value='2'>Oldest First</option>
-                <option value='3'>Most Popular</option>
+                <option value="1">Newest First</option>
+                <option value="2">Oldest First</option>
+                <option value="3">Most Popular</option>
               </chakra.select>
             </Stack>
           </Stack>
@@ -205,20 +205,20 @@ const Jobs = () => {
             <Center
               textAlign={'center'}
               flexDirection={'column'}
-              w='100%'
-              maxW='3xl'
-              h='100%'
+              w="100%"
+              maxW="3xl"
+              h="100%"
             >
               <Heading
-                mb='2rem'
-                rounded='full'
-                bg='gray.100'
-                p='1rem 1.5rem'
-                fontSize='6xl'
+                mb="2rem"
+                rounded="full"
+                bg="gray.100"
+                p="1rem 1.5rem"
+                fontSize="6xl"
               >
                 🫣
               </Heading>
-              <Text maxW='14rem' fontSize='xl'>
+              <Text maxW="14rem" fontSize="xl">
                 Sorry We could not find any match for that.
               </Text>
               <Text color={'gray.400'}>Try something else</Text>

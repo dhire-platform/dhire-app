@@ -32,38 +32,38 @@ const ProfileComponent = () => {
         }}
         bg={useColorModeValue('white', 'blackAlpha.600')}
         w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
-        rounded='lg'
+        rounded="lg"
         flexDirection={'column'}
-        p='1.5rem'
-        alignItems='start'
-        border='1px solid'
+        p="1.5rem"
+        alignItems="start"
+        border="1px solid"
         borderColor={'blackAlpha.200'}
         color={'black'}
       >
         <Stack
           direction={'row'}
-          justify='space-between'
+          justify="space-between"
           align={'start'}
-          w='full'
+          w="full"
         >
-          <Stack direction={'row'} gap='0.7rem' w='full'>
+          <Stack direction={'row'} gap="0.7rem" w="full">
             <Avatar
-              size='lg'
+              size="lg"
               name={user.name}
-              colorScheme='black'
+              colorScheme="black"
               src={user.image}
             />
             <Stack
-              gap='0'
+              gap="0"
               justify={'center'}
-              align='start'
-              w='full'
+              align="start"
+              w="full"
               direction={'column'}
             >
-              <Heading color={'black'} fontSize='xl'>
+              <Heading color={'black'} fontSize="xl">
                 {user.name}
               </Heading>
-              <Text marginBlock='0' margin='0.1rem' color='blackAlpha.500'>
+              <Text marginBlock="0" margin="0.1rem" color="blackAlpha.500">
                 @{user.userName}
               </Text>
             </Stack>
@@ -74,23 +74,23 @@ const ProfileComponent = () => {
             _hover={{
               bg: 'blackAlpha.100',
             }}
-            p='0.1rem'
-            size='sm'
+            p="0.1rem"
+            size="sm"
             display={hover ? 'flex' : 'none'}
-            alignItems='center'
+            alignItems="center"
             justifyContent={'center'}
-            color='blackAlpha.600'
-            aria-label='add experience'
-            icon={<FiEdit2 size='18px' />}
+            color="blackAlpha.600"
+            aria-label="add experience"
+            icon={<FiEdit2 size="18px" />}
           />
         </Stack>
         <Heading
-          fontWeight='300'
+          fontWeight="300"
           fontSize={'md'}
           noOfLines={3}
           color={'black'}
-          w='100%'
-          maxW='36rem'
+          w="100%"
+          maxW="36rem"
           mt={user.about && '1rem'}
         >
           {user.about}

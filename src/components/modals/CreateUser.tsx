@@ -80,14 +80,14 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
         <ModalHeader>Modal Title</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalBody display='flex' flexDirection={'column'} gap='1rem' pb={6}>
+          <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
             {/* Full Name */}
             <FormControl isRequired>
-              <FormLabel htmlFor='name'>Full name</FormLabel>
+              <FormLabel htmlFor="name">Full name</FormLabel>
               <Input
                 isRequired
-                id='name'
-                placeholder='Name'
+                id="name"
+                placeholder="Name"
                 {...register('name', {
                   required: 'This is required',
                   minLength: {
@@ -103,9 +103,9 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
               />
               <ErrorMessage
                 errors={errors}
-                name='name'
+                name="name"
                 render={({ message }) => (
-                  <Text fontSize='sm' color='red.500' py='0.5rem'>
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
                   </Text>
                 )}
@@ -114,14 +114,14 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
 
             {/*userName */}
             <FormControl isRequired>
-              <FormLabel htmlFor='name'>User Name</FormLabel>
+              <FormLabel htmlFor="name">User Name</FormLabel>
               <InputGroup>
                 <InputLeftAddon>@</InputLeftAddon>
                 <Input
                   isRequired
-                  type='text'
-                  id='userName'
-                  placeholder='User Name'
+                  type="text"
+                  id="userName"
+                  placeholder="User Name"
                   {...register('userName', {
                     required: 'This is Required',
                     minLength: {
@@ -137,9 +137,9 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
               </InputGroup>
               <ErrorMessage
                 errors={errors}
-                name='userName'
+                name="userName"
                 render={({ message }) => (
-                  <Text fontSize='sm' color='red.500' py='0.5rem'>
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
                   </Text>
                 )}
@@ -148,13 +148,13 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
 
             {/*Profile Picture URL */}
             <FormControl>
-              <FormLabel htmlFor='image'>Profile Picture</FormLabel>
+              <FormLabel htmlFor="image">Profile Picture</FormLabel>
               <InputGroup>
                 <InputLeftAddon>URL:</InputLeftAddon>
                 <Input
-                  type='url'
-                  id='image'
-                  placeholder='Image URL'
+                  type="url"
+                  id="image"
+                  placeholder="Image URL"
                   {...register('image', {
                     pattern: {
                       value:
@@ -166,9 +166,9 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
               </InputGroup>
               <ErrorMessage
                 errors={errors}
-                name='image'
+                name="image"
                 render={({ message }) => (
-                  <Text fontSize='sm' color='red.500' py='0.5rem'>
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
                   </Text>
                 )}
@@ -178,8 +178,8 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
           <ModalFooter>
             <Button
               isLoading={isSubmitting}
-              type='submit'
-              colorScheme='blue'
+              type="submit"
+              colorScheme="blue"
               mr={3}
             >
               Save

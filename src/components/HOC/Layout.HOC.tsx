@@ -14,12 +14,12 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   return (
     <Container
-      display='flex'
-      flexDirection='column'
+      display="flex"
+      flexDirection="column"
       justifyContent={'space-between'}
-      maxW='full'
-      p='0'
-      zIndex='1'
+      maxW="full"
+      p="0"
+      zIndex="1"
     >
       {user.walletId ? '' : <Background />}
       <Navbar />

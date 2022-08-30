@@ -63,50 +63,49 @@ const ChooseUs = () => {
   }, [controls, inView]);
 
   return (
-    <Container maxW='6xl' py='8rem'>
+    <Container maxW="6xl" py="8rem">
       <Flex
-        justify='space-between'
+        justify="space-between"
         flexDirection={{ base: 'column', md: 'row' }}
-        alignItems='center'
+        alignItems="center"
       >
         <Center
           w={{ base: '22rem', md: '25rem' }}
-          minH='25rem'
-          position='relative'
+          minH="25rem"
+          position="relative"
         >
           <Image
-            src='/assets/jobs.webp'
-            alt='saly'
-            layout='fill'
-            objectFit='contain'
+            src="/assets/jobs.webp"
+            alt="saly"
+            layout="fill"
+            objectFit="contain"
           />
         </Center>
         <Center
-          p='1rem'
+          p="1rem"
           ref={ref}
           alignItems={{ base: 'center', md: 'start' }}
           textAlign={{ base: 'center', md: 'start' }}
-          gap='1.2rem'
+          gap="1.2rem"
           flexDirection={'column'}
         >
-          <MotionBox animate={controls} variants={variant1} initial='hidden'>
+          <MotionBox animate={controls} variants={variant1} initial="hidden">
             <Heading fontSize={['32px', '48px', '60px']}>
               Why choose us?
             </Heading>
           </MotionBox>
-          <MotionBox animate={controls} variants={variant2} initial='hidden'>
-            <Text maxW='36rem'>
+          <MotionBox animate={controls} variants={variant2} initial="hidden">
+            <Text maxW="36rem">
               Being a transparent On-chain platform, both users and
               organizations will experience easy job-hunting and on-boarding,
               with no intermediary. As a user, you get fast and mandatory
               feedback on your application from the organization
             </Text>
           </MotionBox>
-          <MotionBox animate={controls} variants={variant3} initial='hidden'>
+          <MotionBox animate={controls} variants={variant3} initial="hidden">
             <Button>Learn More</Button>
           </MotionBox>
         </Center>
-        
       </Flex>
     </Container>
   );

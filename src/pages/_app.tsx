@@ -3,6 +3,7 @@ import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react';
 import theme from '@/config/chakra.config';
 import dynamic from 'next/dynamic';
 import Layout from 'src/components/HOC/Layout.HOC';
+import ProtectedRoute from 'src/components/ProtectedRoutes';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -13,7 +14,7 @@ const WalletConnectionProvider: any = dynamic(
   }
 );
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <WalletConnectionProvider>
       <ChakraProvider theme={theme}>
@@ -22,9 +23,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             useSystemColorMode: true,
           }}
         >
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <ProtectedRoute router={router}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ProtectedRoute>
         </ColorModeProvider>
       </ChakraProvider>
     </WalletConnectionProvider>

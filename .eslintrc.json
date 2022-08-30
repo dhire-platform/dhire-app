@@ -1,17 +1,14 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "prettier"
-  ],
-  "extends": ["next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
-  ],
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
-    "no-console": 1,       // Means warning
-    "prettier/prettier": 2 // Means error
+    "no-console": 1, // Means warning
+    "prettier/prettier": 1, // Means error
+    "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }],
+    "react-hooks/rules-of-hooks": 1,
+    "no-useless-escape": 1,
+    "prefer-const": 1
   }
 }

@@ -64,7 +64,7 @@ const Navbar = () => {
   }, [w.connected]);
 
   return (
-    <Container minW={'full'} p='0'>
+    <Container minW={'full'} p="0">
       <CreateUserModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       {user.walletId ? (
         <DashboardNavbar>

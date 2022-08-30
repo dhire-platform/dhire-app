@@ -9,7 +9,7 @@ const useSearch = ({ data, searchValue }: ISearch) => {
     });
   };
 
- // console.log(search);
+  // console.log(search);
 };
 
 export default useSearch;

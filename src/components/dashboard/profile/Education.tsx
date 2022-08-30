@@ -92,12 +92,12 @@ const Education = () => {
         _hover={{
           bg: 'blackAlpha.100',
         }}
-        justifyContent='center'
-        p='0.5rem'
-        rounded='md'
+        justifyContent="center"
+        p="0.5rem"
+        rounded="md"
       >
-        <Box as='button' color='blackAlpha.500' {...getCancelButtonProps()}>
-          <IoMdClose size='22px' />
+        <Box as="button" color="blackAlpha.500" {...getCancelButtonProps()}>
+          <IoMdClose size="22px" />
         </Box>
       </Flex>
     ) : (
@@ -105,12 +105,12 @@ const Education = () => {
         _hover={{
           bg: 'blackAlpha.100',
         }}
-        justifyContent='center'
-        p='0.5rem'
-        rounded='md'
+        justifyContent="center"
+        p="0.5rem"
+        rounded="md"
       >
-        <Box as='button' color='blackAlpha.500' {...getEditButtonProps()}>
-          <FiEdit2 size='18px' />
+        <Box as="button" color="blackAlpha.500" {...getEditButtonProps()}>
+          <FiEdit2 size="18px" />
         </Box>
       </Flex>
     );
@@ -120,9 +120,9 @@ const Education = () => {
     <>
       <Modal
         closeOnOverlayClick={false}
-        motionPreset='slideInBottom'
-        scrollBehavior='outside'
-        size='xl'
+        motionPreset="slideInBottom"
+        scrollBehavior="outside"
+        size="xl"
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
         isOpen={isOpen}
@@ -134,19 +134,19 @@ const Education = () => {
           <ModalCloseButton />
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody
-              pt='1rem'
-              display='flex'
+              pt="1rem"
+              display="flex"
               flexDirection={'column'}
-              gap='1rem'
+              gap="1rem"
               pb={6}
             >
               {/* Full Name */}
               <FormControl>
-                <FormLabel htmlFor='name'>Company Name</FormLabel>
+                <FormLabel htmlFor="name">Company Name</FormLabel>
                 <Input
                   isRequired
-                  id='company'
-                  placeholder='Name'
+                  id="company"
+                  placeholder="Name"
                   {...register('company', {
                     required: 'This is required',
                     minLength: {
@@ -160,13 +160,13 @@ const Education = () => {
 
               {/*company logo URL */}
               <FormControl>
-                <FormLabel htmlFor='image'>Company Logo</FormLabel>
+                <FormLabel htmlFor="image">Company Logo</FormLabel>
                 <InputGroup>
                   <InputLeftAddon>URL:</InputLeftAddon>
                   <Input
-                    type='url'
-                    id='image'
-                    placeholder='Logo URL'
+                    type="url"
+                    id="image"
+                    placeholder="Logo URL"
                     {...register('image')}
                   />
                 </InputGroup>
@@ -174,10 +174,10 @@ const Education = () => {
 
               {/*Designation */}
               <FormControl>
-                <FormLabel htmlFor='name'>Position</FormLabel>
+                <FormLabel htmlFor="name">Position</FormLabel>
                 <Input
-                  id='designation'
-                  placeholder='Position'
+                  id="designation"
+                  placeholder="Position"
                   {...register('designation')}
                 />
               </FormControl>
@@ -185,21 +185,21 @@ const Education = () => {
               {/* from/To */}
               <Stack direction={'row'}>
                 <FormControl>
-                  <FormLabel htmlFor='date'>From</FormLabel>
-                  <Input id='from' type={'date'} {...register('from')} />
+                  <FormLabel htmlFor="date">From</FormLabel>
+                  <Input id="from" type={'date'} {...register('from')} />
                 </FormControl>
                 <FormControl>
-                  <FormLabel htmlFor='date'>To</FormLabel>
-                  <Input id='to' type={'date'} {...register('to')} />
+                  <FormLabel htmlFor="date">To</FormLabel>
+                  <Input id="to" type={'date'} {...register('to')} />
                 </FormControl>
               </Stack>
 
               {/* Job Description */}
               <FormControl>
-                <FormLabel htmlFor='name'>Job Description</FormLabel>
+                <FormLabel htmlFor="name">Job Description</FormLabel>
                 <Input
-                  id='description'
-                  placeholder='Position'
+                  id="description"
+                  placeholder="Position"
                   {...register('description')}
                 />
               </FormControl>
@@ -207,8 +207,8 @@ const Education = () => {
             <ModalFooter>
               <Button
                 isLoading={isSubmitting}
-                type='submit'
-                colorScheme='blue'
+                type="submit"
+                colorScheme="blue"
                 mr={3}
               >
                 Save
@@ -228,33 +228,33 @@ const Education = () => {
         onMouseLeave={() => {
           setHover(false);
         }}
-        bg='white'
+        bg="white"
         w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
-        rounded='lg'
+        rounded="lg"
         flexDirection={'column'}
-        justifyContent='start'
+        justifyContent="start"
         color={useColorModeValue('white', 'blackAlpha.600')}
-        gap='1rem'
-        p='1.5rem'
-        alignItems='start'
-        border='1px solid'
+        gap="1rem"
+        p="1.5rem"
+        alignItems="start"
+        border="1px solid"
         borderColor={'blackAlpha.200'}
       >
-        <Stack w='100%' alignContent={'start'} direction={'column'}>
-          <Heading color={'black'} fontSize='xl'>
+        <Stack w="100%" alignContent={'start'} direction={'column'}>
+          <Heading color={'black'} fontSize="xl">
             Education
           </Heading>
           <Editable
-            textAlign='center'
-            fontSize='md'
+            textAlign="center"
+            fontSize="md"
             display={'flex'}
-            alignItems='center'
+            alignItems="center"
             justifyContent={'space-between'}
-            flexDirection='row'
-            defaultValue='Enter your education details...'
-            w='100%'
-            gap='1rem'
-            h='1.8rem'
+            flexDirection="row"
+            defaultValue="Enter your education details..."
+            w="100%"
+            gap="1rem"
+            h="1.8rem"
             color={'blackAlpha.500'}
             isPreviewFocusable={false}
           >
@@ -267,14 +267,14 @@ const Education = () => {
           </Editable>
         </Stack>{' '}
         <Divider />
-        <Stack w='100%' direction='column'>
+        <Stack w="100%" direction="column">
           <Stack
-            h='2rem'
+            h="2rem"
             direction={'row'}
-            alignItems='center'
+            alignItems="center"
             justify={'space-between'}
           >
-            <Heading color={'black'} fontSize='xl'>
+            <Heading color={'black'} fontSize="xl">
               Experience
             </Heading>
             <IconButton
@@ -283,33 +283,33 @@ const Education = () => {
               _hover={{
                 bg: 'blackAlpha.100',
               }}
-              p='0.1rem'
-              size='sm'
+              p="0.1rem"
+              size="sm"
               display={hover && experience?.length > 0 ? 'flex' : 'none'}
-              alignItems='center'
+              alignItems="center"
               justifyContent={'center'}
-              color='blackAlpha.600'
-              aria-label='add experience'
-              icon={<VscAdd size='18px' />}
+              color="blackAlpha.600"
+              aria-label="add experience"
+              icon={<VscAdd size="18px" />}
             />
           </Stack>
           <Flex
-            w='100%'
-            py='1rem'
-            gap='0.7rem'
-            wrap='wrap'
+            w="100%"
+            py="1rem"
+            gap="0.7rem"
+            wrap="wrap"
             flexDir={'column'}
             color={'black'}
-            maxW='36rem'
+            maxW="36rem"
           >
             {experience?.length ? (
               experience?.map((experience: IExperience) => (
                 <>
-                  <Stack px='2rem' w='100%' py='0.5rem' direction={'row'}>
-                    <Avatar src={experience?.image} size='md' bg='white' />
-                    <Stack w='full' direction={'column'}>
+                  <Stack px="2rem" w="100%" py="0.5rem" direction={'row'}>
+                    <Avatar src={experience?.image} size="md" bg="white" />
+                    <Stack w="full" direction={'column'}>
                       <Heading fontSize={'xl'}>{experience.company}</Heading>
-                      <Text fontSize='md'>
+                      <Text fontSize="md">
                         <></>
                       </Text>
                       <Divider />
@@ -317,10 +317,10 @@ const Education = () => {
                         {experience.designation}
                       </Heading>
                       <Heading
-                        fontWeight='400'
+                        fontWeight="400"
                         noOfLines={2}
                         fontSize={'sm'}
-                        color='blackAlpha.500'
+                        color="blackAlpha.500"
                       >
                         {experience.description}
                       </Heading>
@@ -331,24 +331,24 @@ const Education = () => {
             ) : (
               <Stack
                 border={'1px dashed'}
-                borderColor='gray.200'
-                p='4rem 1rem'
-                rounded='md'
+                borderColor="gray.200"
+                p="4rem 1rem"
+                rounded="md"
                 align={'center'}
                 direction={'column'}
-                w='full'
+                w="full"
               >
-                <Text pb='1rem' color='blackAlpha.400'>
+                <Text pb="1rem" color="blackAlpha.400">
                   You have not added any experiences yet.
                 </Text>
                 <Box
                   onClick={onOpen}
-                  as='button'
-                  outline='1px solid gray'
-                  p='0.2rem 0.6rem'
-                  rounded='sm'
+                  as="button"
+                  outline="1px solid gray"
+                  p="0.2rem 0.6rem"
+                  rounded="sm"
                   fontSize={'xs'}
-                  my='1rem'
+                  my="1rem"
                 >
                   Add Experience
                 </Box>

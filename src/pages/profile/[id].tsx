@@ -39,15 +39,15 @@ const User = () => {
     <>
       <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Container
-        maxW='full'
-        py='4rem'
+        maxW="full"
+        py="4rem"
         bgGradient={
           'linear-gradient(to bottom, #bcc0e65e , rgba(255,255,255,1) 100%)'
         }
         color={'black'}
-        px='0'
+        px="0"
       >
-        <Container p='1rem' maxW='8xl' my='2rem'>
+        <Container p="1rem" maxW="8xl" my="2rem">
           <Tabs
             variant={'unstyled'}
             orientation={isMobile ? 'vertical' : 'horizontal'}
@@ -55,33 +55,33 @@ const User = () => {
             <TabList alignItems={'start'}>
               <Tab>
                 <Text
-                  fontSize='lg'
-                  fontWeight='600'
+                  fontSize="lg"
+                  fontWeight="600"
                   //  _selected={{ fontSize: 'xl', fontWeight: '800' }}
                 >
                   Dashboard
                 </Text>
               </Tab>
               <Tab isDisabled>
-                <Text fontSize='lg' fontWeight='600'>
+                <Text fontSize="lg" fontWeight="600">
                   Profile
                 </Text>
               </Tab>
               <Tab isDisabled>
-                <Text fontSize='lg' fontWeight='600'>
+                <Text fontSize="lg" fontWeight="600">
                   Settings
                 </Text>
               </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Center w='full'>
+                <Center w="full">
                   <Flex
-                    mx='auto'
+                    mx="auto"
                     h={{ base: 'full', md: 'clamp(54rem,180vh, 60rem)' }}
-                    gap='2rem'
+                    gap="2rem"
                     flexWrap={'wrap'}
-                    alignItems='center'
+                    alignItems="center"
                     alignContent={'center'}
                     justifyContent={'top'}
                     flexDirection={{ base: 'row', md: 'column' }}
@@ -95,15 +95,15 @@ const User = () => {
                 </Center>
               </TabPanel>
               <TabPanel>
-                <Text size='xl' fontWeight='600'>
-                  <Container minW='full' h='100vh'>
+                <Text size="xl" fontWeight="600">
+                  <Container minW="full" h="100vh">
                     Coming Soon
                   </Container>
                 </Text>
               </TabPanel>
               <TabPanel>
-                <Text size='xl' fontWeight='600'>
-                  <Container minW='full' h='100vh'>
+                <Text size="xl" fontWeight="600">
+                  <Container minW="full" h="100vh">
                     Coming Soon
                   </Container>
                 </Text>
@@ -111,8 +111,8 @@ const User = () => {
             </TabPanels>
           </Tabs>
           <Stack
-            direction='row'
-            justify='space-between'
+            direction="row"
+            justify="space-between"
             align={'start'}
           ></Stack>
         </Container>
