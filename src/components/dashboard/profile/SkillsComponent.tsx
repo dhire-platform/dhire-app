@@ -1,29 +1,20 @@
 import {
-  Button,
+  Box,
   Center,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   IconButton,
-  Input,
   Stack,
   Tag,
   Text,
-  Box,
-  useColorModeValue,
-  FormControl,
-  FormLabel,
 } from '@chakra-ui/react';
-import React, { useCallback, useState, SyntheticEvent } from 'react';
-import { useProfileStore } from 'src/app/profileStore';
-import {
-  IProfile,
-  IProfileStore,
-  skill,
-  SkillLevel,
-} from 'src/definitions/definitions';
-import { MdDone } from 'react-icons/md';
+import { SyntheticEvent, useCallback, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
-import { useLocalStore } from 'src/app/localStore';
+import { MdDone } from 'react-icons/md';
+import { useProfileStore } from 'src/app/profileStore';
+import { skill } from 'src/definitions/definitions';
 import ChakraTagInput from 'src/helpers/ChakraTagInput';
 
 const SkillsComponent = () => {
