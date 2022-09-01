@@ -1,85 +1,38 @@
-import config from '@/config/general.config';
 import {
   Button,
-  Container,
-  Text,
-  FormLabel,
   FormControl,
+  FormLabel,
   Input,
-  Textarea,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   InputGroup,
   InputLeftAddon,
-  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import { useRef } from 'react';
-import { useProfileStore } from 'src/app/profileStore';
-import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { usePersistanceStore } from 'src/app/persistanceStore';
+import { useForm } from 'react-hook-form';
+import { useCreateAccount } from 'src/lib/user/useCreateUser';
 
 const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
-  const { user } = useProfileStore();
-  const createUser = useProfileStore((state: any) => state.createUser);
-  const { userId, userWalletId, setPersistanceUser } = usePersistanceStore();
-
-  const router = useRouter();
-  const connected_wallet = useWallet();
-  const initialRef = useRef(null);
-  const finalRef = useRef(null);
-
+  const [submit, modalClose] = useCreateAccount(onClose);
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm({});
 
-  const onSubmit = async (submittedData: any) => {
-    const Data = {
-      name: submittedData.name,
-      userName: submittedData.userName,
-      image: submittedData.image,
-      walletId: connected_wallet.publicKey?.toBase58(),
-    };
-    createUser(Data)
-      .then((res: any) => {
-        console.log('creating user - ', res);
-        if (res.data.id) {
-          console.log('new user created 🙋🏻‍♂️', res.statusText);
-          const persistData = {
-            userId: res.data.id as string,
-            userName: res.data.username as string,
-            userWalletId: res.data.wallet as string,
-          };
-          console.log(persistData);
-          setPersistanceUser(persistData);
-          router.push('/profile/' + res.data.id);
-          onClose();
-        } else {
-          console.log('error in creating user check navbar component');
-        }
-      })
-      .catch((err: any) => {
-        console.log('Error From Server - ', err.message);
-      });
-    onClose();
-  };
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={() => modalClose}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+      <ModalContent p="1rem" pb="2rem">
+        <ModalHeader fontWeight={'700'}>Tell Us About Yourself</ModalHeader>
         <ModalCloseButton />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(submit)}>
           <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
             {/* Full Name */}
             <FormControl isRequired>
@@ -175,17 +128,14 @@ const CreateUserModal = ({ onClose, onOpen, isOpen }: any) => {
               />
             </FormControl>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter p="0rem 1rem">
             <Button
               isLoading={isSubmitting}
               type="submit"
               colorScheme="blue"
               mr={3}
             >
-              Save
-            </Button>
-            <Button variant={'outline'} onClick={onClose}>
-              Cancel
+              Create Account
             </Button>
           </ModalFooter>
         </form>

@@ -13,5 +13,6 @@
     "no-unused-vars": [1, { "args": "after-used", "argsIgnorePattern": "^_" }],
     "no-useless-escape": 1,
     "prefer-const": 1
+    
   }
 }

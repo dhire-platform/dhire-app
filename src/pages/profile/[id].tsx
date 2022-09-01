@@ -1,28 +1,22 @@
 import {
-  Box,
   Center,
   Container,
   Flex,
   Stack,
-  Tabs,
-  TabList,
-  TabPanels,
   Tab,
+  TabList,
   TabPanel,
-  Button,
+  TabPanels,
+  Tabs,
   Text,
-  Heading,
-  useMediaQuery,
   useDisclosure,
+  useMediaQuery,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useLocalStore } from 'src/app/localStore';
 import { useProfileStore } from 'src/app/profileStore';
+import Jobs from 'src/components/dashboard/jobs/Jobs';
 import Achievement from 'src/components/dashboard/profile/Achievement';
 import Education from 'src/components/dashboard/profile/Education';
-import Experience from 'src/components/dashboard/profile/Education';
 import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent';
 import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditModal';
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
@@ -53,14 +47,25 @@ const User = () => {
             orientation={isMobile ? 'vertical' : 'horizontal'}
           >
             <TabList alignItems={'start'}>
-              <Tab>
-                <Text
-                  fontSize="lg"
-                  fontWeight="600"
-                  //  _selected={{ fontSize: 'xl', fontWeight: '800' }}
-                >
-                  Dashboard
-                </Text>
+              <Tab
+                _selected={{
+                  borderLeft: '1px solid black',
+                }}
+                borderLeft={'1px solid transparent'}
+                fontSize="lg"
+                fontWeight="600"
+              >
+                <Text>Dashboard</Text>
+              </Tab>
+              <Tab
+                _selected={{
+                  borderLeft: '1px solid black',
+                }}
+                borderLeft={'1px solid transparent'}
+                fontSize="lg"
+                fontWeight="600"
+              >
+                <Text>Jobs</Text>
               </Tab>
               <Tab isDisabled>
                 <Text fontSize="lg" fontWeight="600">
@@ -97,7 +102,7 @@ const User = () => {
               <TabPanel>
                 <Text size="xl" fontWeight="600">
                   <Container minW="full" h="100vh">
-                    Coming Soon
+                    <Jobs />
                   </Container>
                 </Text>
               </TabPanel>
