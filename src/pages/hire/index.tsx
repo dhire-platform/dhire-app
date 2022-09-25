@@ -13,19 +13,19 @@ const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 
 const index = () => {
   return (
-    <Container maxW='full' h='70vh'>
-      <Center w='full' py='4rem' h='60vh'>
+    <Container maxW="full" h="70vh">
+      <Center w="full" py="4rem" h="60vh">
         <Heading
-          maxW='60rem'
+          maxW="60rem"
           fontWeight={'800'}
-          letterSpacing='-0.03em'
+          letterSpacing="-0.03em"
           lineHeight={['54px', '72px', '102px']}
           fontSize={['48px', '60px', '94px']}
         >
           <Box
-            as='span'
-            bgGradient='linear(to-l, #6AADF1, #81F2F8, #7D8FFF, #6AADF1)'
-            bgClip='text'
+            as="span"
+            bgGradient="linear(to-l, #6AADF1, #81F2F8, #7D8FFF, #6AADF1)"
+            bgClip="text"
             backgroundPosition={'-100%'}
             backgroundSize={'300%'}
             animation={animation2}

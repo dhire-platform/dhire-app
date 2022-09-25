@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { ISearch } from 'src/definitions/ISearch';
 
 // this should return an array of searched item data and take data, searchInput as input
@@ -9,7 +8,7 @@ const useSearch = ({ data, searchValue }: ISearch) => {
     });
   };
 
- // console.log(search);
+  // console.log(search);
 };
 
 export default useSearch;

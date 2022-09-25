@@ -13,6 +13,7 @@ async function createUser(req: NextApiRequest, res: NextApiResponse) {
     origin: '*',
     optionsSuccessStatus: 200,
   });
+
   const { name, type, wallet, username } = req.body as {
     name: string;
     type: Role;

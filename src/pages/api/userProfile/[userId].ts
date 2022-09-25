@@ -13,27 +13,27 @@ export default async function handler(
     optionsSuccessStatus: 200,
   });
 
-  const { id } = req.query as { id: string };
-  if (!id) {
+  const { userId } = req.query as { userId: string };
+  if (!userId) {
     res.status(400).json({ error: 'id is required' });
     return;
   }
 
   // sanitize id to prevent SQL injection
-  if (id.match(/[^a-zA-Z0-9]/)) {
-    res.status(400).json({ error: 'invalid id' });
+  if (userId.match(/[^a-zA-Z0-9]/)) {
+    res.status(400).json({ error: 'invalid userId' });
     return;
   }
 
   switch (req.method) {
     case 'GET':
-      await getUserProfileById(req, res, id);
+      await getUserProfileById(req, res, userId);
       break;
     case 'PUT':
-      await updateUserProfile(req, res, id);
+      await updateUserProfile(req, res, userId);
       break;
     case 'DELETE':
-      await deleteUserProfile(req, res, id);
+      await deleteUserProfile(req, res, userId);
       break;
     default:
       res.status(400).json({ error: 'invalid method' });
@@ -44,12 +44,12 @@ export default async function handler(
 async function getUserProfileById(
   req: NextApiRequest,
   res: NextApiResponse<any>,
-  id: string
+  userId: string
 ) {
   try {
     const user = await prisma.userProfile.findUnique({
       where: {
-        userId: id,
+        id: userId,
       },
     });
     res.status(200).json(user);
@@ -61,7 +61,7 @@ async function getUserProfileById(
 async function updateUserProfile(
   req: NextApiRequest,
   res: NextApiResponse,
-  id: string
+  userId: string
 ) {
   const {
     bio,
@@ -69,46 +69,42 @@ async function updateUserProfile(
     skills,
     location,
     website,
-    experience,
+    expereince,
     education,
     projects,
     social,
   } = req.body as {
-    walletId: string;
     bio?: string;
     image?: string;
-    skills?: Skill[];
+    skills: Skill[];
     location?: string;
     website?: string;
-    experience?: JSON[];
+    expereince?: JSON[];
     education?: JSON[];
     projects?: JSON[];
     social?: SocialType;
   };
 
   try {
-    console.log(req.body);
-    console.log(id);
     const user = await prisma.userProfile.update({
       where: {
-        userId: id,
+        id: userId,
       },
       data: {
+        userId,
         bio,
         image,
         skills,
         location,
         website,
-        experience,
+        expereince,
         education,
         projects,
         social,
       },
     });
-    console.log('user update', user);
     res.status(200).json(user);
   } catch (e) {
-    console.log(e);
     res.status(400).json({ error: (e as Error).message });
   }
 }
@@ -116,12 +112,12 @@ async function updateUserProfile(
 async function deleteUserProfile(
   req: NextApiRequest,
   res: NextApiResponse,
-  id: string
+  userId: string
 ) {
   try {
     const user = await prisma.userProfile.delete({
       where: {
-        userId: id,
+        id: userId,
       },
     });
     res.status(200).json(user);

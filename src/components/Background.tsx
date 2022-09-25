@@ -7,18 +7,18 @@ const Background = () => {
   return (
     <Container
       maxW={'full'}
-      display='flex'
+      display="flex"
       alignItems={'center'}
-      justifyContent='center'
+      justifyContent="center"
     >
       <Container
-        top='0'
-        maxW='130rem'
+        top="0"
+        maxW="130rem"
         position={'absolute'}
-        zIndex='-1'
-        overflow='hidden'
-        h='100%'
-        pt='20rem'
+        zIndex="-1"
+        overflow="hidden"
+        h="100%"
+        pt="20rem"
         _after={{
           // pink
           content: '""',
@@ -66,21 +66,21 @@ const Background = () => {
           }}
         />
         <Box
-          bg='white'
+          bg="white"
           position={'absolute'}
           top={['22%', '32%', '15%']}
           left={['-30%', '15%', '-20%']}
-          opacity='0.35'
+          opacity="0.35"
           w={['105rem', '105rem', '130rem']}
           h={['16rem', '16rem', '22rem']}
           transform={['rotate(55deg)', 'rotate(55deg)', 'rotate(45deg)']}
         />
         <Box
-          position='absolute'
+          position="absolute"
           top={['2%', '10%', '45%']}
           left={['-205%', '-95%', '40%']}
-          bg='white'
-          opacity='0.35'
+          bg="white"
+          opacity="0.35"
           w={['105rem', '105rem', '130rem']}
           h={['16rem', '16rem', '22rem']}
           transform={['rotate(55deg)', 'rotate(55deg)', 'rotate(45deg)']}
@@ -134,22 +134,22 @@ const Background = () => {
           }}
         />
         <Box
-          bg='white'
+          bg="white"
           position={'absolute'}
           top={['calc(45% + 300vh)', 'calc(45% + 200vh)', 'calc(15% + 200vh)']}
           left={['-180% ', '-140vw', '-25%']}
-          opacity='0.35'
+          opacity="0.35"
           w={['155rem', '155rem', '130rem']}
           h={['16rem', '16rem', '22rem']}
           transform={['rotate(55deg)', 'rotate(55deg)', 'rotate(45deg)']}
           // blur circle
         />
         <Box
-          position='absolute'
+          position="absolute"
           top={['calc(10% + 200vh)', 'calc(25% + 200vh)', 'calc(45% + 200vh)']}
           left={['-140%', '-140vw', '35%']}
-          bg='white'
-          opacity='0.35'
+          bg="white"
+          opacity="0.35"
           w={['105rem', '175rem', '130rem']}
           h={['16rem', '16rem', '22rem']}
           transform={['rotate(55deg)', 'rotate(55deg)', 'rotate(45deg)']}

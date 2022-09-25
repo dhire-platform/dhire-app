@@ -113,7 +113,7 @@ export default forwardRef(function ChakraTagInput(
 
   return (
     <>
-      <Wrap align='center' {...wrapProps}>
+      <Wrap align="center" {...wrapProps}>
         {tags.map((tag, index) => (
           <WrapItem {...maybeCall(wrapItemProps, false, index)} key={index}>
             <ChakraTagInputTag
@@ -129,8 +129,8 @@ export default forwardRef(function ChakraTagInput(
           </WrapItem>
         ))}
       </Wrap>
-      <WrapItem pt='0.5rem' {...maybeCall(wrapItemProps, true, tags.length)}>
-        <Input w='100%' {...props} onKeyDown={handleKeyDown} ref={ref} />
+      <WrapItem pt="0.5rem" {...maybeCall(wrapItemProps, true, tags.length)}>
+        <Input w="100%" {...props} onKeyDown={handleKeyDown} ref={ref} />
       </WrapItem>
     </>
   );
