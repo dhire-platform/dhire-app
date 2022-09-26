@@ -6,7 +6,7 @@ import {
   HStack,
   Icon,
   keyframes,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';

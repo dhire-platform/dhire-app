@@ -1,6 +1,5 @@
 import { Container, useDisclosure } from '@chakra-ui/react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import { useProfileStore } from 'src/app/profileStore';
 import CreateUserModal from 'src/components/modals/CreateUser';
 import { useWalletConnection } from 'src/lib/wallet/useWalletConnection';
 import DashboardNavbar from './DashboardNav';
@@ -8,7 +7,7 @@ import LandingPageNavbar from './LandingPageNav';
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [user] = useWalletConnection(isOpen, onOpen, onClose);
+  const [user] = useWalletConnection(isOpen, onOpen);
 
   return (
     <Container minW={'full'} p="0">

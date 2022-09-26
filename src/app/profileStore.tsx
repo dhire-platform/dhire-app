@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 import axios from 'axios';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { IProfile, IProfileStore, IWallet } from 'src/definitions/definitions';
@@ -118,65 +119,41 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
       ...state,
       loading: true,
     }));
-    return new Promise((resolve) => {
-      axios
-        .post('/api/user', {
-          wallet: data.walletId,
-          type: roleEnum.RECRUIT,
-          name: data.name,
-          username: data.userName,
-        })
-        .then((res) => {
-          console.log(' 2 created a new user succesfully ');
-          set(() => ({
-            user: {
-              id: res.data.id,
-              name: res.data.name,
-              userName: res.data.username,
-              about: get().user.about,
-              image: data.image,
-              walletId: data.walletId,
-              role: get().user.role,
-              skills: get().user.skills,
-              location: get().user.location,
-              website: get().user.website,
-              achievement: get().user.achievement,
-            } as IProfile,
-          }));
+    return new Promise(async (resolve) => {
+      const newUser = await axios.post('/api/user', {
+        wallet: data.walletId,
+        type: roleEnum.RECRUIT,
+        name: data.name,
+        username: data.userName,
+      });
+      if (!newUser.data.id) return;
 
-          axios
-            .post(`/api/userProfile`, {
-              userId: data.walletId,
-              image: data.image,
-            })
-            .then((response: any) => {
-              // eslint-disable-next-line prettier/prettier
-              console.log(' 3 - succesfully updated user while creating one - ', response);
-              resolve(res);
-              set((state: { user: any }) => ({
-                ...state,
-                loading: false,
-              }));
-            })
-            .catch((e) => {
-              console.log(' 3 - error while posting user updates - ', e);
-              resolve(e);
-              set((state: { user: any }) => ({
-                ...state,
-                loading: false,
-              }));
-            });
-        })
-        .catch((err) => {
-          console.log(' 2 - error creating new user ', err);
-          resolve(err);
-        });
+      set(() => ({
+        user: {
+          id: newUser.data.id,
+          name: newUser.data.name,
+          userName: newUser.data.username,
+          about: get().user.about,
+          image: data.image,
+          walletId: data.walletId,
+          role: get().user.role,
+          skills: get().user.skills,
+          location: get().user.location,
+          website: get().user.website,
+          achievement: get().user.achievement,
+        } as IProfile,
+      }));
+
+      set((state: { user: IProfile }) => ({
+        ...state,
+        loading: false,
+      }));
+      resolve(newUser);
     });
   },
 
-  setUser: async (data: any) => {
-    console.log('2 - user already existed in db');
-    set((_prevState: any) => ({
+  setUser: async (data: IProfile) => {
+    set(() => ({
       user: {
         ...data,
       },

@@ -1,7 +1,7 @@
-import prisma from 'prisma/client';
+import { Skill, SocialType } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
-import { Skill, SocialType } from '@prisma/client';
+import prisma from 'prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,27 +13,27 @@ export default async function handler(
     optionsSuccessStatus: 200,
   });
 
-  const { userId } = req.query as { userId: string };
-  if (!userId) {
+  const { id } = req.query as { id: string };
+  if (!id) {
     res.status(400).json({ error: 'id is required' });
     return;
   }
 
   // sanitize id to prevent SQL injection
-  if (userId.match(/[^a-zA-Z0-9]/)) {
-    res.status(400).json({ error: 'invalid userId' });
+  if (id.match(/[^a-zA-Z0-9]/)) {
+    res.status(400).json({ error: 'invalid id' });
     return;
   }
 
   switch (req.method) {
     case 'GET':
-      await getUserProfileById(req, res, userId);
+      await getUserProfileById(req, res, id);
       break;
     case 'PUT':
-      await updateUserProfile(req, res, userId);
+      await updateUserProfile(req, res, id);
       break;
     case 'DELETE':
-      await deleteUserProfile(req, res, userId);
+      await deleteUserProfile(req, res, id);
       break;
     default:
       res.status(400).json({ error: 'invalid method' });
@@ -44,12 +44,12 @@ export default async function handler(
 async function getUserProfileById(
   req: NextApiRequest,
   res: NextApiResponse<any>,
-  userId: string
+  id: string
 ) {
   try {
     const user = await prisma.userProfile.findUnique({
       where: {
-        id: userId,
+        userId: id,
       },
     });
     res.status(200).json(user);
@@ -61,7 +61,7 @@ async function getUserProfileById(
 async function updateUserProfile(
   req: NextApiRequest,
   res: NextApiResponse,
-  userId: string
+  id: string
 ) {
   const {
     bio,
@@ -69,17 +69,18 @@ async function updateUserProfile(
     skills,
     location,
     website,
-    expereince,
+    experience,
     education,
     projects,
     social,
   } = req.body as {
+    walletId: string;
     bio?: string;
     image?: string;
-    skills: Skill[];
+    skills?: Skill[];
     location?: string;
     website?: string;
-    expereince?: JSON[];
+    experience?: JSON[];
     education?: JSON[];
     projects?: JSON[];
     social?: SocialType;
@@ -88,16 +89,15 @@ async function updateUserProfile(
   try {
     const user = await prisma.userProfile.update({
       where: {
-        id: userId,
+        userId: id,
       },
       data: {
-        userId,
         bio,
         image,
         skills,
         location,
         website,
-        expereince,
+        experience,
         education,
         projects,
         social,
@@ -112,12 +112,12 @@ async function updateUserProfile(
 async function deleteUserProfile(
   req: NextApiRequest,
   res: NextApiResponse,
-  userId: string
+  id: string
 ) {
   try {
     const user = await prisma.userProfile.delete({
       where: {
-        id: userId,
+        userId: id,
       },
     });
     res.status(200).json(user);

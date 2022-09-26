@@ -14,75 +14,26 @@ import {
   ModalOverlay,
   Text,
   Textarea,
-  useToast
+  useToast,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocalStore } from 'src/app/localStore';
-import { useProfileStore } from 'src/app/profileStore';
+import useProfileEdit from './useProfileEdit';
 
 const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
-  const editProfile = useProfileStore((state: any) => state.editProfile);
-  const createUser = useProfileStore((state: any) => state.createUser);
-
-  const { user } = useProfileStore();
-  const { edit_mode, set_edit_mode } = useLocalStore();
-
   const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
-  const toast_profile_created = useToast({
-    status: 'success',
-    position: 'bottom',
-    title: 'Profile Created Successfully',
-    containerStyle: {
-      width: '300px',
-      maxWidth: '100%',
-    },
-  });
-  const toast_profile_updated = useToast({
-    status: 'success',
-    position: 'bottom',
-    title: 'Profile Updated Successfully',
-    containerStyle: {
-      width: '300px',
-      maxWidth: '100%',
-    },
-  });
+  const [onSubmit, user] = useProfileEdit({ isOpen, onClose });
 
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm({});
-
-  useEffect(() => {
-    console.log('use effect called inside profile');
-    if (edit_mode) {
-      isOpen;
-    }
-  }, [edit_mode]);
-
-  async function onSubmit(values: any) {
-    const { name, userName, image, about } = values;
-
-    const data = { name, userName: user.userName, about, image };
-    console.log('data from modal to edit component = ', values);
-    editProfile(data)
-      .then((res: any) => {
-        console.log('res', res);
-        toast_profile_updated();
-      })
-      .catch((err: any) => {
-        console.log('error, ', err);
-      });
-    onClose();
-
-    set_edit_mode(false);
-  }
 
   return (
     <Modal

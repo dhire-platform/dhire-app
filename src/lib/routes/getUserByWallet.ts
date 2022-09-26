@@ -1,12 +1,13 @@
+import { getByWalletResponse } from '@/interfaces/response.interface';
 import axios from 'axios';
 
-export default async function getUserByWallet(walletId: string) {
+export default async function getUserByWallet(
+  walletId: string
+): Promise<getByWalletResponse | any> {
   try {
     const res = await axios.get(`/api/user/${walletId}`);
-    console.log('user by wallet', res);
-    return res.data;
+    return res.data as getByWalletResponse;
   } catch (error) {
-    console.log('get user by wallet error - ', error);
     return error;
   }
 }

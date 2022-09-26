@@ -15,7 +15,6 @@ const WalletConnectionProvider: any = dynamic(
   }
 );
 function MyApp({ Component, pageProps, router }: AppProps) {
-  // const { userId } = usePersistanceStore();
   const { user } = useProfileStore();
   const route = useRouter();
 

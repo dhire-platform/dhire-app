@@ -14,7 +14,7 @@ import { IProfileStore } from 'src/definitions/definitions';
 
 const Home: NextPage = () => {
   const { onClose, onOpen, isOpen } = useDisclosure();
-  const user = useProfileStore((state: IProfileStore) => state.user);
+  const wallet = useProfileStore((state: IProfileStore) => state.wallet);
 
   return (
     <>
@@ -23,7 +23,7 @@ const Home: NextPage = () => {
         description={`${config.general.name} is a decentralized hiring platform`}
         image={`https://solana.ghost.io/content/images/2022/06/solana-network-upgrades.png`}
       />
-      {!user.walletId ? (
+      {!wallet.walletId ? (
         <Container maxW="full" p="0">
           <CreateUserModal onClose={onClose} onOpen={onOpen} isOpen={isOpen} />
           <Hero />

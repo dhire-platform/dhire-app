@@ -16,7 +16,7 @@ import Jobs from 'src/components/dashboard/jobs/Jobs';
 import Achievement from 'src/components/dashboard/profile/Achievement';
 import Education from 'src/components/dashboard/profile/Education';
 import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent';
-import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditModal';
+import EditProfileComponent from 'src/components/dashboard/profile/UserDetails/ProfileEditModal';
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
 
 const User = () => {

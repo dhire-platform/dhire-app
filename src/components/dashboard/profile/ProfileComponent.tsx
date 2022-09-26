@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { useProfileStore } from 'src/app/profileStore';
-import EditProfileComponent from './ProfileEditModal';
+import EditProfileComponent from './UserDetails/ProfileEditModal';
 
 const ProfileComponent = () => {
   const [hover, setHover] = useState(false);

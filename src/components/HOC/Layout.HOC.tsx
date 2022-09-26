@@ -2,7 +2,6 @@ import { Container } from '@chakra-ui/react';
 import { useProfileStore } from 'src/app/profileStore';
 import { IProfileStore } from 'src/definitions/definitions';
 import Background from '../Background';
-import Footer from '../navigation/footer';
 import Navbar from '../navigation/navbar';
 
 type Props = {
@@ -24,7 +23,6 @@ const Layout: React.FC<Props> = ({ children }) => {
       {wallet.walletId ? '' : <Background />}
       <Navbar />
       {children}
-      {wallet.walletId ? '' : <Footer />}
     </Container>
   );
 };

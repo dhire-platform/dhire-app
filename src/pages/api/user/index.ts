@@ -1,6 +1,6 @@
-import prisma from 'prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
+import prisma from 'prisma/client';
 
 enum Role {
   RECRUITER = 'RECRUITER',
@@ -13,7 +13,6 @@ async function createUser(req: NextApiRequest, res: NextApiResponse) {
     origin: '*',
     optionsSuccessStatus: 200,
   });
-
   const { name, type, wallet, username } = req.body as {
     name: string;
     type: Role;
