@@ -11,7 +11,7 @@ import {
   RangeSliderTrack,
   Stack,
   Text,
-  Tooltip
+  Tooltip,
 } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
@@ -156,7 +156,7 @@ const Jobs = () => {
               </Heading>
               <RangeSlider
                 aria-label={['0', '300']}
-                max="300"
+                max={300}
                 id="slider"
                 colorScheme="blue"
                 onChangeEnd={(val) => {
