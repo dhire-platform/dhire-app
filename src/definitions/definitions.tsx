@@ -1,16 +1,16 @@
-import { roleEnum } from 'src/enums/enums';
+import { roleEnum, SkillLevel } from 'src/enums/enums';
 
-type skill = {
+export type skill = {
   name: string;
   level: SkillLevel;
 };
 
-interface IUseStore {
+export interface IUseStore {
   isAuth: boolean;
   setAuth: (value: boolean) => any;
 }
 
-interface IPagination {
+export interface IPagination {
   onPageChange: any;
   totalCount: number;
   siblingCount: number;
@@ -18,7 +18,7 @@ interface IPagination {
   pageSize: number;
 }
 
-type IJob = {
+export type IJob = {
   job_title: string;
   job_company: string;
   job_company_image: string;
@@ -30,12 +30,17 @@ type IJob = {
   job_experience_level: number;
 };
 
-interface IProfileStore {
+export interface IProfileStore {
+  loading: boolean;
+  error: string | undefined;
   user: IProfile;
-  projects: IProject[];
-  education: IEducation;
-  socials: ISocial;
+  wallet: IWallet;
+  skill?: skill[];
+  projects?: IProject[];
+  education?: IEducation;
+  socials?: ISocial;
   setWallet: (pubKey: string) => void;
+  setWallet2: (wallet: IWallet) => void;
   setUser: (data: IProfile) => void;
   editProfile: (data: IProfile) => Promise<any>;
   createUser: (data: any) => any;
@@ -45,27 +50,34 @@ interface IProfileStore {
   setExperience: (experience: IExperience[]) => Promise<any>;
 }
 
-interface IUseStore {
+export interface IWallet {
+  walletId: string | undefined;
+  walletName?: string | undefined;
+  connected: boolean;
+  loading?: boolean;
+}
+
+export interface IUseStore {
   isAuth: boolean;
   setAuth: (value: boolean) => any;
 }
 
-interface IProfile {
-  id?: string;
-  userName: string;
-  walletId: string;
-  name: string;
-  role?: roleEnum;
-  about?: string;
-  achievements?: string;
-  image?: string;
-  skills?: skill[];
-  experience?: IExperience[];
-  location?: string;
-  website?: string;
-  achievement?: string;
+export interface IProfile {
+  id: string | undefined;
+  userName: string | undefined;
+  walletId: string | undefined;
+  name: string | undefined;
+  role: roleEnum;
+  about: string | undefined;
+  achievements: string | undefined;
+  image: string | undefined;
+  skills: skill[];
+  experience: IExperience[];
+  location: string | undefined;
+  website: string | undefined;
+  achievement: string | undefined;
 }
-interface IExperience {
+export interface IExperience {
   company?: string;
   image?: string;
   designation?: string;
@@ -76,7 +88,7 @@ interface IExperience {
   description?: string;
 }
 
-interface IEducation {
+export interface IEducation {
   school?: string;
   degree?: string;
   fieldOfStudy?: string;
@@ -87,7 +99,7 @@ interface IEducation {
   description?: string;
 }
 
-interface IProject {
+export interface IProject {
   title: string;
   link?: string;
   from?: string;
@@ -96,7 +108,7 @@ interface IProject {
   description?: string;
 }
 
-interface ISocial {
+export interface ISocial {
   youtube?: string;
   twitter?: string;
   facebook?: string;
@@ -104,22 +116,3 @@ interface ISocial {
   instagram?: string;
   github?: string;
 }
-
-export enum SkillLevel {
-  BEGINNER = 'BEGINNER',
-  INTERMEDIATE = 'INTERMEDIATE',
-  ADVANCED = 'ADVANCED',
-}
-
-export type {
-  skill,
-  IPagination,
-  IProfileStore,
-  IJob,
-  IProfile,
-  IExperience,
-  IEducation,
-  ISocial,
-  IProject,
-  IUseStore,
-};

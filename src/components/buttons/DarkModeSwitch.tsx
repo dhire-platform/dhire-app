@@ -44,7 +44,7 @@ const Switch = () => {
     <Center>
       <Box
         onClick={toggleColorMode}
-        cursor='pointer'
+        cursor="pointer"
         __css={{
           '.btn': {
             width: `${size * 2.1}px`,
@@ -95,67 +95,67 @@ const Switch = () => {
         }}
       >
         <motion.div
-          className='btn'
+          className="btn"
           variants={containerVariants}
           initial={colorMode === 'dark' ? 'light' : 'dark'}
           exit={colorMode === 'dark' ? 'light' : 'dark'}
           animate={colorMode}
         >
           <MotionBox
-            pos='absolute'
-            top='70%'
-            left='25%'
+            pos="absolute"
+            top="70%"
+            left="25%"
             width={`${size * 0.08}px`}
             height={`${size * 0.06}px`}
-            borderRadius='50%'
-            background='white'
-            key='circle-2'
+            borderRadius="50%"
+            background="white"
+            key="circle-2"
             variants={childVariants}
           ></MotionBox>
           <MotionBox
-            pos='absolute'
-            top='25%'
-            left='15%'
+            pos="absolute"
+            top="25%"
+            left="15%"
             width={`${size * 0.3}px`}
             height={`${size * 0.3}px`}
-            background='white'
-            key='subheading1'
-            clipPath='polygon(50% 0%, 63% 38%, 100% 38%, 69% 59%, 82% 100%, 50% 75%, 18% 100%, 31% 59%, 0 38%, 37% 38%)'
-            borderRadius='50%'
+            background="white"
+            key="subheading1"
+            clipPath="polygon(50% 0%, 63% 38%, 100% 38%, 69% 59%, 82% 100%, 50% 75%, 18% 100%, 31% 59%, 0 38%, 37% 38%)"
+            borderRadius="50%"
             variants={childVariants}
           ></MotionBox>
           <MotionBox
-            pos='absolute'
-            top='60%'
-            left='45%'
+            pos="absolute"
+            top="60%"
+            left="45%"
             width={`${size * 0.2}px`}
             height={`${size * 0.2}px`}
-            borderRadius='58%'
-            clipPath='polygon(50% 0%, 63% 38%, 100% 38%, 69% 59%, 82% 100%, 50% 75%, 18% 100%, 31% 59%, 0 38%, 37% 38%)'
-            background='white'
-            key='subheading2'
+            borderRadius="58%"
+            clipPath="polygon(50% 0%, 63% 38%, 100% 38%, 69% 59%, 82% 100%, 50% 75%, 18% 100%, 31% 59%, 0 38%, 37% 38%)"
+            background="white"
+            key="subheading2"
             variants={childVariants}
           ></MotionBox>
           <MotionBox
-            borderRadius='50%'
-            pos='absolute'
-            top='40%'
-            left='35%'
+            borderRadius="50%"
+            pos="absolute"
+            top="40%"
+            left="35%"
             width={`${size * 0.1}px`}
             height={`${size * 0.1}px`}
-            background='white'
-            key='circle-1'
+            background="white"
+            key="circle-1"
             variants={childVariants}
           ></MotionBox>
           <MotionBox
-            pos='absolute'
-            top='25%'
-            left='55%'
+            pos="absolute"
+            top="25%"
+            left="55%"
             width={`${size * 0.08}px`}
             height={`${size * 0.08}px`}
-            borderRadius='50%'
-            background='white'
-            key='circle-2'
+            borderRadius="50%"
+            background="white"
+            key="circle-2"
             variants={childVariants}
           ></MotionBox>
           <motion.div
@@ -174,7 +174,7 @@ const Switch = () => {
               },
             }}
             initial={false}
-            className='knob'
+            className="knob"
           />
         </motion.div>
       </Box>

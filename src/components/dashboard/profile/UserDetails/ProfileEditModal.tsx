@@ -1,58 +1,33 @@
 import {
-  Text,
-  FormLabel,
-  FormControl,
-  Input,
-  Textarea,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Input,
   InputGroup,
   InputLeftAddon,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Textarea,
   useToast,
 } from '@chakra-ui/react';
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useLocalStore } from 'src/app/localStore';
-import { useProfileStore } from 'src/app/profileStore';
 import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
-import { usePersistanceStore } from 'src/app/persistanceStore';
+import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import useProfileEdit from './useProfileEdit';
 
 const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
-  const editProfile = useProfileStore((state: any) => state.editProfile);
-  const createUser = useProfileStore((state: any) => state.createUser);
-
-  const { user } = useProfileStore();
-  const { edit_mode, set_edit_mode } = useLocalStore();
-
   const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
-  const toast_profile_created = useToast({
-    status: 'success',
-    position: 'bottom',
-    title: 'Profile Created Successfully',
-    containerStyle: {
-      width: '300px',
-      maxWidth: '100%',
-    },
-  });
-  const toast_profile_updated = useToast({
-    status: 'success',
-    position: 'bottom',
-    title: 'Profile Updated Successfully',
-    containerStyle: {
-      width: '300px',
-      maxWidth: '100%',
-    },
-  });
+  const [onSubmit, user] = useProfileEdit({ isOpen, onClose });
 
   const {
     handleSubmit,
@@ -60,36 +35,12 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     formState: { errors, isSubmitting },
   } = useForm({});
 
-  useEffect(() => {
-    if (edit_mode) {
-      isOpen;
-    }
-  }, [edit_mode]);
-
-  async function onSubmit(values: any) {
-    const { name, userName, image, about } = values;
-
-    const data = { name, userName: user.userName, about, image };
-    console.log('data from modal to edit component = ', values);
-    editProfile(data)
-      .then((res: any) => {
-        console.log('res', res);
-        toast_profile_updated();
-      })
-      .catch((err: any) => {
-        console.log('error, ', err);
-      });
-    onClose();
-
-    set_edit_mode(false);
-  }
-
   return (
     <Modal
       closeOnOverlayClick={false}
-      motionPreset='slideInBottom'
-      scrollBehavior='outside'
-      size='xl'
+      motionPreset="slideInBottom"
+      scrollBehavior="outside"
+      size="xl"
       initialFocusRef={initialRef}
       finalFocusRef={finalRef}
       isOpen={isOpen}
@@ -100,14 +51,14 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
         <ModalHeader>Edit your Profile</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalBody display='flex' flexDirection={'column'} gap='1rem' pb={6}>
+          <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
             {/* Full Name */}
             <FormControl isRequired>
-              <FormLabel htmlFor='name'>Full name</FormLabel>
+              <FormLabel htmlFor="name">Full name</FormLabel>
               <Input
                 isRequired
-                id='name'
-                placeholder='Name'
+                id="name"
+                placeholder="Name"
                 {...register('name', {
                   required: 'This is required',
                   minLength: {
@@ -123,9 +74,9 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               />
               <ErrorMessage
                 errors={errors}
-                name='name'
+                name="name"
                 render={({ message }) => (
-                  <Text fontSize='sm' color='red.500' py='0.5rem'>
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
                   </Text>
                 )}
@@ -135,15 +86,15 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
             {/*userName */}
             {router.pathname === '/profile' && (
               <FormControl isRequired>
-                <FormLabel htmlFor='name'>User Name</FormLabel>
+                <FormLabel htmlFor="name">User Name</FormLabel>
                 <InputGroup>
                   <InputLeftAddon>@</InputLeftAddon>
                   <Input
                     defaultValue={user.userName}
                     isRequired
-                    type='text'
-                    id='userName'
-                    placeholder='User Name'
+                    type="text"
+                    id="userName"
+                    placeholder="User Name"
                     {...register('userName', {
                       required: 'This is Required',
                       minLength: {
@@ -160,9 +111,9 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                 </InputGroup>
                 <ErrorMessage
                   errors={errors}
-                  name='userName'
+                  name="userName"
                   render={({ message }) => (
-                    <Text fontSize='sm' color='red.500' py='0.5rem'>
+                    <Text fontSize="sm" color="red.500" py="0.5rem">
                       {message}
                     </Text>
                   )}
@@ -172,13 +123,13 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
 
             {/*Profile Picture URL */}
             <FormControl>
-              <FormLabel htmlFor='image'>Profile Picture</FormLabel>
+              <FormLabel htmlFor="image">Profile Picture</FormLabel>
               <InputGroup>
                 <InputLeftAddon>URL:</InputLeftAddon>
                 <Input
-                  type='url'
-                  id='image'
-                  placeholder='Image URL'
+                  type="url"
+                  id="image"
+                  placeholder="Image URL"
                   {...register('image', {
                     pattern: {
                       value:
@@ -190,9 +141,9 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               </InputGroup>
               <ErrorMessage
                 errors={errors}
-                name='image'
+                name="image"
                 render={({ message }) => (
-                  <Text fontSize='sm' color='red.500' py='0.5rem'>
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
                   </Text>
                 )}
@@ -201,10 +152,10 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
 
             {/* About */}
             <FormControl>
-              <FormLabel htmlFor='name'>About</FormLabel>
+              <FormLabel htmlFor="name">About</FormLabel>
               <Textarea
-                id='about'
-                placeholder='About You'
+                id="about"
+                placeholder="About You"
                 {...register('about', {
                   maxLength: {
                     value: 200,
@@ -214,9 +165,9 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               />
               <ErrorMessage
                 errors={errors}
-                name='about'
+                name="about"
                 render={({ message }) => (
-                  <Text fontSize='sm' color='red.500' py='0.5rem'>
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
                   </Text>
                 )}
@@ -226,8 +177,8 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
           <ModalFooter>
             <Button
               isLoading={isSubmitting}
-              type='submit'
-              colorScheme='blue'
+              type="submit"
+              colorScheme="blue"
               mr={3}
             >
               Save

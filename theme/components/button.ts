@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { StyleFunctionProps } from '@chakra-ui/theme-tools';
 
 export const Button = {

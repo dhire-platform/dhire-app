@@ -1,7 +1,7 @@
-import prisma from 'prisma/client';
+import { Role } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
-import { Role } from '@prisma/client';
+import prisma from 'prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,27 +13,26 @@ export default async function handler(
     optionsSuccessStatus: 200,
   });
 
-  
-  const { wallet } = req.query as { wallet: string; };
+  const { wallet } = req.query as { wallet: string };
   if (!wallet) {
-    res.status(400).json({ error: "wallet is required" });
+    res.status(400).json({ error: 'wallet is required' });
     return;
   }
 
   // sanitize wallet to prevent SQL injection
   if (wallet.match(/[^a-zA-Z0-9]/)) {
-    res.status(400).json({ error: "invalid wallet" });
+    res.status(400).json({ error: 'invalid wallet' });
     return;
   }
 
   switch (req.method) {
-    case "GET":
+    case 'GET':
       await getUserById(req, res, wallet);
       break;
-    case "PUT":
+    case 'PUT':
       await updateUser(req, res, wallet);
       break;
-    case "DELETE":
+    case 'DELETE':
       await deleteUser(req, res, wallet);
       break;
     default:
@@ -42,7 +41,11 @@ export default async function handler(
   }
 }
 
-async function getUserById(req: NextApiRequest, res: NextApiResponse<any>, wallet: string) {
+async function getUserById(
+  req: NextApiRequest,
+  res: NextApiResponse<any>,
+  wallet: string
+) {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -55,8 +58,16 @@ async function getUserById(req: NextApiRequest, res: NextApiResponse<any>, walle
   }
 }
 
-async function updateUser(req: NextApiRequest, res: NextApiResponse, wallet: string) {
-  const { name, type, username } = req.body as { name?: string; type?: Role; username?: string; };
+async function updateUser(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  wallet: string
+) {
+  const { name, type, username } = req.body as {
+    name?: string;
+    type?: Role;
+    username?: string;
+  };
   try {
     const user = await prisma.user.update({
       where: {
@@ -69,14 +80,17 @@ async function updateUser(req: NextApiRequest, res: NextApiResponse, wallet: str
         username,
       },
     });
-    console.log(user);
     res.status(200).json(user);
   } catch (e) {
     res.status(400).json({ error: (e as Error).message });
   }
 }
 
-async function deleteUser(req: NextApiRequest, res: NextApiResponse, wallet: string) {
+async function deleteUser(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  wallet: string
+) {
   try {
     const user = await prisma.user.delete({
       where: {

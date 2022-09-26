@@ -1,7 +1,7 @@
-import prisma from 'prisma/client';
+import { Skill, SocialType } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
-import { Skill, SocialType } from '@prisma/client';
+import prisma from 'prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
@@ -87,8 +87,6 @@ async function updateUserProfile(
   };
 
   try {
-    console.log(req.body);
-    console.log(id);
     const user = await prisma.userProfile.update({
       where: {
         userId: id,
@@ -105,10 +103,8 @@ async function updateUserProfile(
         social,
       },
     });
-    console.log('user update', user);
     res.status(200).json(user);
   } catch (e) {
-    console.log(e);
     res.status(400).json({ error: (e as Error).message });
   }
 }

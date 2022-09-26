@@ -1,87 +1,86 @@
 import {
-  Box,
   Center,
   Container,
   Flex,
   Stack,
-  Tabs,
-  TabList,
-  TabPanels,
   Tab,
+  TabList,
   TabPanel,
-  Button,
+  TabPanels,
+  Tabs,
   Text,
-  Heading,
-  useMediaQuery,
   useDisclosure,
+  useMediaQuery
 } from '@chakra-ui/react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useLocalStore } from 'src/app/localStore';
-import { useProfileStore } from 'src/app/profileStore';
+import Jobs from 'src/components/dashboard/jobs/Jobs';
 import Achievement from 'src/components/dashboard/profile/Achievement';
 import Education from 'src/components/dashboard/profile/Education';
-import Experience from 'src/components/dashboard/profile/Education';
 import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent';
-import EditProfileComponent from 'src/components/dashboard/profile/ProfileEditModal';
+import EditProfileComponent from 'src/components/dashboard/profile/UserDetails/ProfileEditModal';
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
 
 const User = () => {
-  const { user } = useProfileStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const router = useRouter();
-
-  // use meidaQuery to get width of scrren
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
     <>
       <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Container
-        maxW='full'
-        py='4rem'
+        maxW="full"
+        py="4rem"
         bgGradient={
           'linear-gradient(to bottom, #bcc0e65e , rgba(255,255,255,1) 100%)'
         }
         color={'black'}
-        px='0'
+        px="0"
       >
-        <Container p='1rem' maxW='8xl' my='2rem'>
+        <Container p="1rem" maxW="8xl" my="2rem">
           <Tabs
             variant={'unstyled'}
             orientation={isMobile ? 'vertical' : 'horizontal'}
           >
             <TabList alignItems={'start'}>
-              <Tab>
-                <Text
-                  fontSize='lg'
-                  fontWeight='600'
-                  //  _selected={{ fontSize: 'xl', fontWeight: '800' }}
-                >
+              <Tab
+                _selected={{
+                  borderLeft: '1px solid black',
+                }}
+                borderLeft={'1px solid transparent'}
+                fontSize="lg"
+                fontWeight="600"
+              >
+                <Text>Dashboard</Text>
+              </Tab>
+              <Tab
+                _selected={{
+                  borderLeft: '1px solid black',
+                }}
+                borderLeft={'1px solid transparent'}
+                fontSize="lg"
+                fontWeight="600"
+              >
+                <Text>Jobs</Text>
+              </Tab>
+              <Tab isDisabled>
+                <Text fontSize="lg" fontWeight="600">
                   Profile
                 </Text>
               </Tab>
               <Tab isDisabled>
-                <Text fontSize='lg' fontWeight='600'>
-                  Dashboard
-                </Text>
-              </Tab>
-              <Tab isDisabled>
-                <Text fontSize='lg' fontWeight='600'>
+                <Text fontSize="lg" fontWeight="600">
                   Settings
                 </Text>
               </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Center w='full'>
+                <Center w="full">
                   <Flex
-                    mx='auto'
+                    mx="auto"
                     h={{ base: 'full', md: 'clamp(54rem,180vh, 60rem)' }}
-                    gap='2rem'
+                    gap="2rem"
                     flexWrap={'wrap'}
-                    alignItems='center'
+                    alignItems="center"
                     alignContent={'center'}
                     justifyContent={'top'}
                     flexDirection={{ base: 'row', md: 'column' }}
@@ -95,15 +94,15 @@ const User = () => {
                 </Center>
               </TabPanel>
               <TabPanel>
-                <Text size='xl' fontWeight='600'>
-                  <Container minW='full' h='100vh'>
-                    Coming Soon
+                <Text size="xl" fontWeight="600">
+                  <Container minW="full" h="100vh">
+                    <Jobs />
                   </Container>
                 </Text>
               </TabPanel>
               <TabPanel>
-                <Text size='xl' fontWeight='600'>
-                  <Container minW='full' h='100vh'>
+                <Text size="xl" fontWeight="600">
+                  <Container minW="full" h="100vh">
                     Coming Soon
                   </Container>
                 </Text>
@@ -111,8 +110,8 @@ const User = () => {
             </TabPanels>
           </Tabs>
           <Stack
-            direction='row'
-            justify='space-between'
+            direction="row"
+            justify="space-between"
             align={'start'}
           ></Stack>
         </Container>

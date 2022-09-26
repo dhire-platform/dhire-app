@@ -1,26 +1,25 @@
-import Card from 'src/components/landing/Jobs/Card';
-import Layout from 'src/components/landing/Jobs/Layout';
-import Data from 'src/components/landing/Jobs/Data.json';
-import { useMemo, useState } from 'react';
-import Pagination from 'src/components/Pagination/Pagination';
-import { IJob } from 'src/definitions/IJob';
 import {
   Center,
+  chakra,
   Checkbox,
   CheckboxGroup,
   Heading,
+  RangeSlider,
+  RangeSliderFilledTrack,
+  RangeSliderMark,
+  RangeSliderThumb,
+  RangeSliderTrack,
   Stack,
   Text,
-  RangeSlider,
-  RangeSliderTrack,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
-  chakra,
+  Tooltip,
 } from '@chakra-ui/react';
-import { prepareServerlessUrl } from 'next/dist/server/base-server';
+import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Redirect } from 'src/helpers/Redirect';
-import { useProfileStore } from 'src/app/profileStore';
+import Card from 'src/components/landing/Jobs/Card';
+import Data from 'src/components/landing/Jobs/Data.json';
+import Layout from 'src/components/landing/Jobs/Layout';
+import Pagination from 'src/components/Pagination/Pagination';
+import { IJob } from 'src/definitions/IJob';
 
 interface IPayload {
   searchWord?: string;
@@ -32,34 +31,17 @@ const Jobs = () => {
   const [filteredData, setFilteredData] = useState<IJob[]>(Data);
   const [modifiedArray, setModifiedArray] = useState<IJob[]>(Data);
   const [checked_value, setChecked_value] = useState<[]>([]);
+  const [sliderValue1, setSliderValue1] = useState(5);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [sliderValue2, setSliderValue2] = useState(5);
+
   const { ref, inView, entry } = useInView({
-    threshold: 0.55,
+    threshold: 0.4,
   });
 
-  // console.log(inView);
-
-  const PageSize: number = 4;
-
-  // const modifyArray = (filter_name?: string, filter?: string) => {
-  //   console.log('checked_value.length -', checked_value.length);
-  //   if (checked_value.length > 0) {
-  //     checked_value.forEach((element) => {
-  //       const temp_arr = Data.filter(
-  //         (x: IJob) => x.job_type === parseInt(element, 10)
-  //       );
-  //       setFillData((prev) => [...prev, temp_arr]);
-  //     });
-  //     setFilteredData(fillData);
-  //     console.log(filteredData.length);
-  //   } else if (checked_value?.length === 0) {
-  //     console.log('here');
-  //     setFilteredData(() => [Data]);
-  //   }
-  // };
+  const PageSize = 6;
 
   const currentData = useMemo(() => {
-    //console.log('useMemoCalled');
-    //console.log(filteredData);
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     const arr = filteredData.slice(firstPageIndex, lastPageIndex);
@@ -67,17 +49,13 @@ const Jobs = () => {
   }, [currentPage, filteredData]);
 
   const modifyData = ({ searchWord, locationName }: IPayload) => {
-    // if both location and search are selected then filter array using two properties, if only one one is defined in params then only use one
-    //console.log(searchWord, locationName);
     if (!searchWord && locationName) {
-      // handle when location is modified
       const newFilteredArray = Data?.filter((DataObject) => {
         return DataObject.job_location === locationName;
       });
       setModifiedArray(newFilteredArray);
       setFilteredData(modifiedArray);
     } else if (searchWord && !locationName) {
-      // handles when search is done
       if (searchWord[0] === ' ') {
         setFilteredData(Data);
       } else {
@@ -93,111 +71,175 @@ const Jobs = () => {
     }
   };
 
+  const salaryRangeFilter = (range: number[]) => {
+    const newFilteredData = Data.filter((data) => {
+      if (range[0] < data.job_salary_max && data.job_salary_max < range[1]) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    console.log(newFilteredData.length, range[0], range[1]);
+    setFilteredData(newFilteredData);
+  };
+
+  const jobTypeFilter = (checked_fields: string[], filter: string) => {
+    if (checked_fields.length === 0) {
+      setFilteredData(Data);
+      return;
+    }
+
+    const checkedFieldsNum = checked_fields.map(function (str) {
+      return parseInt(str);
+    });
+
+    const newFilteredData = filteredData.filter((data: IJob) => {
+      if (filter === 'job_type') {
+        if (checkedFieldsNum.includes(data.job_type)) {
+          return true;
+        }
+      } else if (filter === 'job_level') {
+        if (checkedFieldsNum.includes(data.job_experience_level)) {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    });
+    setFilteredData(newFilteredData);
+    console.log('new filtered data - ', filteredData);
+  };
+
   return (
     <Layout data={filteredData} setData={modifyData}>
       <Stack
         ref={ref}
-        position='sticky'
-        mx='auto'
-        maxW='fit-content'
+        mx="auto"
+        maxW="fit-content"
         direction={'row'}
-        gap='1.5rem'
-        p='1rem'
+        gap="1.5rem"
+        p="1rem"
       >
-        <Stack spacing={'2rem'} minW='15rem' direction={'column'} p='1rem'>
-          <Stack direction={'column'}>
-            <Heading fontWeight='600' fontSize='xl'>
-              Job Type
-            </Heading>
-            <CheckboxGroup
-              onChange={(checked_fields: []) => {
-                //    console.log('checked_fields arr -', checked_fields);
-                setChecked_value(checked_fields);
-                // modifyArray();
-              }}
-            >
-              <Stack direction={'column'} p='1rem'>
-                <Checkbox value='1' size={'md'}>
-                  Full Time Job
-                </Checkbox>
-                <Checkbox value='2' size={'md'}>
-                  Part Time Job
-                </Checkbox>
-                <Checkbox value='3' size={'md'}>
-                  Freelance Job
-                </Checkbox>
-                <Checkbox value='4' size={'md'}>
-                  Remote Job
-                </Checkbox>
-                <Checkbox value='5' size={'md'}>
-                  Internship
-                </Checkbox>
-              </Stack>{' '}
-            </CheckboxGroup>
-          </Stack>
-
-          <Stack gap='1rem'>
-            <Heading fontWeight='600' fontSize='xl'>
-              Salary
-            </Heading>
-            {/* eslint-disable-next-line jsx-a11y/aria-proptypes*/}
-            <RangeSlider aria-label={['min', 'max']} defaultValue={[10, 30]}>
-              <RangeSliderTrack>
-                <RangeSliderFilledTrack />
-              </RangeSliderTrack>
-              <RangeSliderThumb index={0} />
-              <RangeSliderThumb index={1} />
-            </RangeSlider>
-          </Stack>
-          <Stack direction={'column'}>
-            {' '}
-            <Heading fontWeight='600' fontSize='xl'>
-              Experience
-            </Heading>
-            <Stack direction={'column'} p='1rem'>
-              <Checkbox value='1' onSelect={() => console.log('1')}>
-                Entry Level
-              </Checkbox>
-              <Checkbox
-                value='2'
-                onChange={(event: any) => {
-                  //   console.log('2', event.target.checked);
+        <Stack>
+          <Stack spacing={'2rem'} minW="15rem" direction={'column'} p="1rem">
+            <Stack direction={'column'}>
+              <Heading fontWeight="600" fontSize="xl">
+                Job Type
+              </Heading>
+              <CheckboxGroup
+                onChange={(checked_fields: string[]) => {
+                  jobTypeFilter(checked_fields, 'job_type');
                 }}
               >
-                Intermediate Level
-              </Checkbox>
-              <Checkbox value='3' onClick={() => console.log('3')}>
-                Senior Level
-              </Checkbox>
+                <Stack direction={'column'} p="1rem">
+                  <Checkbox value="1" size={'md'}>
+                    Full Time Job
+                  </Checkbox>
+                  <Checkbox value="2" size={'md'}>
+                    Part Time Job
+                  </Checkbox>
+                  <Checkbox value="3" size={'md'}>
+                    Freelance Job
+                  </Checkbox>
+                  <Checkbox value="4" size={'md'}>
+                    Remote Job
+                  </Checkbox>
+                  <Checkbox value="5" size={'md'}>
+                    Internship
+                  </Checkbox>
+                </Stack>{' '}
+              </CheckboxGroup>
+            </Stack>
+            <Stack gap="1rem">
+              <Heading fontWeight="600" fontSize="xl">
+                Salary
+              </Heading>
+              <RangeSlider
+                aria-label={['0', '300']}
+                max={300}
+                id="slider"
+                colorScheme="blue"
+                onChangeEnd={(val) => {
+                  salaryRangeFilter(val);
+                  setSliderValue1(val[0]);
+                  setSliderValue2(val[1]);
+                }}
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              >
+                <RangeSliderMark value={0} mt="1" ml="-2.5" fontSize="sm">
+                  0k
+                </RangeSliderMark>
+                <RangeSliderMark value={300} mt="1" ml="-2.5" fontSize="sm">
+                  300k
+                </RangeSliderMark>
+                <RangeSliderTrack>
+                  <RangeSliderFilledTrack />
+                </RangeSliderTrack>
+                <Tooltip
+                  hasArrow
+                  bg="blue.500"
+                  color="white"
+                  placement="top"
+                  isOpen={showTooltip}
+                  label={`${sliderValue1}k`}
+                >
+                  <RangeSliderThumb index={0} />
+                </Tooltip>
+                <Tooltip
+                  hasArrow
+                  bg="blue.500"
+                  color="white"
+                  placement="top"
+                  isOpen={showTooltip}
+                  label={`${sliderValue2}k`}
+                >
+                  <RangeSliderThumb index={1} />
+                </Tooltip>
+              </RangeSlider>
+            </Stack>
+            <Stack direction={'column'}>
+              {' '}
+              <Heading fontWeight="600" fontSize="xl">
+                Experience
+              </Heading>
+              <CheckboxGroup
+                onChange={(checked_fields: string[]) => {
+                  console.log('button clicked - ', checked_fields);
+                  // setChecked_value(checked_fields);
+                  // modifyArray();
+                  jobTypeFilter(checked_fields, 'job_level');
+                }}
+              >
+                <Stack direction={'column'} p="1rem">
+                  <Checkbox value="1">Entry Level</Checkbox>
+                  <Checkbox value="2">Intermediate Level</Checkbox>
+                  <Checkbox value="3">Senior Level</Checkbox>
+                </Stack>
+              </CheckboxGroup>
             </Stack>
           </Stack>
         </Stack>
         <Center
-          minW='42rem'
-          gap='1.3rem'
-          p='1rem'
-          w='fit-content'
-          flexDirection='column'
+          minW="42rem"
+          gap="1.3rem"
+          p="1rem"
+          w="fit-content"
+          flexDirection="column"
         >
           <Stack
-            fontWeight='400'
+            fontWeight="400"
             direction={'row'}
-            justifyContent='space-between'
-            w='100%'
+            justifyContent="space-between"
+            w="100%"
           >
-            <Text color='gray.400'>Showing {filteredData.length} results</Text>
+            <Text color="gray.400">Showing {filteredData.length} results</Text>
             <Stack direction={'row'}>
-              <Text color='gray.400'>Sort by :</Text>
-              <chakra.select
-                onChange={(event: any) => console.log(event.target.value)}
-                defaultValue='1'
-                bg='white'
-                name='cars'
-                id='cars'
-              >
-                <option value='1'>Newest First</option>
-                <option value='2'>Oldest First</option>
-                <option value='3'>Most Popular</option>
+              <Text color="gray.400">Sort by :</Text>
+              <chakra.select defaultValue="1" bg="white" name="cars" id="cars">
+                <option value="1">Newest First</option>
+                <option value="2">Oldest First</option>
+                <option value="3">Most Popular</option>
               </chakra.select>
             </Stack>
           </Stack>
@@ -205,20 +247,20 @@ const Jobs = () => {
             <Center
               textAlign={'center'}
               flexDirection={'column'}
-              w='100%'
-              maxW='3xl'
-              h='100%'
+              w="100%"
+              maxW="3xl"
+              h="100%"
             >
               <Heading
-                mb='2rem'
-                rounded='full'
-                bg='gray.100'
-                p='1rem 1.5rem'
-                fontSize='6xl'
+                mb="2rem"
+                rounded="full"
+                bg="gray.100"
+                p="1rem 1.5rem"
+                fontSize="6xl"
               >
                 🫣
               </Heading>
-              <Text maxW='14rem' fontSize='xl'>
+              <Text maxW="14rem" fontSize="xl">
                 Sorry We could not find any match for that.
               </Text>
               <Text color={'gray.400'}>Try something else</Text>

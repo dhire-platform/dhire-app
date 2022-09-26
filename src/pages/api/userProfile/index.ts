@@ -1,7 +1,13 @@
-import prisma from 'prisma/client';
+import {
+  EducationType,
+  ExperienceType,
+  ProjectType,
+  Skill,
+  SocialType
+} from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
-import { EducationType, ExperienceType, ProjectType, Skill, SocialType } from '@prisma/client';
+import prisma from 'prisma/client';
 
 async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
   await NextCors(req, res, {
@@ -49,7 +55,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
         experience,
         education,
         projects,
-        social
+        social,
       },
     });
     res.status(200).json(userProfile);

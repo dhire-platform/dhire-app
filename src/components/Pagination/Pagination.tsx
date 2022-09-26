@@ -43,8 +43,8 @@ const Pagination = ({
   // let lastPage = paginationRange[paginationRange.length - 1];
   return (
     <Stack direction={'row'}>
-      <Box pt='0.3rem' as='button' onClick={onPrevious}>
-        <Icon w='2rem' h='2rem' as={BsArrowLeftShort} />
+      <Box pt="0.3rem" as="button" onClick={onPrevious}>
+        <Icon w="2rem" h="2rem" as={BsArrowLeftShort} />
       </Box>
       {paginationRange?.map(
         (
@@ -63,9 +63,9 @@ const Pagination = ({
           }
           return (
             <Box
-              p='0.4rem'
-              as='button'
-              fontSize='lg'
+              p="0.4rem"
+              as="button"
+              fontSize="lg"
               key={key}
               fontWeight={currentPage === pageNumber ? '800' : '500'}
               onClick={() => onPageChange(pageNumber)}
@@ -75,8 +75,8 @@ const Pagination = ({
           );
         }
       )}
-      <Box pt='0.3rem' as='button' onClick={onNext}>
-        <Icon w='2rem' h='2rem' as={BsArrowRightShort} />
+      <Box pt="0.3rem" as="button" onClick={onNext}>
+        <Icon w="2rem" h="2rem" as={BsArrowRightShort} />
       </Box>
     </Stack>
   );

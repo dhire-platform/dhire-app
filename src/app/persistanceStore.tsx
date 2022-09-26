@@ -1,6 +1,6 @@
+import { mountStoreDevtool } from 'simple-zustand-devtools';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-import { mountStoreDevtool } from 'simple-zustand-devtools';
 type persistDataType = {
   userId: string;
   userWalletId: string;
@@ -11,6 +11,7 @@ interface IPersistanceStore {
   userWalletId: string;
   userName: string;
   setPersistanceUser: (data: persistDataType) => void;
+  removePersistanceUser: () => void;
 }
 
 export const usePersistanceStore = create<IPersistanceStore>()(
@@ -21,6 +22,9 @@ export const usePersistanceStore = create<IPersistanceStore>()(
       userName: '' as string,
       setPersistanceUser: (data: persistDataType) => {
         set(data);
+      },
+      removePersistanceUser: () => {
+        set({ userId: '', userWalletId: '', userName: '' });
       },
     }),
     { name: 'dhire' }

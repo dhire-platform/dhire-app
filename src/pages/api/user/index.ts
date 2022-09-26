@@ -1,6 +1,6 @@
-import prisma from 'prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
+import prisma from 'prisma/client';
 
 enum Role {
   RECRUITER = 'RECRUITER',
