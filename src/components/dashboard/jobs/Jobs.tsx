@@ -16,7 +16,7 @@ import {
   RangeSliderTrack,
   Stack,
   Text,
-  Tooltip
+  Tooltip,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
@@ -231,7 +231,7 @@ const Jobs = () => {
                 </Heading>
                 <RangeSlider
                   aria-label={['0', '300']}
-                  max="300"
+                  max={300}
                   id="slider"
                   colorScheme="blue"
                   onChangeEnd={(val) => {
