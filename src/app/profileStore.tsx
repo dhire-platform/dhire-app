@@ -62,6 +62,51 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     set(() => ({ wallet: wallet }));
   },
 
+  createUser: async (data: {
+    name: string;
+    userName: string;
+    image: string;
+    walletId: string;
+  }): Promise<any> => {
+    set((state: { user: any }) => ({
+      ...state,
+      loading: true,
+    }));
+    return new Promise(async (resolve) => {
+      const newUser = await axios.post('/api/user', {
+        wallet: data.walletId,
+        type: roleEnum.RECRUIT,
+        name: data.name,
+        username: data.userName,
+      });
+
+      console.log('2 - new user response ', newUser);
+      if (!newUser.data.id) return;
+
+      set(() => ({
+        user: {
+          id: newUser.data.id,
+          name: newUser.data.name,
+          userName: newUser.data.username,
+          about: get().user.about,
+          image: data.image,
+          walletId: data.walletId,
+          role: get().user.role,
+          skills: get().user.skills,
+          location: get().user.location,
+          website: get().user.website,
+          achievement: get().user.achievement,
+        } as IProfile,
+      }));
+
+      set((state: { user: IProfile }) => ({
+        ...state,
+        loading: false,
+      }));
+      resolve(newUser);
+    });
+  },
+
   setSkills: async (skills: string[]) => {
     set((state: { user: any }) => ({
       ...state,
@@ -100,111 +145,97 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
       });
   },
 
-  /**
-     * function:  creates a new user
-     * @params:    newUserData
-     * @returns:   none
-     * @route:    /api/user
-     * Note: it also creates a user profile bu hitting the url /api/user/{id}
-     todo: add update skills and achievements/education inside this function & do both requests in one request
-    */
-
-  createUser: async (data: {
-    name: string;
-    userName: string;
-    image: string;
-    walletId: string;
-  }): Promise<any> => {
+  setUser: async (data: any) => {
+    console.log('1 setUser called data passed = ', data);
+    // set data to user
     set((state: { user: any }) => ({
       ...state,
-      loading: true,
-    }));
-    return new Promise(async (resolve) => {
-      const newUser = await axios.post('/api/user', {
-        wallet: data.walletId,
-        type: roleEnum.RECRUIT,
-        name: data.name,
-        username: data.userName,
-      });
-      if (!newUser.data.id) return;
-
-      set(() => ({
-        user: {
-          id: newUser.data.id,
-          name: newUser.data.name,
-          userName: newUser.data.username,
-          about: get().user.about,
-          image: data.image,
-          walletId: data.walletId,
-          role: get().user.role,
-          skills: get().user.skills,
-          location: get().user.location,
-          website: get().user.website,
-          achievement: get().user.achievement,
-        } as IProfile,
-      }));
-
-      set((state: { user: IProfile }) => ({
-        ...state,
-        loading: false,
-      }));
-      resolve(newUser);
-    });
-  },
-
-  setUser: async (data: IProfile) => {
-    set(() => ({
       user: {
         ...data,
       },
     }));
+    console.log('2 - user set to ', get().user);
   },
-
-  /**
-   * function:  gets the user profile
-   * @params:    none
-   * @returns:   none
-   * @route:    `/api/user/${get().user.id}`
-   * Note: it updates the user profile and gets back the response from the server
-   * todo: handle error state & return type to the function
-   */
 
   editProfile: async (data: any): Promise<any> => {
     set((state: { user: any }) => ({
       ...state,
       loading: true,
     }));
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       set((prevState: any) => ({
         user: {
           ...prevState.user,
-          ...data,
-          skills: [
-            { name: 'hello', level: SkillLevel.ADVANCED },
-            { name: 'world', level: SkillLevel.BEGINNER },
-          ],
+          about: data.about,
+          image: data.image,
+          name: data.name,
         },
       }));
 
-      const userData = get().user as IProfile;
-      console.log('user - ', userData);
+      const userData = {
+        walletId: data.walletId,
+        name: data.name,
+        bio: data.about,
+        image: data.image,
+      };
 
-      axios
-        .put(`/api/userProfile/${get().user.id}`, userData)
-        .then((res) => {
-          set((state: { user: any }) => ({
-            ...state,
-            loading: false,
-          }));
-          resolve(res);
-        })
-        .catch((err) => {
-          set((state: { user: any }) => ({
-            ...state,
-            loading: false,
-          }));
-          reject(err);
-        });
+      console.log('update data - ', userData);
+      try {
+        const updateProfileRes = await axios.put(
+          `/api/userProfile/${get().user.id}`,
+          userData
+        );
+        set((state: { user: any }) => ({
+          ...state,
+          loading: false,
+        }));
+        resolve(updateProfileRes);
+      } catch (error) {
+        set((state: { user: any }) => ({
+          ...state,
+          loading: false,
+        }));
+        reject(error);
+      }
+    });
+  },
+
+  editUserInfo: async (data: any): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+      set((prevState: any) => ({
+        user: {
+          about: data.about,
+          image: data.image,
+          name: data.name,
+          ...prevState.user,
+        },
+      }));
+
+      const userData = {
+        walletId: data.walletId,
+        name: data.name,
+        bio: data.about,
+        image: data.image,
+      };
+
+      console.log('update data - ', userData);
+      try {
+        const updateProfileRes = await axios.put(
+          `/api/userProfile/${get().user.id}`,
+          userData
+        );
+        set((state: { user: any }) => ({
+          ...state,
+          loading: false,
+        }));
+        resolve(updateProfileRes);
+      } catch (error) {
+        set((state: { user: any }) => ({
+          ...state,
+          loading: false,
+        }));
+        reject(error);
+      }
     });
   },
 

@@ -1,10 +1,8 @@
-import { getByWalletResponse } from '@/interfaces/response.interface';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { usePersistanceStore } from 'src/app/persistanceStore';
 import { useProfileStore } from 'src/app/profileStore';
-import { IWallet } from 'src/definitions/definitions';
 import { roleEnum } from 'src/enums/enums';
 import getUserByWallet from '../routes/getUserByWallet';
 
@@ -13,11 +11,11 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
   const router = useRouter();
 
   const { user, setUser, setWallet2 } = useProfileStore();
-  const { setPersistanceUser } = usePersistanceStore();
+  const { setPersistanceUser, userName } = usePersistanceStore();
 
   useEffect(() => {
     if (!wallet.connected) {
-      router.push('/');
+      // the screen refreshes due to this it takes time for wallet to throw wallet.connected = true
       setPersistanceUser({
         userId: '',
         userName: '',
@@ -44,45 +42,13 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
         connected: false,
         loading: false,
       });
+      router.push('/');
       return;
     }
 
-    getUserByWallet(wallet.publicKey?.toBase58() as string)
-      .then((userData: getByWalletResponse) => {
-        setUser({
-          name: userData.name,
-          userName: userData.username,
-          id: userData.id,
-          walletId: userData.wallet,
-          role: roleEnum.RECRUIT,
-          about: undefined,
-          achievements: undefined,
-          image: undefined,
-          skills: [],
-          experience: [],
-          location: undefined,
-          website: undefined,
-          achievement: undefined,
-        });
-
-        const walletData: IWallet = {
-          walletId: userData.wallet,
-          walletName: '',
-          connected: true,
-          loading: false,
-        };
-        setWallet2(walletData);
-        setPersistanceUser({
-          userId: userData.id as string,
-          userName: userData.username as string,
-          userWalletId: userData.wallet as string,
-        });
-        router.push('/profile/' + userData.id);
-      })
-
-      .catch(() => {
-        onOpen();
-      });
+    getUserByWallet(wallet.publicKey?.toBase58() as string).catch(() => {
+      onOpen();
+    });
   }, [wallet.connected]);
 
   return [user];

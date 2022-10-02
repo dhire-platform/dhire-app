@@ -43,6 +43,7 @@ export interface IProfileStore {
   setWallet2: (wallet: IWallet) => void;
   setUser: (data: IProfile) => void;
   editProfile: (data: IProfile) => Promise<any>;
+  editUserInfo: (data: any) => Promise<any>;
   createUser: (data: any) => any;
   setSkills: (skills: string[]) => any;
   getUser: () => void;
@@ -66,12 +67,12 @@ export interface IProfile {
   id: string | undefined;
   userName: string | undefined;
   walletId: string | undefined;
-  name: string | undefined;
+  name?: string | undefined;
   role: roleEnum;
   about: string | undefined;
   achievements: string | undefined;
   image: string | undefined;
-  skills: skill[];
+  skills: skill[] | undefined;
   experience: IExperience[];
   location: string | undefined;
   website: string | undefined;

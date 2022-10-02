@@ -3,6 +3,7 @@ import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useProfileStore } from 'src/app/profileStore';
 import Layout from 'src/components/HOC/Layout.HOC';
 
@@ -15,19 +16,21 @@ const WalletConnectionProvider: any = dynamic(
   }
 );
 function MyApp({ Component, pageProps, router }: AppProps) {
-  const { user } = useProfileStore();
+  const { wallet } = useProfileStore();
   const route = useRouter();
 
-  const ProtectedRoute = ['profile'];
-  ProtectedRoute.forEach((protectedRoute) => {
-    route.pathname.split('/').forEach((element) => {
-      if (protectedRoute === element) {
-        if (!user) {
-          router.push('/');
-        }
-      }
-    });
-  });
+  // useEffect(() => {
+  //   const ProtectedRoute = ['profile'];
+  //   ProtectedRoute.forEach((protectedRoute) => {
+  //     route.pathname.split('/').forEach((element) => {
+  //       if (protectedRoute === element) {
+  //         if (!wallet.walletId) {
+  //           router.push('/');
+  //         }
+  //       }
+  //     });
+  //   });
+  // }, [wallet]);
 
   return (
     <WalletConnectionProvider>

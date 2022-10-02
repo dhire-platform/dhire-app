@@ -33,7 +33,6 @@ const CreateUserModal = ({ isOpen, onOpen, onClose }: any) => {
     <Modal
       isOpen={isOpen}
       onClose={() => {
-        console.log('modal close wallet disconnect');
         connected_wallet.disconnect();
         onClose();
       }}

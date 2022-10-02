@@ -34,11 +34,10 @@ const useProfileEdit = ({
 
   async function onSubmit(values: any) {
     console.log(values);
-    // const { name, userName, image, about } = values;
+    const { name, image, about } = values;
 
-    // const data = { name, userName: user.userName, about, image };
-    // console.log('data from modal to edit component = ', values);
-    // editProfile(data)
+    const data = { name, userName: user.userName, about, image };
+    const profileEditResponse = await editProfile(data);
     //   .then((res: any) => {
     //     console.log('res', res);
     //     toast_profile_updated();

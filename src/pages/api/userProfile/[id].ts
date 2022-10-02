@@ -85,7 +85,7 @@ async function updateUserProfile(
     projects?: JSON[];
     social?: SocialType;
   };
-
+  console.log(bio, image);
   try {
     const user = await prisma.userProfile.update({
       where: {
