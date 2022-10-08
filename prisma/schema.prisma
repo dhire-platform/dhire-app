@@ -12,14 +12,16 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  wallet      String        @unique
-  type        Role
-  name        String
-  username    String        @unique
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  UserProfile UserProfile[]
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  wallet           String             @unique
+  type             Role
+  name             String
+  username         String             @unique
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  UserProfile      UserProfile[]
+  RecruiterProfile RecruiterProfile[]
+  JobPost          JobPost[]
 }
 
 model UserProfile {
@@ -36,6 +38,59 @@ model UserProfile {
   social     SocialType?
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
+}
+
+model RecruiterProfile {
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String      @id @map("_id") @db.ObjectId
+  bio       String?
+  image     String?
+  company   String?
+  location  String?
+  website   String?
+  social    SocialType?
+  jobPosts  JobPost[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Company {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  website         String?
+  logo            String?
+  description     String?
+  size            Int?
+  type            String?
+  industry        String?
+  founded         DateTime?
+  specializations String[]
+  benefits        String[]
+  location        String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  jobPosts        JobPost[]
+}
+
+model JobPost {
+  id                     String            @id @default(auto()) @map("_id") @db.ObjectId
+  title                  String
+  description            String
+  location               String
+  from                   DateTime
+  to                     DateTime
+  company                Company           @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  companyId              String            @map("companyId") @db.ObjectId
+  salary                 Int
+  salaryType             SalaryType
+  skills                 Skill[]
+  applicants             String[]          @default([])
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  RecruiterProfile       RecruiterProfile? @relation(fields: [recruiterProfileUserId], references: [userId])
+  recruiterProfileUserId String?           @db.ObjectId
+  User                   User?             @relation(fields: [userId], references: [id])
+  userId                 String?           @db.ObjectId
 }
 
 enum Role {
@@ -91,4 +146,16 @@ type SocialType {
   linkedin  String?
   instagram String?
   github    String?
+}
+
+enum Currency {
+  USD
+  INR
+  SOL
+  USDC
+}
+
+enum SalaryType {
+  CRYPTO
+  FIAT
 }
