@@ -19,21 +19,17 @@ import Card from 'src/components/landing/Jobs/Card';
 import Data from 'src/components/landing/Jobs/Data.json';
 import Layout from 'src/components/landing/Jobs/Layout';
 import Pagination from 'src/components/Pagination/Pagination';
+import { IFilter } from 'src/definitions/definitions';
 import { IJob } from 'src/definitions/IJob';
-
-interface IPayload {
-  searchWord?: string;
-  locationName?: string;
-}
+import { useFilter } from 'src/hooks/useFilter';
 
 const Jobs = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filteredData, setFilteredData] = useState<IJob[]>(Data);
-  const [modifiedArray, setModifiedArray] = useState<IJob[]>(Data);
-  const [checked_value, setChecked_value] = useState<[]>([]);
   const [sliderValue1, setSliderValue1] = useState(5);
   const [showTooltip, setShowTooltip] = useState(false);
   const [sliderValue2, setSliderValue2] = useState(5);
+  const [filters, setFilters] = useState<IFilter[]>([]);
 
   const { ref, inView, entry } = useInView({
     threshold: 0.4,
@@ -48,70 +44,25 @@ const Jobs = () => {
     return arr;
   }, [currentPage, filteredData]);
 
-  const modifyData = ({ searchWord, locationName }: IPayload) => {
-    if (!searchWord && locationName) {
-      const newFilteredArray = Data?.filter((DataObject) => {
-        return DataObject.job_location === locationName;
-      });
-      setModifiedArray(newFilteredArray);
-      setFilteredData(modifiedArray);
-    } else if (searchWord && !locationName) {
-      if (searchWord[0] === ' ') {
-        setFilteredData(Data);
-      } else {
-        const newFilteredArray = Data?.filter((DataObject) => {
-          return DataObject.job_title
-            .toLowerCase()
-            .includes(searchWord.toLowerCase());
-        });
-        setFilteredData(newFilteredArray);
-      }
-    } else {
-      // handles when both are modified
-    }
+  const setReqFilter = (filter: IFilter) => {
+    let existingFilters = filters;
+    let req_filter = existingFilters.filter(
+      (item) => item.filter_type !== filter.filter_type
+    );
+    req_filter.push(filter);
+    setFilters(req_filter);
   };
-
-  const salaryRangeFilter = (range: number[]) => {
-    const newFilteredData = Data.filter((data) => {
-      if (range[0] < data.job_salary_max && data.job_salary_max < range[1]) {
-        return true;
-      } else {
-        return false;
-      }
+  useEffect(() => {
+    let newArray = useFilter({
+      all_filters: filters,
+      fullArray: Data,
     });
-    console.log(newFilteredData.length, range[0], range[1]);
-    setFilteredData(newFilteredData);
-  };
-
-  const jobTypeFilter = (checked_fields: string[], filter: string) => {
-    if (checked_fields.length === 0) {
-      setFilteredData(Data);
-      return;
-    }
-
-    const checkedFieldsNum = checked_fields.map(function (str) {
-      return parseInt(str);
-    });
-
-    const newFilteredData = filteredData.filter((data: IJob) => {
-      if (filter === 'job_type') {
-        if (checkedFieldsNum.includes(data.job_type)) {
-          return true;
-        }
-      } else if (filter === 'job_level') {
-        if (checkedFieldsNum.includes(data.job_experience_level)) {
-          return true;
-        }
-      } else {
-        return false;
-      }
-    });
-    setFilteredData(newFilteredData);
-    console.log('new filtered data - ', filteredData);
-  };
-
+    console.log(newArray[0]);
+    setFilteredData(newArray);
+    setCurrentPage(1);
+  }, [filters]);
   return (
-    <Layout data={filteredData} setData={modifyData}>
+    <Layout data={filteredData} setData={setReqFilter}>
       <Stack
         ref={ref}
         mx="auto"
@@ -128,7 +79,10 @@ const Jobs = () => {
               </Heading>
               <CheckboxGroup
                 onChange={(checked_fields: string[]) => {
-                  jobTypeFilter(checked_fields, 'job_type');
+                  setReqFilter({
+                    filter_type: 'job_type',
+                    filter_values: checked_fields,
+                  });
                 }}
               >
                 <Stack direction={'column'} p="1rem">
@@ -160,7 +114,13 @@ const Jobs = () => {
                 id="slider"
                 colorScheme="blue"
                 onChangeEnd={(val) => {
-                  salaryRangeFilter(val);
+                  let props = {
+                    filter_type: 'job_salary_max',
+                    filter_values: ['1'],
+                    compare: { min: val[0], max: val[1] },
+                  };
+                  console.log(val);
+                  setReqFilter(props);
                   setSliderValue1(val[0]);
                   setSliderValue2(val[1]);
                 }}
@@ -205,10 +165,10 @@ const Jobs = () => {
               </Heading>
               <CheckboxGroup
                 onChange={(checked_fields: string[]) => {
-                  console.log('button clicked - ', checked_fields);
-                  // setChecked_value(checked_fields);
-                  // modifyArray();
-                  jobTypeFilter(checked_fields, 'job_level');
+                  setReqFilter({
+                    filter_type: 'job_experience_level',
+                    filter_values: checked_fields,
+                  });
                 }}
               >
                 <Stack direction={'column'} p="1rem">
@@ -236,10 +196,23 @@ const Jobs = () => {
             <Text color="gray.400">Showing {filteredData.length} results</Text>
             <Stack direction={'row'}>
               <Text color="gray.400">Sort by :</Text>
-              <chakra.select defaultValue="1" bg="white" name="cars" id="cars">
+              <chakra.select
+                defaultValue="1"
+                bg="white"
+                name="cars"
+                id="cars"
+                onChange={(event: { target: { value: any } }) => {
+                  setReqFilter({
+                    filter_type: 'created_at',
+                    filter_values: ['1'],
+                    sort:
+                      event.target.value === '1' ? 'increasing' : 'decreasing',
+                  });
+                }}
+              >
                 <option value="1">Newest First</option>
                 <option value="2">Oldest First</option>
-                <option value="3">Most Popular</option>
+                {/* <option value="3">Most Popular</option> */}
               </chakra.select>
             </Stack>
           </Stack>
