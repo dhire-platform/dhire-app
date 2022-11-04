@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { RiMapPin2Line } from 'react-icons/ri';
-import { IJob } from 'src/definitions/IJob';
+import { IJob } from '@/interfaces/job/job.interface';
 
 const animationKeyframes = keyframes`
     from {

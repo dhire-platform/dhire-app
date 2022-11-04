@@ -19,7 +19,7 @@ import Card from 'src/components/landing/Jobs/Card';
 import Data from 'src/components/landing/Jobs/Data.json';
 import Layout from 'src/components/landing/Jobs/Layout';
 import Pagination from 'src/components/Pagination/Pagination';
-import { IJob } from 'src/definitions/IJob';
+import { IJob } from '@/interfaces/job/job.interface';
 
 interface IPayload {
   searchWord?: string;

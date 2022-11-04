@@ -11,7 +11,7 @@ const animationKeyframes = keyframes`
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 
-const Error = (props) => {
+const Error = (props: any) => {
   return (
     <Container maxW="full" h="70vh">
       <Center w="full" py="4rem" h="60vh">

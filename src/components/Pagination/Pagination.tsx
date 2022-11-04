@@ -2,7 +2,7 @@ import { Box, Icon, Stack } from '@chakra-ui/react';
 import React from 'react';
 import { usePagination, DOTS } from 'src/lib/hooks/usePagination';
 import { BsArrowRightShort, BsArrowLeftShort } from 'react-icons/bs';
-import { IPagination } from 'src/definitions/IPageination';
+import { IPagination } from '@/interfaces/pagination.interface';
 {
   /*
    * @params
