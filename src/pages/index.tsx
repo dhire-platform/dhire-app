@@ -9,9 +9,10 @@ import Philosophy from 'src/components/landing/Home/Philosophy';
 import Section1 from 'src/components/landing/Home/Sections/Section1';
 import Section2 from 'src/components/landing/Home/Sections/Section2';
 import CreateUserModal from 'src/components/modals/CreateUser';
+import UserApplication from 'src/components/modals/UserApplication';
 import SEO from 'src/components/SEO/SEO';
 import { IProfileStore } from 'src/definitions/definitions';
-
+import Hire from 'src/pages/hire';
 const Home: NextPage = () => {
   const { onClose, onOpen, isOpen } = useDisclosure();
   const wallet = useProfileStore((state: IProfileStore) => state.wallet);
@@ -32,6 +33,7 @@ const Home: NextPage = () => {
           <Philosophy />
           <Section1 />
           <Section2 />
+          <Hire />
         </Container>
       ) : (
         <Container>
