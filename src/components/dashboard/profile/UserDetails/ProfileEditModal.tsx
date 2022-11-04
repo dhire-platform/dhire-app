@@ -20,14 +20,16 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 import useProfileEdit from './useProfileEdit';
 
 const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
+  const { user, userProfile } = useProfileStore();
   const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
-  const [onSubmit, user] = useProfileEdit({ isOpen, onClose });
+  const onSubmit = useProfileEdit({ isOpen, onClose });
 
   const {
     handleSubmit,
@@ -53,7 +55,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
             {/* Full Name */}
-            <FormControl isRequired>
+            {/* <FormControl isRequired>
               <FormLabel htmlFor="name">Full name</FormLabel>
               <Input
                 isRequired
@@ -81,7 +83,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                   </Text>
                 )}
               />
-            </FormControl>
+            </FormControl> */}
 
             {/*userName */}
             {router.pathname === '/profile' && (
@@ -90,7 +92,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                 <InputGroup>
                   <InputLeftAddon>@</InputLeftAddon>
                   <Input
-                    defaultValue={user.userName}
+                    defaultValue={user?.username}
                     isRequired
                     type="text"
                     id="userName"

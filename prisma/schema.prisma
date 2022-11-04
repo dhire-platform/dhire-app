@@ -55,7 +55,7 @@ type Skill {
 }
 
 type ExperienceType {
-  company     String?
+  company     Company?
   designation String?
   from        DateTime?
   to          DateTime?
@@ -91,4 +91,9 @@ type SocialType {
   linkedin  String?
   instagram String?
   github    String?
+}
+
+type Company {
+  name  String?
+  image String?
 }

@@ -1,4 +1,4 @@
-import { SkillLevel } from 'src/enums/enums';
+import { SkillLevel } from 'src/lib/enums/enums';
 
 export type skill = {
   name: string;

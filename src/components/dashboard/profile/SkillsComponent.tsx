@@ -13,9 +13,9 @@ import {
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { MdDone } from 'react-icons/md';
-import { useProfileStore } from 'src/app/profileStore';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { skill } from 'src/definitions/definitions';
-import ChakraTagInput from 'src/helpers/ChakraTagInput';
+import ChakraTagInput from 'src/lib/helpers/ChakraTagInput';
 
 const SkillsComponent = () => {
   const [hover, setHover] = useState(false);
@@ -132,12 +132,12 @@ const SkillsComponent = () => {
             color={'black'}
             maxW="36rem"
           >
-            {skills?.map((skill: string) => (
+            {skills?.map((skill: string, index: any) => (
               <Tag
                 background="blackAlpha.50"
                 p="0.4rem 0.8rem"
                 fontWeight={'400'}
-                key={skill}
+                key={index}
               >
                 {skill}
               </Tag>

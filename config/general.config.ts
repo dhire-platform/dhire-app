@@ -1,4 +1,4 @@
-import { ConfigInterface } from '../interfaces/config.interface';
+import { ConfigInterface } from '../src/interfaces/config.interface';
 
 const config: ConfigInterface = {
   general: {

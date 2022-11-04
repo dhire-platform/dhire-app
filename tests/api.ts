@@ -21,7 +21,6 @@ export const getUser = async (walletId: string) => {
 };
 
 export const createUserProfile = async (userId: string) => {
-  console.log(userId);
   const res = axios
     .post(`http://localhost:3000/api/userProfile`, {
       userId,

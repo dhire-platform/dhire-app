@@ -17,11 +17,12 @@ import {
 import { ErrorMessage } from '@hookform/error-message';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useForm } from 'react-hook-form';
-import { useCreateAccount } from 'src/lib/user/useCreateUser';
+import { useCreateAccount } from 'src/lib/hooks/createUser/useCreateUser';
 
 const CreateUserModal = ({ isOpen, onOpen, onClose }: any) => {
+  console.log('1 - create user process ( modal component )');
   const connected_wallet = useWallet();
-  const [submit] = useCreateAccount(onClose);
+  const submit = useCreateAccount(onClose);
 
   const {
     handleSubmit,

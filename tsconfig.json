@@ -6,7 +6,7 @@
       "@/store/*": ["store/*"],
       "@/styles/*": ["styles/*"],
       "@/config/*": ["config/*"],
-      "@/interfaces/*": ["interfaces/*"],
+      "@/interfaces/*": ["src/interfaces/*"],
       "@/utils/*": ["utils/*"]
     },
     "target": "es5",

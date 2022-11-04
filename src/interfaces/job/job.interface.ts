@@ -1,5 +1,5 @@
 export type IJob = {
-  id: string,
+  id: string;
   job_title: string;
   job_company: string;
   job_company_image: string;

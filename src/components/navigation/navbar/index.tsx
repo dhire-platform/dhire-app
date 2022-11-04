@@ -1,18 +1,16 @@
-import { Container, useDisclosure } from '@chakra-ui/react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-import CreateUserModal from 'src/components/modals/CreateUser';
-import { useWalletConnection } from 'src/lib/wallet/useWalletConnection';
+import { Container  } from '@chakra-ui/react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'; 
 import DashboardNavbar from './DashboardNav';
-import LandingPageNavbar from './LandingPageNav';
+import LandingPageNavbar from './LandingPageNav'; 
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 
+// write props
 const Navbar = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [user] = useWalletConnection(isOpen, onOpen);
+  const { user } = useProfileStore((state) => state);
 
   return (
-    <Container minW={'full'} p="0">
-      <CreateUserModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      {user.walletId ? (
+    <Container minW={'full'} p="0" background={'transparent'}>
+      {user?.id ? (
         <DashboardNavbar>
           <WalletMultiButton />
         </DashboardNavbar>

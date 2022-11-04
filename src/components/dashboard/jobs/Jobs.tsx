@@ -349,7 +349,7 @@ const Jobs = () => {
               </Center>
             ) : (
               currentData.map((item, index) => (
-                <a href={`job/${item.id}`}>
+                <a key={index} href={`job/${item.id}`}>
                   <Card key={index} {...item} />
                 </a>
               ))
