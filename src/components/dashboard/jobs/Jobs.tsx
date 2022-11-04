@@ -26,7 +26,7 @@ import { useInView } from 'react-intersection-observer';
 import Card from 'src/components/landing/Jobs/Card';
 import Data from 'src/components/landing/Jobs/Data.json';
 import Pagination from 'src/components/Pagination/Pagination';
-import { IJob } from 'src/definitions/IJob';
+import { IJob } from '@/interfaces/job/job.interface';
 
 const animationKeyframes = keyframes`
       from {

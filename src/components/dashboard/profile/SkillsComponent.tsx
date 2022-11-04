@@ -8,26 +8,25 @@ import {
   IconButton,
   Stack,
   Tag,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { MdDone } from 'react-icons/md';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
-import { skill } from 'src/definitions/definitions';
 import ChakraTagInput from 'src/lib/helpers/ChakraTagInput';
 
 const SkillsComponent = () => {
   const [hover, setHover] = useState(false);
-  const { user } = useProfileStore();
+  const { user, userProfile } = useProfileStore();
   const setSkills = useProfileStore((state: any) => state.setSkills);
   const [edit, setEdit] = useState(false);
   const [tags, setTags] = useState(
-    user.skills?.map((skill: any) => skill.name)
+    userProfile.skills?.map((skill: any) => skill.name)
   );
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-  const skillArr: string[] = user.skills?.map((skill: skill) => skill.name)!;
-  const skills: string[] = skillArr;
+  const skillArr = userProfile.skills?.map((skill) => skill.name)! as string[];
+  const skills = skillArr as string[];
 
   const handleTagsChange = useCallback(
     (_event: SyntheticEvent, tags: string[]) => {

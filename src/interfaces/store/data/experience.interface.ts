@@ -10,6 +10,6 @@ export interface IExperience {
 }
 
 export interface Company {
-  name: string;
-  image: string;
+  name?: string;
+  image?: string;
 }

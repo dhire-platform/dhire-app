@@ -32,7 +32,7 @@ const Achievement = () => {
       border="1px solid"
       color="blackAlpha.200"
     >
-      {user.achievement ? (
+      {/* {user.achievement ? (
         <>
           <Stack alignContent={'start'} direction={'row'}>
             <Heading color={'black'} fontSize="xl">
@@ -80,7 +80,7 @@ const Achievement = () => {
             </Box>
           </Stack>
         </>
-      )}
+      )} */}
     </Center>
   );
 };

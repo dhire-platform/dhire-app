@@ -62,7 +62,7 @@ const Education = () => {
     const to: Date = new Date(values.to);
 
     const companyDetails: Company = {
-      name: company,
+      name: company as string,
       image: image,
     };
 
@@ -332,7 +332,7 @@ const Education = () => {
                 >
                   <Avatar src={experience?.image} size="md" bg="white" />
                   <Stack w="full" direction={'column'}>
-                    <Heading fontSize={'xl'}>{experience.company}</Heading>
+                    <Heading fontSize={'xl'}>experience</Heading>
                     <Text fontSize="md">
                       <></>
                     </Text>
