@@ -23,13 +23,13 @@ import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { roleEnum } from 'src/lib/enums/enums';
 
-const User = () => {
+const Recruiter = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const router = useRouter();
   const { user } = useProfileStore();
   useEffect(() => {
-    if (user.type === roleEnum.RECRUITER) router.push('/recruiter/' + user.id);
+    if (user.type === roleEnum.RECRUIT) router.push('/profile/' + user.id);
   }, [router]);
   return (
     <>
@@ -69,16 +69,6 @@ const User = () => {
               >
                 <Text>Jobs</Text>
               </Tab>
-              <Tab isDisabled>
-                <Text fontSize="lg" fontWeight="600">
-                  Profile
-                </Text>
-              </Tab>
-              <Tab isDisabled>
-                <Text fontSize="lg" fontWeight="600">
-                  Settings
-                </Text>
-              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -108,13 +98,6 @@ const User = () => {
                   </Container>
                 </Text>
               </TabPanel>
-              <TabPanel>
-                <Text size="xl" fontWeight="600">
-                  <Container minW="full" h="100vh">
-                    Coming Soon
-                  </Container>
-                </Text>
-              </TabPanel>
             </TabPanels>
           </Tabs>
           <Stack
@@ -128,4 +111,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Recruiter;

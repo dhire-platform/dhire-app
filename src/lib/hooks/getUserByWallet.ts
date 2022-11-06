@@ -9,7 +9,7 @@ import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
 export default async function getUserByWallet(
   walletId: string
 ): Promise<IUserProfile | undefined> {
- // const {  setWallet } = useProfileStore();
+  // const {  setWallet } = useProfileStore();
   const { setPersistanceUser } = usePersistanceStore();
   const router = useRouter();
   console.log('2- getting user by wallet');
@@ -27,8 +27,8 @@ export default async function getUserByWallet(
     const userProfile = userProfileResponse.data as IUserProfile;
     console.log('user profile details - ', userProfile);
 
-   // setUser(res.data);
-   // setUserProfile(userProfile);
+    // setUser(res.data);
+    // setUserProfile(userProfile);
     setPersistanceUser(res.data);
     // setWallet({
     //   walletId: userProfile.user?.wallet?.walletId,
@@ -36,7 +36,10 @@ export default async function getUserByWallet(
     //   connected: true,
     //   loading: false,
     // });
-    router.push('/profile/' + res.data.id);
+    router.push(
+      (res.data.type === roleEnum.RECRUIT ? '/profile/' : '/recruiter/') +
+        res.data.id
+    );
 
     return userProfile as IUserProfile;
   } catch (error) {

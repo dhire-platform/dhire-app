@@ -17,12 +17,16 @@ import {
 import { ErrorMessage } from '@hookform/error-message';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useForm } from 'react-hook-form';
+import { roleEnum } from 'src/lib/enums/enums';
 import { useCreateAccount } from 'src/lib/hooks/createUser/useCreateUser';
 
-const CreateUserModal = ({ isOpen, onOpen, onClose }: any) => {
+const CreateUserModal = ({ isOpen, onOpen, onClose, userData }: any) => {
   console.log('1 - create user process ( modal component )');
   const connected_wallet = useWallet();
-  const submit = useCreateAccount(onClose);
+  const submit = useCreateAccount(
+    onClose,
+    userData ? userData.userType : roleEnum.RECRUIT
+  );
 
   const {
     handleSubmit,
@@ -51,6 +55,7 @@ const CreateUserModal = ({ isOpen, onOpen, onClose }: any) => {
                 isRequired
                 id="name"
                 placeholder="Name"
+                defaultValue={userData ? userData.name : ''}
                 {...register('name', {
                   required: 'This is required',
                   minLength: {
@@ -85,6 +90,7 @@ const CreateUserModal = ({ isOpen, onOpen, onClose }: any) => {
                   type="text"
                   id="userName"
                   placeholder="User Name"
+                  defaultValue={userData ? userData.name : ''}
                   {...register('userName', {
                     required: 'This is Required',
                     minLength: {

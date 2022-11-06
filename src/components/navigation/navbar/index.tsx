@@ -1,7 +1,7 @@
-import { Container  } from '@chakra-ui/react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'; 
+import { Container } from '@chakra-ui/react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import DashboardNavbar from './DashboardNav';
-import LandingPageNavbar from './LandingPageNav'; 
+import LandingPageNavbar from './LandingPageNav';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 
 // write props

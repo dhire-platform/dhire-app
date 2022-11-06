@@ -1,13 +1,15 @@
 import { IUser } from '@/interfaces/store/data/user.interface';
 import { useWallet } from '@solana/wallet-adapter-react';
 import axios from 'axios';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { usePersistanceStore } from 'src/app/store/persistance/persistanceStore';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { roleEnum } from 'src/lib/enums/enums';
 import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
 
-export const useCreateAccount = (onClose: any) => {
+// ERROR HANDLING NOT DONE
+
+export const useCreateAccount = (onClose: any, userType: roleEnum) => {
   console.log('2 - use create user hook called');
   const connected_wallet = useWallet();
   const { createNewUser, createNewUserProfile } = useProfileStore();
@@ -26,7 +28,7 @@ export const useCreateAccount = (onClose: any) => {
         connected: true,
         loading: false,
       },
-      type: roleEnum.RECRUIT,
+      type: userType,
     };
 
     const createdUserStoreResponse = (await createNewUser(Data)) as {
@@ -36,7 +38,7 @@ export const useCreateAccount = (onClose: any) => {
     };
 
     const createdNewUserProfile = (await createNewUserProfile({
-      userId: createdUserStoreResponse.data.id,  
+      userId: createdUserStoreResponse.data.id,
       image: submittedData.image,
     })) as {
       data: IUserProfile;
@@ -54,7 +56,10 @@ export const useCreateAccount = (onClose: any) => {
       return console.log('created user response from store was unsuccessful');
 
     setPersistanceUser(createdUserStoreResponse.data);
-    router.push('/profile/' + createdUserStoreResponse.data.id);
+    let user = createdUserStoreResponse.data;
+    router.push(
+      (user.type === roleEnum.RECRUIT ? '/profile/' : '/recruiter/') + user.id
+    );
     onClose();
   }
   return submit;

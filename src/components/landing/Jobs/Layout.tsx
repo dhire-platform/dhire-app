@@ -11,6 +11,7 @@ import {
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { RiMapPin2Line } from 'react-icons/ri';
+import { IFilter } from '@/interfaces/filter.interface';
 import { IJob } from '@/interfaces/job/job.interface';
 
 const animationKeyframes = keyframes`
@@ -24,21 +25,12 @@ const animationKeyframes = keyframes`
 type Props = {
   children?: JSX.Element | JSX.Element[];
   data: IJob[];
-  setData: any;
+  setData: (filter: IFilter) => void;
 };
-interface IPayload {
-  searchWord?: string;
-  locationName?: string;
-}
 
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 
 const Layout: React.FC<Props> = ({ children, data, setData }) => {
-  // console.log(data.length);
-  const HandleSetData = ({ searchWord, locationName }: IPayload) => {
-    setData({ searchWord, locationName });
-  };
-
   return (
     <Container overflow="hidden" h="fit-content" maxW="full" p="0">
       <VStack>
@@ -76,7 +68,14 @@ const Layout: React.FC<Props> = ({ children, data, setData }) => {
               <Icon as={FiSearch} w={7} h={7} color="gray.300" />
               <chakra.input
                 onChange={(event: { target: { value: any } }) => {
-                  HandleSetData({ searchWord: event.target.value });
+                  setData({
+                    filter_type: 'job_title',
+                    filter_values:
+                      event.target.value === ''
+                        ? []
+                        : [event.target.value.toLowerCase()],
+                    search: true,
+                  });
                 }}
                 placeholder="Search Job..."
                 w="100%"
@@ -92,9 +91,14 @@ const Layout: React.FC<Props> = ({ children, data, setData }) => {
                 name="location"
                 placeholder="Select option"
                 onChange={(event: { target: { value: any } }) => {
-                  HandleSetData({ locationName: event.target.value });
+                  setData({
+                    filter_type: 'job_location',
+                    filter_values:
+                      event.target.value === '' ? [] : [event.target.value],
+                  });
                 }}
               >
+                <option value="">ALL</option>
                 <option value="London, UK">London, UK</option>
                 <option value="California, US">California, US</option>
                 <option value="New Delhi, India">New Delhi, India</option>
