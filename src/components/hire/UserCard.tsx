@@ -17,12 +17,12 @@ import { GrAddCircle } from 'react-icons/gr';
 import { BiLink } from 'react-icons/bi';
 import { BsDiscord, BsGithub, BsTwitter } from 'react-icons/bs';
 const animationKeyframes = keyframes`
-    from {
-      background-position: 0 0;
-    to {
-      background-position: 100% 100%;
-    }
-  `;
+      from {
+        background-position: 0 0;
+      to {
+        background-position: 100% 100%;
+      }
+    `;
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 

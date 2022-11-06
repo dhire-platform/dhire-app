@@ -27,23 +27,26 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
-  useEditableControls
+  useEditableControls,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiEdit2 } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 import { VscAdd } from 'react-icons/vsc';
-import { useProfileStore } from 'src/app/profileStore';
-import { IExperience, IProfileStore } from 'src/definitions/definitions';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
+import { IProfileStore } from '@/interfaces/store/profileStore.interface';
+import {
+  IExperience,
+  Company,
+} from '@/interfaces/store/data/experience.interface';
+import { IEducation } from '@/interfaces/store/data/education.interface';
+import axios from 'axios';
 
 const Education = () => {
   const [hover, setHover] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { setExperience } = useProfileStore();
-  const experience: IExperience[] = useProfileStore(
-    (state: IProfileStore) => state.user.experience!
-  );
+  const { user, setExperience, experience, education } = useProfileStore();
 
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -57,10 +60,33 @@ const Education = () => {
     const { company, image, designation, description }: IExperience = values;
     const from: Date = new Date(values.from);
     const to: Date = new Date(values.to);
-    setExperience([{ company, designation, from, to, description }])
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-      .finally(() => onClose());
+
+    const companyDetails: Company = {
+      name: company as string,
+      image: image,
+    };
+
+    const experienceData: IExperience = {
+      company: companyDetails,
+      designation: designation,
+      from: from,
+      to: to,
+      current: false,
+      location: 'remote',
+      description: description,
+    };
+
+    axios
+      .put('/api/userProfile/' + user.id, {
+        experience: [experienceData],
+      })
+      .then((res) => {
+        setExperience(experienceData);
+        onClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function toMonthName(monthNumber: number) {
@@ -296,30 +322,34 @@ const Education = () => {
             maxW="36rem"
           >
             {experience?.length ? (
-              experience?.map((experience: IExperience) => (
-                <>
-                  <Stack px="2rem" w="100%" py="0.5rem" direction={'row'}>
-                    <Avatar src={experience?.image} size="md" bg="white" />
-                    <Stack w="full" direction={'column'}>
-                      <Heading fontSize={'xl'}>{experience.company}</Heading>
-                      <Text fontSize="md">
-                        <></>
-                      </Text>
-                      <Divider />
-                      <Heading fontWeight={'500'} fontSize={'lg'}>
-                        {experience.designation}
-                      </Heading>
-                      <Heading
-                        fontWeight="400"
-                        noOfLines={2}
-                        fontSize={'sm'}
-                        color="blackAlpha.500"
-                      >
-                        {experience.description}
-                      </Heading>
-                    </Stack>
+              experience?.map((experience: IExperience, index) => (
+                <Stack
+                  key={index}
+                  px="2rem"
+                  w="100%"
+                  py="0.5rem"
+                  direction={'row'}
+                >
+                  <Avatar src={experience?.image} size="md" bg="white" />
+                  <Stack w="full" direction={'column'}>
+                    <Heading fontSize={'xl'}>experience</Heading>
+                    <Text fontSize="md">
+                      <></>
+                    </Text>
+                    <Divider />
+                    <Heading fontWeight={'500'} fontSize={'lg'}>
+                      {experience.designation}
+                    </Heading>
+                    <Heading
+                      fontWeight="400"
+                      noOfLines={2}
+                      fontSize={'sm'}
+                      color="blackAlpha.500"
+                    >
+                      {experience.description}
+                    </Heading>
                   </Stack>
-                </>
+                </Stack>
               ))
             ) : (
               <Stack

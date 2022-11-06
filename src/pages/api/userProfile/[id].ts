@@ -63,6 +63,7 @@ async function updateUserProfile(
   res: NextApiResponse,
   id: string
 ) {
+  console.log(req.body);
   const {
     bio,
     image,
@@ -85,7 +86,6 @@ async function updateUserProfile(
     projects?: JSON[];
     social?: SocialType;
   };
-
   try {
     const user = await prisma.userProfile.update({
       where: {
@@ -103,8 +103,10 @@ async function updateUserProfile(
         social,
       },
     });
+    console.log('user - ', user);
     res.status(200).json(user);
   } catch (e) {
+    console.log('error - ', e);
     res.status(400).json({ error: (e as Error).message });
   }
 }

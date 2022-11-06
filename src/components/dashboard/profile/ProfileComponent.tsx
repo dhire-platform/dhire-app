@@ -6,16 +6,16 @@ import {
   Stack,
   Text,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
-import { useProfileStore } from 'src/app/profileStore';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 import EditProfileComponent from './UserDetails/ProfileEditModal';
 
 const ProfileComponent = () => {
   const [hover, setHover] = useState(false);
-  const { user } = useProfileStore();
+  const { userProfile, user } = useProfileStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -48,9 +48,9 @@ const ProfileComponent = () => {
           <Stack direction={'row'} gap="0.7rem" w="full">
             <Avatar
               size="lg"
-              name={user.name}
+              name={user?.name}
               colorScheme="black"
-              src={user.image}
+              src={userProfile.image}
             />
             <Stack
               gap="0"
@@ -60,10 +60,10 @@ const ProfileComponent = () => {
               direction={'column'}
             >
               <Heading color={'black'} fontSize="xl">
-                {user.name}
+                {user?.name}
               </Heading>
               <Text marginBlock="0" margin="0.1rem" color="blackAlpha.500">
-                @{user.userName}
+                @{user?.username}
               </Text>
             </Stack>
           </Stack>
@@ -90,9 +90,9 @@ const ProfileComponent = () => {
           color={'black'}
           w="100%"
           maxW="36rem"
-          mt={user.about && '1rem'}
+          mt={userProfile?.bio && '1rem'}
         >
-          {user.about}
+          {userProfile?.bio}
         </Heading>
       </Center>
     </>

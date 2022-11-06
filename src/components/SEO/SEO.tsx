@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import config from '@/config/general.config';
-import SeoPropsInterface from '@/interfaces/seo.interface';
+import SeoPropsInterface from 'src/interfaces/seo.interface';
 
 const SEO = ({ title, description, image }: SeoPropsInterface) => {
   return (

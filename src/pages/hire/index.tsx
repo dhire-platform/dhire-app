@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import NavBar from 'src/components/hire/Navbar';
+import HireNavBar from 'src/components/navigation/navbar/HireNav';
 import { useState } from 'react';
 import UserCard from 'src/components/hire/UserCard';
 import Pagination from 'src/components/Pagination/Pagination';
@@ -34,7 +34,7 @@ const index = () => {
       maxW="full"
       p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
     >
-      <NavBar />
+      <HireNavBar />
       <Flex
         w="full"
         bg="rgba(255,255,255,0.4)"

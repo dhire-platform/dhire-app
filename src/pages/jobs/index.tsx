@@ -19,9 +19,9 @@ import Card from 'src/components/landing/Jobs/Card';
 import Data from 'src/components/landing/Jobs/Data.json';
 import Layout from 'src/components/landing/Jobs/Layout';
 import Pagination from 'src/components/Pagination/Pagination';
-import { IFilter } from 'src/definitions/definitions';
-import { IJob } from 'src/definitions/IJob';
-import { useFilter } from 'src/hooks/useFilter';
+import { IFilter } from '@/interfaces/filter.interface';
+import { IJob } from '@/interfaces/job/job.interface';
+import { useFilter } from 'src/lib/hooks/useFilter';
 
 const Jobs = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -57,7 +57,6 @@ const Jobs = () => {
       all_filters: filters,
       fullArray: Data,
     });
-    console.log(newArray[0]);
     setFilteredData(newArray);
     setCurrentPage(1);
   }, [filters]);
@@ -119,7 +118,7 @@ const Jobs = () => {
                     filter_values: ['1'],
                     compare: { min: val[0], max: val[1] },
                   };
-                  console.log(val);
+                  //console.log(val);
                   setReqFilter(props);
                   setSliderValue1(val[0]);
                   setSliderValue2(val[1]);

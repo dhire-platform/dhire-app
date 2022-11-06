@@ -1,4 +1,4 @@
-import { ISearch } from 'src/definitions/ISearch';
+import { ISearch } from '@/interfaces/search.interface';
 
 // this should return an array of searched item data and take data, searchInput as input
 const useSearch = ({ data, searchValue }: ISearch) => {
