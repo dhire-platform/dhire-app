@@ -7,3 +7,19 @@ export enum SkillLevel {
   INTERMEDIATE = 'INTERMEDIATE',
   ADVANCED = 'ADVANCED',
 }
+export enum JobLevel {
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
+}
+export enum JobType {
+  FULLTIME = 'FULL TIME',
+  PARTTIME = 'PART TIME',
+  INTERNSHIP = 'INTERNSHIP',
+  REMOTE = 'REMOTE',
+  FREELANCE = 'FREELANCE',
+}
+export enum SalaryType {
+  CRYPTO = 'CRYPTO',
+  FIAT = 'FIAT',
+}
