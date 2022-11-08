@@ -7,6 +7,7 @@ import {
   IEducation,
   ISocial,
   IExperience,
+  IRecruiterProfile,
 } from './data/data.index';
 
 export interface IStoreDataResponse {
@@ -14,6 +15,7 @@ export interface IStoreDataResponse {
   message: string;
   data:
     | IUserProfile
+    | IRecruiterProfile
     | IWallet
     | ISkill
     | IProject
@@ -31,7 +33,13 @@ export interface IProfileStore {
   createNewUserProfile: (data: IUserProfile) => Promise<IStoreDataResponse>;
   updateUserProfile: (data: IUserProfile) => void;
 
+  recruiterProfile: IRecruiterProfile;
+  createNewRecruiterProfile: (
+    data: IRecruiterProfile
+  ) => Promise<IStoreDataResponse>;
   wallet: IWallet;
+  updateRecruiterProfile: (data: IRecruiterProfile) => void;
+
   updateWallet: (wallet: IWallet) => void;
 
   experience: IExperience[];

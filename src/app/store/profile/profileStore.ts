@@ -17,7 +17,9 @@ import {
   IWallet,
   IEducation,
   IProject,
+  IRecruiterProfile,
 } from 'src/interfaces/store/data/data.index';
+import { roleEnum } from 'src/lib/enums/enums';
 
 const social: ISocial = {};
 const experience: IExperience[] = [];
@@ -45,6 +47,15 @@ const userProfile: IUserProfile = {
   experience: experience,
   education: education,
   projects: projects,
+  social: social,
+};
+const recruiterProfile: IRecruiterProfile = {
+  userId: undefined,
+  bio: undefined,
+  image: undefined,
+  company: undefined,
+  location: undefined,
+  website: undefined,
   social: social,
 };
 
@@ -131,6 +142,57 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     set(
       produce((state) => {
         state.userProfile = data;
+      })
+    );
+  },
+
+  recruiterProfile: recruiterProfile,
+  createNewRecruiterProfile: (
+    data: IRecruiterProfile
+  ): Promise<IStoreDataResponse> => {
+    return new Promise((resolve, reject) => {
+      set(
+        produce((draft) => {
+          draft.recruiterProfile.image = data.image;
+        })
+      );
+      const recruiterData = {
+        userId: get().user.id,
+        name: get().user.name,
+        bio: data.bio,
+        image: data.image,
+        company: data.company,
+        location: data.location,
+        website: data.website,
+      };
+      axios
+        .post(`/api/recruiterProfile`, recruiterData)
+        .then((res) => {
+          console.log(res.data);
+          set(
+            produce((draft) => {
+              draft.recruiterProfile = res.data;
+            })
+          );
+          resolve({
+            success: false,
+            message: 'User profile created succesfully',
+            data: res.data,
+          });
+        })
+        .catch((err) => {
+          resolve({
+            success: false,
+            message: 'server response error ',
+            data: err,
+          });
+        });
+    });
+  },
+  updateRecruiterProfile: (data: IUserProfile) => {
+    set(
+      produce((state) => {
+        state.recruiterProfile = data;
       })
     );
   },

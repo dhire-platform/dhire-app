@@ -5,14 +5,14 @@ import { useRouter } from 'next/router';
 import { usePersistanceStore } from 'src/app/store/persistance/persistanceStore';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { roleEnum } from 'src/lib/enums/enums';
-import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
+import { IRecruiterProfile } from '@/interfaces/store/data/userProfile.interface';
 
 // ERROR HANDLING NOT DONE
 
-export const useCreateAccount = (onClose: any) => {
-  console.log('2 - use create user hook called');
+export const useCreateRecruiterAccount = (onClose: any) => {
+  console.log('2 - use create recruiter hook called');
   const connected_wallet = useWallet();
-  const { createNewUser, createNewUserProfile } = useProfileStore();
+  const { createNewUser, createNewRecruiterProfile } = useProfileStore();
   const { setPersistanceUser } = usePersistanceStore();
   const router = useRouter();
 
@@ -28,7 +28,7 @@ export const useCreateAccount = (onClose: any) => {
         connected: true,
         loading: false,
       },
-      type: roleEnum.RECRUIT,
+      type: roleEnum.RECRUITER,
     };
 
     const createdUserStoreResponse = (await createNewUser(Data)) as {
@@ -37,11 +37,14 @@ export const useCreateAccount = (onClose: any) => {
       message: string;
     };
 
-    const createdNewUserProfile = (await createNewUserProfile({
+    const createdNewUserProfile = (await createNewRecruiterProfile({
       userId: createdUserStoreResponse.data.id,
       image: submittedData.image,
+      company: submittedData.company,
+      website: submittedData.website,
+      location: submittedData.location,
     })) as {
-      data: IUserProfile;
+      data: IRecruiterProfile;
       success: boolean;
       message: string;
     };
@@ -57,7 +60,7 @@ export const useCreateAccount = (onClose: any) => {
 
     setPersistanceUser(createdUserStoreResponse.data);
     let user = createdUserStoreResponse.data;
-    router.push('/profile/' + user.id);
+    router.push('/recruiter/' + user.id);
     onClose();
   }
   return submit;

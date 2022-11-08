@@ -5,7 +5,7 @@ import { ISocial } from './socials.interface';
 import { IProject } from './projects.interface';
 import { IExperience } from './experience.interface';
 
-export interface IUserProfile { 
+export interface IUserProfile {
   userId?: string;
   bio?: string;
   image?: string;
@@ -15,5 +15,15 @@ export interface IUserProfile {
   experience?: IExperience[];
   education?: IEducation[];
   projects?: IProject[];
+  social?: ISocial;
+}
+
+export interface IRecruiterProfile {
+  userId?: string;
+  bio?: string;
+  image?: string;
+  company?: string;
+  location?: string;
+  website?: string;
   social?: ISocial;
 }

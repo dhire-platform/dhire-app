@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Center,
   Container,
   Heading,
@@ -17,7 +18,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { HiOutlineMail, HiOutlineUsers } from 'react-icons/hi';
 import { TbAdjustmentsHorizontal, TbFolders } from 'react-icons/tb';
 import { BiFilterAlt } from 'react-icons/bi';
@@ -25,6 +26,7 @@ import { AiOutlineBell } from 'react-icons/ai';
 import { RiHandCoinLine } from 'react-icons/ri';
 
 const HireNavBar = () => {
+  const [selectedBtn, setSelectedBtn] = useState<number>(0);
   let buttons = [
     { text: 'Inbox', icon: HiOutlineMail },
     { text: 'Screen', icon: BiFilterAlt },
@@ -34,22 +36,15 @@ const HireNavBar = () => {
   ];
   function renderButton(button: { text: string; icon: any }, index: number) {
     return (
-      <Center
-        as="button"
-        bg="white"
-        py={2}
-        px={3}
-        borderRadius="10px"
-        fontWeight={500}
-        _hover={{
-          color: 'white',
-          background: 'black',
-          transition: 'all 0.2s ease-in-out',
-        }}
+      <Button
+        bg={selectedBtn !== index ? 'white' : 'black'}
+        color={selectedBtn === index ? 'white' : 'black'}
+        key={index}
+        onClick={() => setSelectedBtn(index)}
       >
         <Icon as={button.icon} w={5} h={5} mr={2} />
         {button.text}
-      </Center>
+      </Button>
     );
   }
   return (
@@ -60,28 +55,11 @@ const HireNavBar = () => {
         })}
       </HStack>
       <HStack>
-        <Center
-          bg="rgba(255,255,255,0.6)"
-          fontWeight={500}
-          p={2}
-          borderRadius="10px"
-          as="button"
-        >
-          Post a job
-        </Center>
-        <Center
-          bg="rgba(255,255,255,0.6)"
-          fontWeight={500}
-          p={2}
-          borderRadius="10px"
-          as="button"
-        >
-          <Icon as={TbAdjustmentsHorizontal} w={6} h={6} />
-        </Center>
+        <Button>Post a job</Button>
         <Popover>
           <PopoverTrigger>
             <Center
-              bg="rgba(255,255,255,0.6)"
+              bg="white"
               fontWeight={500}
               p={2}
               borderRadius="10px"

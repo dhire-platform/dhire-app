@@ -7,6 +7,7 @@ import Navbar from '../navigation/navbar';
 import CreateUserModal from '../modals/CreateUserModal';
 import { useWalletConnection } from 'src/lib/hooks/useWalletConnection/useWalletConnection';
 import UserTypeModal from '../modals/UserTypeModal';
+import { roleEnum } from 'src/lib/enums/enums';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
@@ -46,7 +47,7 @@ const Layout: React.FC<Props> = ({ children }) => {
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
-        userData={userData}
+        userData={userData || { userType: roleEnum.RECRUIT }}
       />
       <Navbar />
       {children}

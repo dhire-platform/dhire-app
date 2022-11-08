@@ -1,5 +1,8 @@
 import { IUser } from 'src/interfaces/store/data/user.interface';
-import { IUserProfile } from 'src/interfaces/store/data/userProfile.interface';
+import {
+  IUserProfile,
+  IRecruiterProfile,
+} from 'src/interfaces/store/data/userProfile.interface';
 import { IExperience } from 'src/interfaces/store/data/experience.interface';
 import { ISocial } from 'src/interfaces/store/data/socials.interface';
 import { ISkill } from 'src/interfaces/store/data/skills.interface';
@@ -9,6 +12,7 @@ import { IProject } from 'src/interfaces/store/data/projects.interface';
 export type {
   IUser,
   IUserProfile,
+  IRecruiterProfile,
   IExperience,
   ISocial,
   ISkill,

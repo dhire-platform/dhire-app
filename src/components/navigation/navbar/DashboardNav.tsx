@@ -10,7 +10,7 @@ const DashboardNavbar = ({ children }: Props) => {
       <Container
         color={'black'}
         bg={useColorModeValue('white', 'blackAlpha.800')}
-        zIndex={'999'}
+        zIndex={'9099'}
         position="fixed"
         filter={'blur(100)'}
         borderBottom="1px solid"
