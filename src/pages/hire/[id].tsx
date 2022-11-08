@@ -1,5 +1,6 @@
 import { Heading } from '@chakra-ui/react';
 
-const hire = () => {
+const Hire = () => {
   return <Heading>Comming Soon ...</Heading>;
 };
+export default Hire;
