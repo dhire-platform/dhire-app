@@ -1,5 +1,6 @@
-import { Container, useDisclosure } from '@chakra-ui/react';
+import { Center, Container, Spinner, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { IProfileStore } from '@/interfaces/store/profileStore.interface';
 import Background from '../Background';
@@ -8,6 +9,7 @@ import CreateUserModal from '../modals/CreateUserModal';
 import { useWalletConnection } from 'src/lib/hooks/useWalletConnection/useWalletConnection';
 import UserTypeModal from '../modals/UserTypeModal';
 import { roleEnum } from 'src/lib/enums/enums';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
@@ -25,6 +27,9 @@ const Layout: React.FC<Props> = ({ children }) => {
 
   const user = useWalletConnection(isOpenType, onOpenType);
 
+  const { user: userDetails } = useProfileStore();
+  const wallet = useWallet();
+  const router = useRouter();
   return (
     <Container
       background={'white'}
@@ -36,6 +41,24 @@ const Layout: React.FC<Props> = ({ children }) => {
       zIndex="1"
     >
       {user.wallet?.walletId ? '' : <Background />}
+      {wallet.connected &&
+        (!userDetails.id || router.pathname === '/') &&
+        !isOpen &&
+        !isOpenType && (
+          <Center
+            w="100%"
+            h="100vh"
+            bg={'rgba(0,0,0,0.95)'}
+            pos={'absolute'}
+            zIndex={99999}
+          >
+            <Spinner
+              color="white"
+              w={['40px', '60px', '100px']}
+              h={['40px', '60px', '100px']}
+            />
+          </Center>
+        )}
       <UserTypeModal
         isOpen={isOpenType}
         onOpen={onOpenType}

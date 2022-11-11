@@ -8,6 +8,7 @@ import {
   ISocial,
   IExperience,
   IRecruiterProfile,
+  ICompany,
 } from './data/data.index';
 
 export interface IStoreDataResponse {
@@ -22,7 +23,8 @@ export interface IStoreDataResponse {
     | IEducation
     | ISocial
     | IExperience
-    | IUser;
+    | IUser
+    | ICompany;
 }
 export interface IProfileStore {
   user: IUser;
@@ -39,6 +41,10 @@ export interface IProfileStore {
   ) => Promise<IStoreDataResponse>;
   wallet: IWallet;
   updateRecruiterProfile: (data: IRecruiterProfile) => void;
+
+  company: ICompany;
+  createNewCompany: (data: ICompany) => Promise<IStoreDataResponse>;
+  updateCompany: (data: ICompany) => void;
 
   updateWallet: (wallet: IWallet) => void;
 

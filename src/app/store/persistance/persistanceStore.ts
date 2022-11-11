@@ -1,3 +1,4 @@
+import { ICompany } from '@/interfaces/store/data/company.interface';
 import { IUser } from '@/interfaces/store/data/user.interface';
 import produce from 'immer';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
@@ -11,6 +12,11 @@ interface IPersistanceStore {
     data: IUser;
   };
   removePersistanceUser: () => { success: boolean };
+  company?: ICompany;
+  setPersistanceCompany: (data: ICompany) => {
+    success: boolean;
+    data: ICompany;
+  };
 }
 
 export const usePersistanceStore = create<IPersistanceStore>()(
@@ -26,8 +32,17 @@ export const usePersistanceStore = create<IPersistanceStore>()(
         return { success: true, data };
       },
       removePersistanceUser: () => {
-        set({ user: undefined });
+        set({ user: undefined, company: undefined });
         return { success: true };
+      },
+      company: undefined,
+      setPersistanceCompany: (data: ICompany) => {
+        set(
+          produce((draft) => {
+            draft.company = data;
+          })
+        );
+        return { success: true, data };
       },
     }),
     { name: 'dhire' }

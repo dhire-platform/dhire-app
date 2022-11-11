@@ -43,7 +43,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
   const { job, createJob } = useProfileStore();
   const { recruiterProfile } = userProfile();
   const toast = useToast();
-  console.log('job', job);
+  //console.log('job', job);
   const submit = (data: any) => {
     let error = '';
     if (jobType?.length === 0) {

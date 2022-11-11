@@ -4,13 +4,22 @@ import { useRouter } from 'next/router';
 import { usePersistanceStore } from 'src/app/store/persistance/persistanceStore';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { roleEnum } from 'src/lib/enums/enums';
-import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
+import {
+  IRecruiterProfile,
+  IUserProfile,
+} from '@/interfaces/store/data/userProfile.interface';
 
 export default async function getUserByWallet(
   walletId: string
 ): Promise<IUserProfile | undefined> {
   // const {  setWallet } = useProfileStore();
-  const { setPersistanceUser } = usePersistanceStore();
+  const { setPersistanceUser, setPersistanceCompany } = usePersistanceStore();
+  const {
+    updateCompany,
+    updateUser,
+    updateUserProfile,
+    updateRecruiterProfile,
+  } = useProfileStore();
   const router = useRouter();
   console.log('2- getting user by wallet');
   try {
@@ -24,12 +33,25 @@ export default async function getUserByWallet(
       '/api/userProfile/' + res.data.id
     );
 
-    const userProfile = userProfileResponse.data as IUserProfile;
+    const userProfile = userProfileResponse.data as
+      | IUserProfile
+      | IRecruiterProfile;
     console.log('user profile details - ', userProfile);
 
     // setUser(res.data);
     // setUserProfile(userProfile);
     setPersistanceUser(res.data);
+    updateUser(res.data);
+    if ('company' in userProfile) {
+      const companyDetails = await axios.get(
+        '/api/company/' + userProfile.company
+      );
+      setPersistanceCompany(companyDetails.data);
+      updateCompany(companyDetails.data);
+      updateRecruiterProfile(userProfile);
+    } else {
+      updateUserProfile(userProfile);
+    }
     // setWallet({
     //   walletId: userProfile.user?.wallet?.walletId,
     //   walletName: userProfile.user?.wallet?.walletName,

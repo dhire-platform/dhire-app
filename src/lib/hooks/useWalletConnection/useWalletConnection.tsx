@@ -22,10 +22,12 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
     updateUser,
     updateUserProfile,
     updateRecruiterProfile,
+    updateCompany,
   } = useProfileStore();
   const {
     removePersistanceUser,
     setPersistanceUser,
+    setPersistanceCompany,
     user: persistenceUser,
   } = usePersistanceStore();
   // check if the wallet is connected or not before the app starts
@@ -76,8 +78,12 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
                 const userProfile =
                   userProfileResponse.data as IRecruiterProfile;
                 updateRecruiterProfile(userProfile);
-                router.push('/recruiter/' + res.data.id);
-                return userProfile as IRecruiterProfile;
+                axios.get('/api/company/' + userProfile.company).then((res) => {
+                  setPersistanceCompany(res.data);
+                  updateCompany(res.data);
+                  router.push('/recruiter/' + res.data.id);
+                  return userProfile as IRecruiterProfile;
+                });
               }
             })
             .catch((e) => {

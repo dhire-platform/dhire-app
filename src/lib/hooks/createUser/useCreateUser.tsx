@@ -10,7 +10,6 @@ import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
 // ERROR HANDLING NOT DONE
 
 export const useCreateAccount = (onClose: any) => {
-  console.log('2 - use create user hook called');
   const connected_wallet = useWallet();
   const { createNewUser, createNewUserProfile } = useProfileStore();
   const { setPersistanceUser } = usePersistanceStore();

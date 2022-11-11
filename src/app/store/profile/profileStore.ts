@@ -18,6 +18,7 @@ import {
   IEducation,
   IProject,
   IRecruiterProfile,
+  ICompany,
 } from 'src/interfaces/store/data/data.index';
 import { roleEnum } from 'src/lib/enums/enums';
 
@@ -58,7 +59,7 @@ const recruiterProfile: IRecruiterProfile = {
   website: undefined,
   social: social,
 };
-
+const company: ICompany = {};
 export const useProfileStore = create<IProfileStore>((set, get) => ({
   user: user,
   createNewUser: (data: IUser): Promise<IStoreDataResponse> => {
@@ -168,7 +169,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
       axios
         .post(`/api/recruiterProfile`, recruiterData)
         .then((res) => {
-          console.log(res.data);
+          //console.log(res.data);
           set(
             produce((draft) => {
               draft.recruiterProfile = res.data;
@@ -193,6 +194,41 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
     set(
       produce((state) => {
         state.recruiterProfile = data;
+      })
+    );
+  },
+
+  company: company,
+  createNewCompany: (data: ICompany): Promise<IStoreDataResponse> => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`/api/company`, data)
+        .then((res) => {
+          //console.log(res.data);
+          set(
+            produce((draft) => {
+              draft.company = res.data;
+            })
+          );
+          resolve({
+            success: false,
+            message: 'New Company created succesfully',
+            data: res.data,
+          });
+        })
+        .catch((err) => {
+          resolve({
+            success: false,
+            message: 'server response error ',
+            data: err,
+          });
+        });
+    });
+  },
+  updateCompany: (data: ICompany) => {
+    set(
+      produce((state) => {
+        state.company = data;
       })
     );
   },

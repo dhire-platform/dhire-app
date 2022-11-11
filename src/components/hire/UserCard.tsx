@@ -11,11 +11,14 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { MdVerified } from 'react-icons/md';
 import { TbAsterisk } from 'react-icons/tb';
 import { BiLink } from 'react-icons/bi';
 import { BsDiscord, BsGithub, BsTwitter } from 'react-icons/bs';
+import { useRouter } from 'next/router';
+import { GrBookmark } from 'react-icons/gr';
+import { ImBookmark } from 'react-icons/im';
 const animationKeyframes = keyframes`
       from {
         background-position: 0 0;
@@ -26,9 +29,10 @@ const animationKeyframes = keyframes`
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 
-const UserCard = () => {
+const UserCard = ({ openUser }: any) => {
+  const [bookmark, setBookmark] = useState(false);
   return (
-    <VStack minW="300px" spacing={0} my={3}>
+    <VStack minW="300px" spacing={0} my={3} w="fit-content">
       <VStack
         bg="white"
         borderRadius="8px 8px 0 0"
@@ -36,7 +40,7 @@ const UserCard = () => {
         p={'1.5rem 2rem'}
         alignItems="left"
       >
-        <HStack justifyContent="flex-start">
+        <HStack justifyContent="flex-start" pos="relative">
           <Image
             src="https://xsgames.co/randomusers/avatar.php?g=female"
             w="60px"
@@ -53,6 +57,16 @@ const UserCard = () => {
               <Text as="span">5 years</Text>
             </HStack>
           </VStack>
+
+          <Icon
+            as={bookmark ? ImBookmark : GrBookmark}
+            pos="absolute"
+            right={'-10px'}
+            top={0}
+            fontSize={'1.3rem'}
+            cursor="pointer"
+            onClick={() => setBookmark(!bookmark)}
+          />
         </HStack>
         <VStack
           alignItems="left"
@@ -92,14 +106,19 @@ const UserCard = () => {
       </VStack>
       <HStack
         color="#444"
-        w="full"
+        w="100%"
         justifyContent={'space-between'}
         p={'1rem'}
         bg="white"
         border={'1px solid rgba(0,0,0,0.1)'}
         borderRadius={'0 0 8px 8px'}
       >
-        <Button bg="transparent" border="1px solid #444" color="gray.600">
+        <Button
+          bg="transparent"
+          border="1px solid #444"
+          color="gray.600"
+          onClick={() => openUser(true)}
+        >
           View More
         </Button>
         <HStack fontSize={'1.2rem'} gap={1} color={'gray.400'}>

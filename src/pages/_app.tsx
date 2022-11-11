@@ -1,6 +1,5 @@
 import theme from '@/config/chakra.config';
-import { ChakraProvider, ColorModeProvider, Progress } from '@chakra-ui/react';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import { usePersistanceStore } from 'src/app/store/persistance/persistanceStore';

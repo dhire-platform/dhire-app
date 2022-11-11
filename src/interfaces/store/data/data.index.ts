@@ -9,6 +9,7 @@ import { ISkill } from 'src/interfaces/store/data/skills.interface';
 import { IWallet } from 'src/interfaces/store/data/wallet.interface';
 import { IEducation } from 'src/interfaces/store/data/education.interface';
 import { IProject } from 'src/interfaces/store/data/projects.interface';
+import { ICompany } from 'src/interfaces/store/data/company.interface';
 export type {
   IUser,
   IUserProfile,
@@ -19,4 +20,5 @@ export type {
   IWallet,
   IEducation,
   IProject,
+  ICompany,
 };

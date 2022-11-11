@@ -6,14 +6,15 @@ import { usePersistanceStore } from 'src/app/store/persistance/persistanceStore'
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { roleEnum } from 'src/lib/enums/enums';
 import { IRecruiterProfile } from '@/interfaces/store/data/userProfile.interface';
+import { ICompany } from '@/interfaces/store/data/company.interface';
 
 // ERROR HANDLING NOT DONE
 
 export const useCreateRecruiterAccount = (onClose: any) => {
-  console.log('2 - use create recruiter hook called');
   const connected_wallet = useWallet();
-  const { createNewUser, createNewRecruiterProfile } = useProfileStore();
-  const { setPersistanceUser } = usePersistanceStore();
+  const { createNewUser, createNewRecruiterProfile, createNewCompany } =
+    useProfileStore();
+  const { setPersistanceUser, setPersistanceCompany } = usePersistanceStore();
   const router = useRouter();
 
   async function submit(submittedData: any) {
@@ -37,10 +38,19 @@ export const useCreateRecruiterAccount = (onClose: any) => {
       message: string;
     };
 
-    const createdNewUserProfile = (await createNewRecruiterProfile({
+    const createdNewCompany = (await createNewCompany({
+      name: submittedData.company,
+      website: submittedData.website,
+      location: submittedData.location,
+    })) as {
+      data: ICompany;
+      success: boolean;
+      message: string;
+    };
+    const createdNewProfile = (await createNewRecruiterProfile({
       userId: createdUserStoreResponse.data.id,
       image: submittedData.image,
-      company: submittedData.company,
+      company: createdNewCompany.data.id,
       website: submittedData.website,
       location: submittedData.location,
     })) as {
@@ -52,13 +62,14 @@ export const useCreateRecruiterAccount = (onClose: any) => {
     console.log(
       'created user response from store - ',
       createdUserStoreResponse.message,
-      createdNewUserProfile.message
+      createdNewProfile.message
     );
 
     if (!createdUserStoreResponse.success)
       return console.log('created user response from store was unsuccessful');
 
     setPersistanceUser(createdUserStoreResponse.data);
+    setPersistanceCompany(createdNewCompany.data);
     let user = createdUserStoreResponse.data;
     router.push('/recruiter/' + user.id);
     onClose();

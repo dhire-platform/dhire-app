@@ -3,6 +3,7 @@ import {
   Container,
   Flex,
   Heading,
+  Icon,
   Stack,
   Tab,
   TabList,
@@ -15,7 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Jobs from 'src/components/dashboard/jobs/Jobs';
 import EditProfileComponent from 'src/components/dashboard/profile/UserDetails/ProfileEditModal';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
@@ -25,12 +26,18 @@ import { RecruiterProcess } from 'src/components/dashboard/recruiter/RecruiterPr
 import { Schedule } from 'src/components/dashboard/recruiter/Schedule';
 import { ActionButtons } from 'src/components/dashboard/recruiter/ActionButtons';
 import { Applications } from 'src/components/hire/Applications';
+import UserApplication from 'src/components/modals/UserApplication';
+import { BiArrowBack } from 'react-icons/bi';
+import JobsList from 'src/components/dashboard/recruiter/JobList';
 
 const Recruiter = () => {
+  const [userDetails, setUserDetails] = useState<boolean>(false);
+  const [jobDetails, setJobDetails] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const router = useRouter();
-  const { user, recruiterProfile } = useProfileStore();
+  const { user, recruiterProfile, company } = useProfileStore();
+  console.log(process.env.NODE_ENV);
   const nav_width = '150px';
   useEffect(() => {
     if (user.type === roleEnum.RECRUIT) router.push('/profile/' + user.id);
@@ -84,8 +91,12 @@ const Recruiter = () => {
                 fontSize="lg"
                 fontWeight="600"
                 w="100%"
+                onClick={() => {
+                  setUserDetails(false);
+                  setJobDetails(false);
+                }}
               >
-                <Text>Applications</Text>
+                <Text>Jobs</Text>
               </Tab>
             </TabList>
             <TabPanels ml={nav_width}>
@@ -109,21 +120,18 @@ const Recruiter = () => {
                   </Flex>
                 </Center>
               </TabPanel>
-              <TabPanel>
-                <Center w="full">
-                  <Flex
-                    w="full"
-                    mx="auto"
-                    minH={'full'}
-                    gap="2rem"
-                    flexWrap={'wrap'}
-                    alignItems="center"
-                    alignContent={'center'}
-                    justifyContent={'top'}
-                    flexDirection={{ base: 'row', md: 'column' }}
-                  >
-                    <Applications />
-                  </Flex>
+              <TabPanel p={0}>
+                <Center w="full" pos="relative">
+                  {userDetails ? (
+                    <UserApplication setUserDetails={setUserDetails} />
+                  ) : jobDetails ? (
+                    <Applications openUser={setUserDetails} />
+                  ) : (
+                    <VStack pt={3}>
+                      <ActionButtons />
+                      <JobsList openJob={setJobDetails} />
+                    </VStack>
+                  )}
                 </Center>
               </TabPanel>
             </TabPanels>

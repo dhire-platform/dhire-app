@@ -15,130 +15,19 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { useForm } from 'react-hook-form';
-import { roleEnum } from 'src/lib/enums/enums';
-import { useCreateRecruiterAccount } from 'src/lib/hooks/createUser/useCreateRecruiter';
-import { useCreateAccount } from 'src/lib/hooks/createUser/useCreateUser';
 
-const CreateUserModal = ({
-  isOpen,
-  onOpen,
-  onClose,
-  userData: { name, userType },
-}: any) => {
-  const connected_wallet = useWallet();
-  const submit =
-    userType === roleEnum.RECRUIT
-      ? useCreateAccount(onClose)
-      : useCreateRecruiterAccount(onClose);
-
+const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
+  const submit = (data: any) => console.log(data);
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm({});
-
-  const addRecruiterFields = () => {
-    return (
-      <>
-        {/* COMPANY NAME */}
-        <FormControl isRequired>
-          <FormLabel htmlFor="company">Company name</FormLabel>
-          <Input
-            isRequired
-            id="company"
-            placeholder="XYZ Coorporation"
-            {...register('company', {
-              required: 'This is required',
-              minLength: {
-                value: 4,
-                message: 'Minimum length should be 4',
-              },
-              pattern: {
-                value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                message:
-                  'Entered value cant start/end or contain only white spacing',
-              },
-            })}
-          />
-          <ErrorMessage
-            errors={errors}
-            name="company"
-            render={({ message }) => (
-              <Text fontSize="sm" color="red.500" py="0.5rem">
-                {message}
-              </Text>
-            )}
-          />
-        </FormControl>
-
-        {/* COMPANY WEBSITE */}
-        <FormControl>
-          <FormLabel htmlFor="website">Website</FormLabel>
-          <Input
-            id="website"
-            placeholder="xyz.com"
-            {...register('website', {
-              minLength: {
-                value: 4,
-                message: 'Minimum length should be 4',
-              },
-              pattern: {
-                value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                message:
-                  'Entered value cant start/end or contain only white spacing',
-              },
-            })}
-          />
-          <ErrorMessage
-            errors={errors}
-            name="website"
-            render={({ message }) => (
-              <Text fontSize="sm" color="red.500" py="0.5rem">
-                {message}
-              </Text>
-            )}
-          />
-        </FormControl>
-
-        {/* COMPANY LOCATION */}
-        <FormControl>
-          <FormLabel htmlFor="location">Location</FormLabel>
-          <Input
-            id="location"
-            placeholder="Location"
-            {...register('location', {
-              minLength: {
-                value: 4,
-                message: 'Minimum length should be 4',
-              },
-              pattern: {
-                value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                message:
-                  'Entered value cant start/end or contain only white spacing',
-              },
-            })}
-          />
-          <ErrorMessage
-            errors={errors}
-            name="location"
-            render={({ message }) => (
-              <Text fontSize="sm" color="red.500" py="0.5rem">
-                {message}
-              </Text>
-            )}
-          />
-        </FormControl>
-      </>
-    );
-  };
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
-        console.log('modal close wallet disconnect');
-        connected_wallet.disconnect();
         onClose();
       }}
     >
@@ -154,7 +43,6 @@ const CreateUserModal = ({
               <Input
                 isRequired
                 id="name"
-                defaultValue={name}
                 placeholder="Name"
                 {...register('name', {
                   required: 'This is required',
@@ -190,7 +78,6 @@ const CreateUserModal = ({
                   type="text"
                   id="userName"
                   placeholder="User Name"
-                  defaultValue={name}
                   {...register('userName', {
                     required: 'This is Required',
                     minLength: {
@@ -243,8 +130,6 @@ const CreateUserModal = ({
                 )}
               />
             </FormControl>
-
-            {userType === roleEnum.RECRUITER && addRecruiterFields()}
           </ModalBody>
           <ModalFooter p="0rem 1rem">
             <Button
@@ -261,5 +146,4 @@ const CreateUserModal = ({
     </Modal>
   );
 };
-
-export default CreateUserModal;
+export default EditCompany;

@@ -24,8 +24,9 @@ import { HiTrendingUp } from 'react-icons/hi';
 export const RecruiterProcess = () => {
   const { recruiterProfile } = useProfileStore();
   return (
-    <HStack w="95%" mt={3} spacing={['5%']} flexWrap="wrap">
-      <VStack gap={3}>
+    <HStack w="95%" mt={3} spacing={0} flexWrap="wrap" gap={5}>
+      {/* COMPANY SIZE */}
+      <VStack gap={3} maxW={{ base: '100%', md: '30%' }}>
         <VStack
           bg="white"
           borderRadius="10px"
@@ -63,6 +64,8 @@ export const RecruiterProcess = () => {
           </HStack>
         </VStack>
       </VStack>
+
+      {/* RECRUITER PROCESS */}
       <VStack
         bg="white"
         borderRadius="10px"
@@ -70,6 +73,7 @@ export const RecruiterProcess = () => {
         p={'1.5rem 1rem'}
         alignSelf={'stretch'}
         gap={5}
+        flex={1}
       >
         <Heading fontSize={['18px', '20px', '22px']} ml={5}>
           Recruiter Process
@@ -114,11 +118,13 @@ export const RecruiterProcess = () => {
           </Table>
         </TableContainer>
       </VStack>
+
+      {/* WORK FORMAT */}
       <VStack
         bg="white"
         borderRadius="10px"
         flex={1}
-        minW={'200px'}
+        minW={'150px'}
         p={'1.5rem 1rem'}
         alignSelf={'stretch'}
         gap={5}
@@ -127,7 +133,7 @@ export const RecruiterProcess = () => {
         <CircularProgress
           value={40}
           color="#6125F2"
-          size={'150px'}
+          size={'200px'}
           trackColor="#DED2F7"
           capIsRound
         >
