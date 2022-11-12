@@ -49,7 +49,8 @@ const Layout: React.FC<Props> = ({ children }) => {
             w="100%"
             h="100vh"
             bg={'rgba(0,0,0,0.95)'}
-            pos={'absolute'}
+            pos={'fixed'}
+            top={0}
             zIndex={99999}
           >
             <Spinner

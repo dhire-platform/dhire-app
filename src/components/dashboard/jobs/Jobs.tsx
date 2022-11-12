@@ -25,7 +25,7 @@ import { useInView } from 'react-intersection-observer';
 import Card from 'src/components/landing/Jobs/Card';
 import Data from 'src/components/landing/Jobs/Data.json';
 import Pagination from 'src/components/Pagination/Pagination';
-import { IJob } from '@/interfaces/job/job.interface';
+import { IJob } from '@/interfaces/store/data/job.interface';
 import { useFilter } from 'src/lib/hooks/useFilter';
 import { IFilter } from '@/interfaces/filter.interface';
 

@@ -27,8 +27,10 @@ import { Schedule } from 'src/components/dashboard/recruiter/Schedule';
 import { ActionButtons } from 'src/components/dashboard/recruiter/ActionButtons';
 import { Applications } from 'src/components/hire/Applications';
 import UserApplication from 'src/components/modals/UserApplication';
-import { BiArrowBack } from 'react-icons/bi';
+import { BiArrowBack, BiHome, BiHomeAlt } from 'react-icons/bi';
 import JobsList from 'src/components/dashboard/recruiter/JobList';
+import { useJobStore } from 'src/app/store/job/jobStore';
+import { BsBriefcase } from 'react-icons/bs';
 
 const Recruiter = () => {
   const [userDetails, setUserDetails] = useState<boolean>(false);
@@ -37,8 +39,8 @@ const Recruiter = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const router = useRouter();
   const { user, recruiterProfile, company } = useProfileStore();
-  console.log(process.env.NODE_ENV);
-  const nav_width = '150px';
+  const { job } = useJobStore();
+  const nav_width = { base: '50px', lg: '150px' };
   useEffect(() => {
     if (user.type === roleEnum.RECRUIT) router.push('/profile/' + user.id);
   }, [router]);
@@ -74,13 +76,20 @@ const Recruiter = () => {
                   color: 'white',
                 }}
                 borderLeft={'1px solid transparent'}
-                fontSize="lg"
+                fontSize={{ base: 'xl', lg: 'lg' }}
                 fontWeight="600"
                 w="100%"
-                mb="20px"
                 mt="40px"
               >
-                <Text>Dashboard</Text>
+                <Icon as={BiHomeAlt} display={{ lg: 'none' }} my={2} />
+                <Text
+                  w="full"
+                  textAlign={'left'}
+                  pl={3}
+                  display={{ base: 'none', lg: 'inline-block' }}
+                >
+                  Dashboard
+                </Text>
               </Tab>
               <Tab
                 _selected={{
@@ -88,7 +97,7 @@ const Recruiter = () => {
                   color: 'white',
                 }}
                 borderLeft={'1px solid transparent'}
-                fontSize="lg"
+                fontSize={{ base: 'xl', lg: 'lg' }}
                 fontWeight="600"
                 w="100%"
                 onClick={() => {
@@ -96,7 +105,15 @@ const Recruiter = () => {
                   setJobDetails(false);
                 }}
               >
-                <Text>Jobs</Text>
+                <Icon as={BsBriefcase} display={{ lg: 'none' }} my={2} />
+                <Text
+                  w="full"
+                  textAlign={'left'}
+                  pl={3}
+                  display={{ base: 'none', lg: 'inline-block' }}
+                >
+                  Jobs
+                </Text>
               </Tab>
             </TabList>
             <TabPanels ml={nav_width}>

@@ -130,7 +130,14 @@ export default forwardRef(function ChakraTagInput(
         ))}
       </Wrap>
       <WrapItem pt="0.5rem" {...maybeCall(wrapItemProps, true, tags.length)}>
-        <Input w="100%" {...props} onKeyDown={handleKeyDown} ref={ref} />
+        <Input
+          w="100%"
+          {...props}
+          onKeyDown={handleKeyDown}
+          ref={ref}
+          placeholder="Press enter to save"
+          _placeholder={{ fontSize: '14px' }}
+        />
       </WrapItem>
     </>
   );

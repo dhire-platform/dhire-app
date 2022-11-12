@@ -1,4 +1,4 @@
-import { SalaryType, Skill } from '@prisma/client';
+import { JobType, SalaryType, Skill, SkillLevel } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
 import prisma from 'prisma/client';
@@ -70,8 +70,11 @@ async function updateJobPost(
     from,
     to,
     companyId,
-    salary,
+    minSalary,
+    maxSalary,
     salaryType,
+    jobLevel,
+    jobType,
     applicants,
     recruiterProfileUserId,
     skills,
@@ -82,8 +85,11 @@ async function updateJobPost(
     from: Date;
     to: Date;
     companyId: string;
-    salary: number;
+    minSalary: number;
+    maxSalary: number;
     salaryType: SalaryType;
+    jobLevel: SkillLevel;
+    jobType: JobType[];
     applicants?: string[];
     recruiterProfileUserId: string;
     skills: Skill[];
@@ -100,8 +106,11 @@ async function updateJobPost(
         from,
         to,
         companyId,
-        salary,
+        minSalary,
+        maxSalary,
         salaryType,
+        jobLevel,
+        jobType,
         applicants,
         recruiterProfileUserId,
         skills,

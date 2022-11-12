@@ -1,4 +1,4 @@
-import { IJobs } from '@/interfaces/job/job.interface';
+import { IJobs } from '@/interfaces/store/data/job.interface';
 import { skill } from '@/interfaces/response.interface';
 import {
   Button,
@@ -31,21 +31,28 @@ import {
 import { ErrorMessage } from '@hookform/error-message';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useProfileStore } from 'src/app/store/job/jobStore';
-import { useProfileStore as userProfile } from 'src/app/store/profile/profileStore';
+import { useJobStore } from 'src/app/store/job/jobStore';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { JobLevel, JobType, SkillLevel, SalaryType } from 'src/lib/enums/enums';
 
 const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
-  const [jobType, setJobType] = useState<(string | number)[]>();
+  const [jobType, setJobType] = useState<JobType[]>();
   const [allSkills, setAllSkills] = useState<skill[]>([]);
   const [skill, setSkill] = useState<string>('');
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.BEGINNER);
-  const { job, createJob } = useProfileStore();
-  const { recruiterProfile } = userProfile();
+  const { job, createJob } = useJobStore();
+  const { recruiterProfile, company, user } = useProfileStore();
   const toast = useToast();
-  //console.log('job', job);
-  const submit = (data: any) => {
-    let error = '';
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({});
+
+  const submit = async (data: any) => {
+    let error = '',
+      status = 'error';
     if (jobType?.length === 0) {
       error = 'Please select some job type.';
     } else if (data.to <= data.from) {
@@ -59,20 +66,30 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
         ...data,
         from: new Date(data.from),
         to: new Date(data.to),
+        minSalary: parseInt(data.minSalary),
+        maxSalary: parseInt(data.maxSalary),
         jobType,
         skills: allSkills,
-        companyId: recruiterProfile.userId,
+        userId: user.id,
+        companyId: company.id,
         recruiterProfileUserId: recruiterProfile.userId,
       };
-      console.log(newJob);
-      createJob(newJob);
-      return;
+      const result = await createJob(newJob);
+      if (!result.message.includes('error')) {
+        error = 'Successfully created new job.';
+        status = 'success';
+      }
+      reset();
+      setAllSkills([]);
+      setJobType([]);
+      setSkill('');
+      onClose();
     }
     toast({
       position: 'top',
-      title: 'ERROR !!',
+      title: status === 'error' ? 'ERROR !!' : 'Success !',
       description: error,
-      status: 'error',
+      status: status === 'error' ? 'error' : 'success',
       duration: 3000,
       isClosable: true,
       containerStyle: {
@@ -80,11 +97,6 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
       },
     });
   };
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-  } = useForm({});
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -338,7 +350,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               <CheckboxGroup
                 size={{ base: 'sm', lg: 'md' }}
                 colorScheme="green"
-                onChange={(value) => setJobType(value)}
+                onChange={(value) => setJobType(value as JobType[])}
               >
                 <Stack
                   spacing={0}
@@ -432,12 +444,13 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                 <Textarea
                   id="description"
                   h={{ base: '120px', md: '150px' }}
-                  placeholder="Write minimum 30 character description"
+                  placeholder="Write minimum 50 character description"
                   {...register('description', {
                     required: 'This is Required',
                     minLength: {
-                      value: 30,
-                      message: 'minimum number of character for location is 30',
+                      value: 50,
+                      message:
+                        'write at least 50 letter description about the job',
                     },
                   })}
                 />
@@ -561,7 +574,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               colorScheme="blue"
               mr={3}
             >
-              Create Account
+              Create Job
             </Button>
           </ModalFooter>
         </form>

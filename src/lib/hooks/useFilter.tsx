@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import { useMemo } from 'react';
 import { IFilter } from '@/interfaces/filter.interface';
-import { IJob } from '@/interfaces/job/job.interface';
+import { IJob } from '@/interfaces/store/data/job.interface';
 
 type filterProps = {
   all_filters: Array<IFilter>;

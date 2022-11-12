@@ -1,15 +1,14 @@
-import { IJobs } from '@/interfaces/job/job.interface';
+import { IJobs } from '@/interfaces/store/data/job.interface';
 import { skill } from '@/interfaces/response.interface';
 import { mountStoreDevtool } from 'simple-zustand-devtools';
 import { JobType } from 'src/lib/enums/enums';
 import create from 'zustand';
 import produce from 'immer';
 import axios from 'axios';
-
-interface IJobStore {
-  job: IJobs;
-  createJob: (data: IJobs) => any;
-}
+import {
+  IJobStore,
+  IStoreDataResponse,
+} from '@/interfaces/store/jobStore.interface';
 
 const jobType: JobType[] = [];
 const skills: skill[] = [];
@@ -19,22 +18,17 @@ const job = {
   skills,
 };
 
-export const useProfileStore = create<IJobStore>((set, get) => ({
-  job: job,
+export const useJobStore = create<IJobStore>((set, get) => ({
+  job: [],
 
-  createJob: async (data: IJobs): Promise<any> => {
-    set(
-      produce((draft) => {
-        draft.job = data;
-      })
-    );
+  createJob: async (data: IJobs): Promise<IStoreDataResponse> => {
     return new Promise((resolve, reject) => {
       axios
         .post('/api/jobPost', data)
         .then((newJob) => {
           set(
             produce((draft) => {
-              draft.job = newJob;
+              draft.job = [...draft.job, newJob.data];
             })
           );
 
@@ -45,6 +39,7 @@ export const useProfileStore = create<IJobStore>((set, get) => ({
           });
         })
         .catch((err) => {
+          console.log(err.response.data.error);
           reject({
             success: true,
             message: 'error posting new job',
@@ -53,8 +48,16 @@ export const useProfileStore = create<IJobStore>((set, get) => ({
         });
     });
   },
+
+  updateJob: (data: IJobs) => {
+    set(
+      produce((draft) => {
+        draft.job = data;
+      })
+    );
+  },
 }));
 
 if (process.env.NODE_ENV === 'development') {
-  mountStoreDevtool('profileStore', useProfileStore);
+  mountStoreDevtool('jobStore', useJobStore);
 }

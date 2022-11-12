@@ -10,6 +10,7 @@ import { IWallet } from 'src/interfaces/store/data/wallet.interface';
 import { IEducation } from 'src/interfaces/store/data/education.interface';
 import { IProject } from 'src/interfaces/store/data/projects.interface';
 import { ICompany } from 'src/interfaces/store/data/company.interface';
+import { IJobs } from 'src/interfaces/store/data/job.interface';
 export type {
   IUser,
   IUserProfile,
@@ -21,4 +22,5 @@ export type {
   IEducation,
   IProject,
   ICompany,
+  IJobs,
 };

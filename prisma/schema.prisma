@@ -81,7 +81,10 @@ model JobPost {
   to                     DateTime
   company                Company           @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   companyId              String            @map("companyId") @db.ObjectId
-  salary                 Int
+  minSalary                 Int
+  maxSalary                 Int
+  jobLevel               SkillLevel
+  jobType                JobType[]
   salaryType             SalaryType
   skills                 Skill[]
   applicants             String[]          @default([])
@@ -104,6 +107,13 @@ enum SkillLevel {
   ADVANCED
 }
 
+enum JobType {
+  FULLTIME 
+  PARTTIME
+  INTERNSHIP
+  REMOTE
+  FREELANCE
+}
 type Skill {
   name  String
   level SkillLevel

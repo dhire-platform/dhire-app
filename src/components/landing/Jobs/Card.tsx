@@ -12,7 +12,7 @@ import {
 import Image from 'next/image';
 import React, { RefObject, useRef } from 'react';
 import { RiMapPin2Line } from 'react-icons/ri';
-import { IJob } from '@/interfaces/job/job.interface';
+import { IJob } from '@/interfaces/store/data/job.interface';
 
 const Card: React.FC<IJob> = (props) => {
   const elementRef = useRef() as RefObject<HTMLElement>;

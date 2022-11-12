@@ -1,4 +1,4 @@
-import { IJob } from './job/job.interface';
+import { IJob } from './store/data/job.interface';
 
 export interface ISearch {
   data: [IJob];

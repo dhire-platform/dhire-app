@@ -20,7 +20,7 @@ import Data from 'src/components/landing/Jobs/Data.json';
 import Layout from 'src/components/landing/Jobs/Layout';
 import Pagination from 'src/components/Pagination/Pagination';
 import { IFilter } from '@/interfaces/filter.interface';
-import { IJob } from '@/interfaces/job/job.interface';
+import { IJob } from '@/interfaces/store/data/job.interface';
 import { useFilter } from 'src/lib/hooks/useFilter';
 
 const Jobs = () => {
