@@ -1,94 +1,48 @@
 import {
   Avatar,
   Box,
-  Button,
   Center,
   Divider,
-  Editable,
-  EditableInput,
-  EditablePreview,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Heading,
+  HStack,
+  Icon,
   IconButton,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
   useColorModeValue,
   useDisclosure,
-  useEditableControls,
+  VStack,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
-import { IoMdClose } from 'react-icons/io';
+import { IoCloseSharp } from 'react-icons/io5';
 import { VscAdd } from 'react-icons/vsc';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
-import { IProfileStore } from '@/interfaces/store/profileStore.interface';
-import {
-  IExperience,
-  Company,
-} from '@/interfaces/store/data/experience.interface';
-import { IEducation } from '@/interfaces/store/data/education.interface';
+import { IExperience } from '@/interfaces/store/data/experience.interface';
+import EditEducationModal from './UserDetails/EducationEditModal';
+import ExpEditModal from './UserDetails/ExpEditModal';
 import axios from 'axios';
 
 const Education = () => {
   const [hover, setHover] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { user, setExperience, experience, education } = useProfileStore();
-
-  const initialRef = useRef(null);
-  const finalRef = useRef(null);
   const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-  } = useForm();
+    isOpen: isEduOpen,
+    onOpen: onEduOpen,
+    onClose: onEduClose,
+  } = useDisclosure();
+  const { user, userProfile, experience, education, updateUserProfile } =
+    useProfileStore();
 
-  function onSubmit(values: any) {
-    const { company, image, designation, description }: IExperience = values;
-    const from: Date = new Date(values.from);
-    const to: Date = new Date(values.to);
+  const deleteEdu = async (del: number) => {
+    let newEdu = userProfile.education?.filter((edu, index) => index !== del);
+    const res = await axios.put('/api/userProfile/' + user.id, {
+      education: newEdu,
+    });
 
-    const companyDetails: Company = {
-      name: company as string,
-      image: image,
-    };
-
-    const experienceData: IExperience = {
-      company: companyDetails,
-      designation: designation,
-      from: from,
-      to: to,
-      current: false,
-      location: 'remote',
-      description: description,
-    };
-
-    axios
-      .put('/api/userProfile/' + user.id, {
-        experience: [experienceData],
-      })
-      .then((res) => {
-        setExperience(experienceData);
-        onClose();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
+    updateUserProfile(res.data);
+  };
   function toMonthName(monthNumber: number) {
     const date = new Date();
     date.setMonth(monthNumber - 1);
@@ -98,147 +52,14 @@ const Education = () => {
     });
   }
 
-  function EditableControls() {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps,
-    } = useEditableControls();
-
-    return isEditing ? (
-      <Flex
-        _hover={{
-          bg: 'blackAlpha.100',
-        }}
-        justifyContent="center"
-        p="0.5rem"
-        rounded="md"
-      >
-        <Box as="button" color="blackAlpha.500" {...getCancelButtonProps()}>
-          <IoMdClose size="22px" />
-        </Box>
-      </Flex>
-    ) : (
-      <Flex
-        _hover={{
-          bg: 'blackAlpha.100',
-        }}
-        justifyContent="center"
-        p="0.5rem"
-        rounded="md"
-      >
-        <Box as="button" color="blackAlpha.500" {...getEditButtonProps()}>
-          <FiEdit2 size="18px" />
-        </Box>
-      </Flex>
-    );
-  }
-
   return (
     <>
-      <Modal
-        closeOnOverlayClick={false}
-        motionPreset="slideInBottom"
-        scrollBehavior="outside"
-        size="xl"
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Job Details</ModalHeader>
-          <ModalCloseButton />
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <ModalBody
-              pt="1rem"
-              display="flex"
-              flexDirection={'column'}
-              gap="1rem"
-              pb={6}
-            >
-              {/* Full Name */}
-              <FormControl>
-                <FormLabel htmlFor="name">Company Name</FormLabel>
-                <Input
-                  isRequired
-                  id="company"
-                  placeholder="Name"
-                  {...register('company', {
-                    required: 'This is required',
-                    minLength: {
-                      value: 3,
-                      message: 'Minimum length should be 3',
-                    },
-                  })}
-                />
-                <FormErrorMessage>errors?.name?.message</FormErrorMessage>
-              </FormControl>
-
-              {/*company logo URL */}
-              <FormControl>
-                <FormLabel htmlFor="image">Company Logo</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon>URL:</InputLeftAddon>
-                  <Input
-                    type="url"
-                    id="image"
-                    placeholder="Logo URL"
-                    {...register('image')}
-                  />
-                </InputGroup>
-              </FormControl>
-
-              {/*Designation */}
-              <FormControl>
-                <FormLabel htmlFor="name">Position</FormLabel>
-                <Input
-                  id="designation"
-                  placeholder="Position"
-                  {...register('designation')}
-                />
-              </FormControl>
-
-              {/* from/To */}
-              <Stack direction={'row'}>
-                <FormControl>
-                  <FormLabel htmlFor="date">From</FormLabel>
-                  <Input id="from" type={'date'} {...register('from')} />
-                </FormControl>
-                <FormControl>
-                  <FormLabel htmlFor="date">To</FormLabel>
-                  <Input id="to" type={'date'} {...register('to')} />
-                </FormControl>
-              </Stack>
-
-              {/* Job Description */}
-              <FormControl>
-                <FormLabel htmlFor="name">Job Description</FormLabel>
-                <Input
-                  id="description"
-                  placeholder="Position"
-                  {...register('description')}
-                />
-              </FormControl>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                isLoading={isSubmitting}
-                type="submit"
-                colorScheme="blue"
-                mr={3}
-              >
-                Save
-              </Button>
-              <Button variant={'outline'} onClick={onClose}>
-                Cancel
-              </Button>
-            </ModalFooter>
-          </form>
-        </ModalContent>
-      </Modal>
+      <EditEducationModal
+        isOpen={isEduOpen}
+        onOpen={onEduOpen}
+        onClose={onEduClose}
+      />
+      <ExpEditModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Center
         boxShadow="0px 35px 41px 10px rgba(0, 0, 0, 0.03)"
         onMouseEnter={() => {
@@ -259,32 +80,73 @@ const Education = () => {
         border="1px solid"
         borderColor={'blackAlpha.200'}
       >
-        <Stack w="100%" alignContent={'start'} direction={'column'}>
-          <Heading color={'black'} fontSize="xl">
-            Education
-          </Heading>
-          <Editable
-            textAlign="center"
-            fontSize="md"
-            display={'flex'}
-            alignItems="center"
-            justifyContent={'space-between'}
-            flexDirection="row"
-            defaultValue="Enter your education details..."
-            w="100%"
-            gap="1rem"
-            h="1.8rem"
-            color={'blackAlpha.500'}
-            isPreviewFocusable={false}
+        <VStack justify="space-between" align={'start'} w="full">
+          <Stack
+            direction={'row'}
+            justify="space-between"
+            align={'start'}
+            w="full"
+            role="group"
+            minH="50px"
           >
-            <EditablePreview />
-            {/* Here is the custom input */}
-            <Input textAlign={'start'} as={EditableInput} />
-            <Center display={hover ? 'flex' : 'none'}>
-              <EditableControls />
-            </Center>
-          </Editable>
-        </Stack>{' '}
+            <Heading color={'black'} fontSize="xl">
+              Education
+            </Heading>
+            <IconButton
+              onClick={onEduOpen}
+              variant={'unstyled'}
+              _hover={{
+                bg: 'blackAlpha.100',
+              }}
+              display="none"
+              _groupHover={{ display: 'flex' }}
+              p="0.1rem"
+              size="sm"
+              alignItems="center"
+              justifyContent={'center'}
+              color="blackAlpha.600"
+              aria-label="add experience"
+              icon={<FiEdit2 size="18px" />}
+            />
+          </Stack>{' '}
+          {userProfile.education?.map((edu, index) => (
+            <VStack
+              key={index}
+              alignItems="flex-start"
+              color="black"
+              fontSize={'12px'}
+              border="1px solid gray"
+              borderColor="gray.300"
+              p={4}
+              rounded={'8px'}
+              pos="relative"
+              role="group"
+            >
+              <IconButton
+                onClick={() => deleteEdu(index)}
+                variant={'unstyled'}
+                _hover={{
+                  bg: 'blackAlpha.100',
+                }}
+                display="none"
+                _groupHover={{ display: 'flex' }}
+                p="0.1rem"
+                size="sm"
+                pos="absolute"
+                top="0px"
+                right="0px"
+                color="blackAlpha.600"
+                aria-label="add experience"
+                icon={<IoCloseSharp size="18px" />}
+              />
+              <Text>{`${edu.degree}, ${edu.school} ${
+                edu.location || ''
+              }`}</Text>
+              <Text>{`${edu.from} - ${edu.to}`}</Text>
+              <Text>{edu.description}</Text>
+            </VStack>
+          ))}
+        </VStack>
         <Divider />
         <Stack w="100%" direction="column">
           <Stack
