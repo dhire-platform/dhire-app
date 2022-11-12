@@ -4,6 +4,7 @@ import {
   WalletProvider,
 } from '@solana/wallet-adapter-react';
 import {
+  BackpackWalletAdapter,
   CoinbaseWalletAdapter,
   GlowWalletAdapter,
   PhantomWalletAdapter,
@@ -23,6 +24,7 @@ const WalletConnectionProvider: FC = ({ children }: any) => {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(
     () => [
+      new BackpackWalletAdapter(),
       new CoinbaseWalletAdapter(),
       new GlowWalletAdapter(),
       new PhantomWalletAdapter(),

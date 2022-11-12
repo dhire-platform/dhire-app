@@ -10,19 +10,27 @@ import {
   Tabs,
   Text,
   useDisclosure,
-  useMediaQuery
+  useMediaQuery,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import Jobs from 'src/components/dashboard/jobs/Jobs';
 import Achievement from 'src/components/dashboard/profile/Achievement';
 import Education from 'src/components/dashboard/profile/Education';
 import ProfileComponent from 'src/components/dashboard/profile/ProfileComponent';
 import EditProfileComponent from 'src/components/dashboard/profile/UserDetails/ProfileEditModal';
 import SkillsComponent from 'src/components/dashboard/profile/SkillsComponent';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
+import { roleEnum } from 'src/lib/enums/enums';
 
 const User = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useMediaQuery('(max-width: 768px)');
-
+  const router = useRouter();
+  const { user } = useProfileStore();
+  useEffect(() => {
+    if (user.type === roleEnum.RECRUITER) router.push('/recruiter/' + user.id);
+  }, [router]);
   return (
     <>
       <EditProfileComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />

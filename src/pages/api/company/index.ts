@@ -9,18 +9,19 @@ async function createCompany(req: NextApiRequest, res: NextApiResponse) {
     optionsSuccessStatus: 200,
   });
 
-  const { name, 
-          website,
-          logo,
-          description,
-          size,
-          type,
-          industry,
-          founded,
-          specializations,
-          benefits,
-          location,
-        } = req.body as {
+  const {
+    name,
+    website,
+    logo,
+    description,
+    size,
+    type,
+    industry,
+    founded,
+    specializations,
+    benefits,
+    location,
+  } = req.body as {
     name: string;
     website?: string;
     logo?: string;
@@ -50,11 +51,9 @@ async function createCompany(req: NextApiRequest, res: NextApiResponse) {
       },
     });
     res.status(200).json(company);
-  }
-  catch (e) {
+  } catch (e) {
     res.status(400).json({ error: (e as Error).message });
   }
 }
 
 export default createCompany;
-

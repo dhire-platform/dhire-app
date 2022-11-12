@@ -7,12 +7,12 @@ import {
   Stack,
   Tag,
   Text,
-  useDimensions
+  useDimensions,
 } from '@chakra-ui/react';
 import Image from 'next/image';
 import React, { RefObject, useRef } from 'react';
 import { RiMapPin2Line } from 'react-icons/ri';
-import { IJob } from 'src/definitions/IJob';
+import { IJob } from '@/interfaces/store/data/job.interface';
 
 const Card: React.FC<IJob> = (props) => {
   const elementRef = useRef() as RefObject<HTMLElement>;

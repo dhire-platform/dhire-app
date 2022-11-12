@@ -1,56 +1,36 @@
+import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
 import { useToast } from '@chakra-ui/react';
+import axios from 'axios';
 import React, { useEffect } from 'react';
-import { useLocalStore } from 'src/app/localStore';
-import { useProfileStore } from 'src/app/profileStore';
-import { IProfile } from 'src/definitions/definitions';
+import { useLocalStore } from 'src/app/store/local/localStore';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 
 const useProfileEdit = ({
   isOpen,
   onClose,
-}: any): [(values: any) => Promise<any>, IProfile] => {
-  const editProfile = useProfileStore((state: any) => state.editProfile);
+}: any): ((values: any) => Promise<any>) => {
+  const { updateUserProfile } = useProfileStore();
 
   const { user } = useProfileStore();
-  const { edit_mode, set_edit_mode } = useLocalStore();
-
-  const toast_profile_created = useToast({
-    status: 'success',
-    position: 'bottom',
-    title: 'Profile Created Successfully',
-    containerStyle: {
-      width: '300px',
-      maxWidth: '100%',
-    },
-  });
-  const toast_profile_updated = useToast({
-    status: 'success',
-    position: 'bottom',
-    title: 'Profile Updated Successfully',
-    containerStyle: {
-      width: '300px',
-      maxWidth: '100%',
-    },
-  });
-
+  const { set_edit_mode } = useLocalStore();
   async function onSubmit(values: any) {
     console.log(values);
-    // const { name, userName, image, about } = values;
+    const { name, image, about } = values;
 
-    // const data = { name, userName: user.userName, about, image };
-    // console.log('data from modal to edit component = ', values);
-    // editProfile(data)
-    //   .then((res: any) => {
-    //     console.log('res', res);
-    //     toast_profile_updated();
-    //   })
-    //   .catch((err: any) => {
-    //     console.log('error, ', err);
-    //   });
+    const data = { bio: about, image };
+    axios
+      .put(`/api/userProfile/` + user.id, data)
+      .then((res) => {
+        console.log('update user profile route response', res);
+        updateUserProfile(data);
+      })
+      .catch((err) => {
+        console.log('error in update user profile route', err);
+      });
     onClose();
-
     set_edit_mode(false);
   }
-  return [onSubmit, user];
+  return onSubmit;
 };
 
 export default useProfileEdit;

@@ -57,7 +57,7 @@ const ChooseUs = () => {
   const [ref, inView] = useInView();
 
   useEffect(() => {
-    console.log('use effect called');
+    //console.log('use effect called');
     if (inView) {
       controls.start('visible');
     }

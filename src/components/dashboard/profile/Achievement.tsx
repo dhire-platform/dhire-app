@@ -11,8 +11,8 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { useLocalStore } from 'src/app/localStore';
-import { useProfileStore } from 'src/app/profileStore';
+import { useLocalStore } from 'src/app/store/local/localStore';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 
 const Achievement = () => {
   const { user } = useProfileStore();
@@ -32,7 +32,7 @@ const Achievement = () => {
       border="1px solid"
       color="blackAlpha.200"
     >
-      {user.achievement ? (
+      {/* {user.achievement ? (
         <>
           <Stack alignContent={'start'} direction={'row'}>
             <Heading color={'black'} fontSize="xl">
@@ -80,7 +80,7 @@ const Achievement = () => {
             </Box>
           </Stack>
         </>
-      )}
+      )} */}
     </Center>
   );
 };

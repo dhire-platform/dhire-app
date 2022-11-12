@@ -190,8 +190,8 @@ const Philosophy = () => {
                       y2="67.8994"
                       gradientUnits="userSpaceOnUse"
                     >
-                      <stop stop-color="#6AADF1" />
-                      <stop offset="1" stop-color="#6B79D2" />
+                      <stop stopColor="#6AADF1" />
+                      <stop offset="1" stopColor="#6B79D2" />
                     </linearGradient>
                   </defs>
                 </svg>
