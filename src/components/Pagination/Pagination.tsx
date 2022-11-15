@@ -59,7 +59,7 @@ const Pagination = ({
           key: number
         ) => {
           if (pageNumber === DOTS) {
-            return <Box>&#8230;</Box>;
+            return <Box key={'icon'}>&#8230;</Box>;
           }
           return (
             <Box

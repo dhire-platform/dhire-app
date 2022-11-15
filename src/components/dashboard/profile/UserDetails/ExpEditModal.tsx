@@ -4,6 +4,7 @@ import {
 } from '@/interfaces/store/data/experience.interface';
 import {
   Button,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -18,7 +19,10 @@ import {
   ModalHeader,
   ModalOverlay,
   Stack,
+  Text,
+  useToast,
 } from '@chakra-ui/react';
+import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,24 +31,36 @@ import { useProfileStore } from 'src/app/store/profile/profileStore';
 const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
+  const toast = useToast();
   const { user, userProfile, setExperience, updateUserProfile } =
     useProfileStore();
-  function onSubmit(values: any) {
-    const { company, image, designation, description }: IExperience = values;
+  async function onSubmit(values: any) {
+    const { company, image, designation, description, current }: IExperience =
+      values;
     const from: Date = new Date(values.from);
     const to: Date = new Date(values.to);
-    // Add this in prisma
-    const companyDetails: Company = {
-      name: company as string,
-      image: image,
-    };
 
+    if (to && from && (to < from || from > new Date())) {
+      toast({
+        position: 'top',
+        title: 'Error !!',
+        description: 'Date to/from is incorrect',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        containerStyle: {
+          marginTop: '10%',
+        },
+      });
+      return;
+    }
     const experienceData: IExperience = {
-      company: companyDetails,
+      company: company,
+      image,
       designation: designation,
       from: from,
       to: to,
-      current: false,
+      current,
       location: 'remote',
       description: description,
     };
@@ -52,18 +68,17 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
     let expArray: IExperience[] = userProfile.experience?.length
       ? [...userProfile.experience, experienceData]
       : [experienceData];
-    axios
-      .put('/api/userProfile/' + user.id, {
+    try {
+      const res = await axios.put('/api/userProfile/' + user.id, {
         experience: expArray,
-      })
-      .then((res) => {
-        updateUserProfile(res.data);
-        setExperience(experienceData);
-        onClose();
-      })
-      .catch((err: any) => {
-        console.log(err);
       });
+
+      updateUserProfile(res.data);
+      setExperience(experienceData);
+      onClose();
+    } catch (e: any) {
+      console.log(e.response.data.error);
+    }
   }
   const {
     handleSubmit,
@@ -94,9 +109,9 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
             gap="1rem"
             pb={6}
           >
-            {/* Full Name */}
+            {/* CompanyName */}
             <FormControl>
-              <FormLabel htmlFor="name">Company Name</FormLabel>
+              <FormLabel htmlFor="company">Company Name</FormLabel>
               <Input
                 isRequired
                 id="company"
@@ -109,7 +124,15 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
                   },
                 })}
               />
-              <FormErrorMessage>errors?.name?.message</FormErrorMessage>
+              <ErrorMessage
+                errors={errors}
+                name="company"
+                render={({ message }) => (
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
+                    {message}
+                  </Text>
+                )}
+              />
             </FormControl>
 
             {/*company logo URL */}
@@ -128,11 +151,22 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
 
             {/*Designation */}
             <FormControl>
-              <FormLabel htmlFor="name">Position</FormLabel>
+              <FormLabel htmlFor="designation">Position</FormLabel>
               <Input
                 id="designation"
                 placeholder="Position"
                 {...register('designation')}
+              />
+            </FormControl>
+
+            {/* Location */}
+            <FormControl>
+              <FormLabel htmlFor="location">Location</FormLabel>
+              <Input
+                type="text"
+                placeholder="Location"
+                id="location"
+                {...register('location')}
               />
             </FormControl>
 
@@ -148,12 +182,16 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
               </FormControl>
             </Stack>
 
+            {/* Current (ongoing/present) */}
+            <FormControl>
+              <Checkbox {...register('current')}> Ongoing </Checkbox>
+            </FormControl>
             {/* Job Description */}
             <FormControl>
               <FormLabel htmlFor="name">Job Description</FormLabel>
               <Input
                 id="description"
-                placeholder="Position"
+                placeholder="Description"
                 {...register('description')}
               />
             </FormControl>

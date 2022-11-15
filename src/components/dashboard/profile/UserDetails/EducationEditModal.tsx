@@ -31,6 +31,7 @@ import useProfileEdit from './useProfileEdit';
 const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
   const { user, userProfile, updateUserProfile } = useProfileStore();
   const router = useRouter();
+  const toast = useToast();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
@@ -41,6 +42,20 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
       to: new Date(values.to),
       from: new Date(values.from),
     };
+    if (edu.to && edu.from && (edu.to < edu.from || edu.from > new Date())) {
+      toast({
+        position: 'top',
+        title: 'Error !!',
+        description: 'Date to/from is incorrect',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        containerStyle: {
+          marginTop: '10%',
+        },
+      });
+      return;
+    }
     let eduArray: IEducation[] = userProfile.education?.length
       ? [...userProfile.education, edu]
       : [edu];
@@ -127,15 +142,6 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
                 placeholder="Computer Science ..etc"
                 {...register('fieldOfStudy')}
               />
-              <ErrorMessage
-                errors={errors}
-                name="fieldOfStudy"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
-              />
             </FormControl>
 
             {/* from */}
@@ -183,30 +189,12 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
             {/* current */}
             <FormControl>
               <Checkbox {...register('current')}> Ongoing </Checkbox>
-              <ErrorMessage
-                errors={errors}
-                name="current"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
-              />
             </FormControl>
 
             {/* Location */}
             <FormControl>
               <FormLabel htmlFor="location">Location</FormLabel>
               <Input type="text" id="location" {...register('location')} />
-              <ErrorMessage
-                errors={errors}
-                name="location"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
-              />
             </FormControl>
 
             {/* Description */}

@@ -1,5 +1,8 @@
+import { IEducation } from '@/interfaces/store/data/education.interface';
+import { IProject } from '@/interfaces/store/data/projects.interface';
 import {
   Button,
+  Checkbox,
   FormControl,
   FormLabel,
   Input,
@@ -17,23 +20,56 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
-import { useRouter } from 'next/router';
+import axios from 'axios';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
-import useProfileEdit from './useProfileEdit';
 
-const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
-  const { user, userProfile } = useProfileStore();
-  const router = useRouter();
+const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
+  const { user, userProfile, updateUserProfile } = useProfileStore();
+  const toast = useToast();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
-  const onSubmit = useProfileEdit({ isOpen, onClose });
+  const onSubmit = async (values: any) => {
+    // useToast when date.to < date.from
+    let project: IProject = {
+      ...values,
+      to: new Date(values.to),
+      from: new Date(values.from),
+    };
+    if (
+      project.to &&
+      project.from &&
+      (project.to < project.from || project.from > new Date())
+    ) {
+      toast({
+        position: 'top',
+        title: 'Error !!',
+        description: 'Date to/from is incorrect',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+        containerStyle: {
+          marginTop: '10%',
+        },
+      });
+      return;
+    }
+    let projectArray: IProject[] = userProfile.projects?.length
+      ? [...userProfile.projects, project]
+      : [project];
+    const res = await axios.put('/api/userProfile/' + user.id, {
+      projects: projectArray,
+    });
+    updateUserProfile(res.data);
+    onClose();
+  };
 
   const {
     handleSubmit,
     register,
+
     formState: { errors, isSubmitting },
   } = useForm({});
 
@@ -50,89 +86,42 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Edit your Profile</ModalHeader>
+        <ModalHeader>Project Details</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
-            {/* Full Name */}
-            {/* <FormControl isRequired>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+            {/* title */}
+            <FormControl isRequired>
+              <FormLabel htmlFor="title">Project title</FormLabel>
               <Input
                 isRequired
-                id="name"
-                placeholder="Name"
-                {...register('name', {
-                  required: 'This is required',
-                  minLength: {
-                    value: 4,
-                    message: 'Minimum length should be 4',
-                  },
-                  pattern: {
-                    value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                    message:
-                      'Entered value cant start/end or contain only white spacing',
-                  },
+                type="text"
+                id="title"
+                {...register('title', {
+                  required: 'This is Required',
                 })}
               />
               <ErrorMessage
                 errors={errors}
-                name="name"
+                name="title"
                 render={({ message }) => (
                   <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
                   </Text>
                 )}
               />
-            </FormControl> */}
+            </FormControl>
 
-            {/*userName */}
-            {router.pathname === '/profile' && (
-              <FormControl isRequired>
-                <FormLabel htmlFor="name">User Name</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon>@</InputLeftAddon>
-                  <Input
-                    defaultValue={user?.username}
-                    isRequired
-                    type="text"
-                    id="userName"
-                    placeholder="User Name"
-                    {...register('userName', {
-                      required: 'This is Required',
-                      minLength: {
-                        value: 5,
-                        message:
-                          'minimum number of character for username is 5',
-                      },
-                      pattern: {
-                        value: /^\w[a-zA-Z@#0-9.]*$/,
-                        message: 'User Name can not contain white spacing',
-                      },
-                    })}
-                  />
-                </InputGroup>
-                <ErrorMessage
-                  errors={errors}
-                  name="userName"
-                  render={({ message }) => (
-                    <Text fontSize="sm" color="red.500" py="0.5rem">
-                      {message}
-                    </Text>
-                  )}
-                />
-              </FormControl>
-            )}
-
-            {/*Profile Picture URL */}
+            {/* link*/}
             <FormControl>
-              <FormLabel htmlFor="image">Profile Picture</FormLabel>
+              <FormLabel htmlFor="link">Project link</FormLabel>
               <InputGroup>
                 <InputLeftAddon>URL:</InputLeftAddon>
                 <Input
                   type="url"
-                  id="image"
-                  placeholder="Image URL"
-                  {...register('image', {
+                  id="link"
+                  placeholder="project link"
+                  {...register('link', {
                     pattern: {
                       value:
                         /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
@@ -143,7 +132,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               </InputGroup>
               <ErrorMessage
                 errors={errors}
-                name="image"
+                name="link"
                 render={({ message }) => (
                   <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
@@ -152,17 +141,19 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               />
             </FormControl>
 
-            {/* Location */}
-            <FormControl>
-              <FormLabel htmlFor="location">Location</FormLabel>
+            {/* from */}
+            <FormControl isRequired>
+              <FormLabel htmlFor="from">From</FormLabel>
               <Input
-                id="location"
-                placeholder="Your location"
-                {...register('location')}
+                type="date"
+                id="from"
+                {...register('from', {
+                  required: 'This is Required',
+                })}
               />
               <ErrorMessage
                 errors={errors}
-                name="location"
+                name="from"
                 render={({ message }) => (
                   <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
@@ -171,13 +162,38 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               />
             </FormControl>
 
-            {/* About */}
+            {/* to */}
+            <FormControl isRequired>
+              <FormLabel htmlFor="to">To</FormLabel>
+              <Input
+                type="date"
+                id="to"
+                {...register('to', {
+                  required: 'This is Required',
+                })}
+              />
+              <ErrorMessage
+                errors={errors}
+                name="to"
+                render={({ message }) => (
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
+                    {message}
+                  </Text>
+                )}
+              />
+            </FormControl>
+
+            {/* current */}
             <FormControl>
-              <FormLabel htmlFor="bio">About</FormLabel>
+              <Checkbox {...register('current')}> Ongoing </Checkbox>
+            </FormControl>
+
+            {/* Description */}
+            <FormControl>
+              <FormLabel htmlFor="description">Description</FormLabel>
               <Textarea
-                id="bio"
-                placeholder="About You"
-                {...register('bio', {
+                id="description"
+                {...register('description', {
                   maxLength: {
                     value: 200,
                     message: 'Maximum length should be 200',
@@ -186,7 +202,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               />
               <ErrorMessage
                 errors={errors}
-                name="bio"
+                name="description"
                 render={({ message }) => (
                   <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
@@ -214,4 +230,4 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   );
 };
 
-export default EditProfileComponent;
+export default EditProjectModal;

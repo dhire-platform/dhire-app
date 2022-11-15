@@ -12,6 +12,7 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -23,33 +24,191 @@ import { IExperience } from '@/interfaces/store/data/experience.interface';
 import EditEducationModal from './UserDetails/EducationEditModal';
 import ExpEditModal from './UserDetails/ExpEditModal';
 import axios from 'axios';
+import { deleteField } from './useDeleteField';
+import { IEducation } from '@/interfaces/store/data/education.interface';
+import { changeToMonth } from 'src/lib/helpers/Date/changeToMonth';
 
 const Education = () => {
   const [hover, setHover] = useState(false);
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isEduOpen,
     onOpen: onEduOpen,
     onClose: onEduClose,
   } = useDisclosure();
-  const { user, userProfile, experience, education, updateUserProfile } =
-    useProfileStore();
+  const { user, userProfile, education, updateUserProfile } = useProfileStore();
+  const { experience } = userProfile;
 
-  const deleteEdu = async (del: number) => {
-    let newEdu = userProfile.education?.filter((edu, index) => index !== del);
-    const res = await axios.put('/api/userProfile/' + user.id, {
-      education: newEdu,
-    });
+  function experienceRender(experience: IExperience, index: number) {
+    return (
+      <Stack
+        key={index}
+        px={{ base: '0', lg: '2rem' }}
+        w="100%"
+        gap={[0, 5]}
+        direction={'row'}
+        role="group"
+        pos="relative"
+        borderBottom={
+          userProfile.experience?.length === index + 1
+            ? ''
+            : '1px solid rgba(0,0,0,0.2)'
+        }
+      >
+        <IconButton
+          onClick={() =>
+            deleteField(
+              { del: index, type: 'exp' },
+              toast,
+              user,
+              userProfile,
+              updateUserProfile
+            )
+          }
+          variant={'unstyled'}
+          _hover={{
+            bg: 'blackAlpha.100',
+          }}
+          display="none"
+          _groupHover={{ display: 'flex' }}
+          p="0.1rem"
+          size="sm"
+          pos="absolute"
+          top="0px"
+          right="0px"
+          color="blackAlpha.600"
+          aria-label="add experience"
+          icon={<IoCloseSharp size="18px" />}
+        />
+        <Box pt={1}>
+          <Avatar
+            name={experience?.company}
+            src={experience?.image}
+            size={'md'}
+            colorScheme={'black'}
+          />
+        </Box>
+        <Stack
+          w="full"
+          spacing={[5, 5, 7]}
+          direction={'column'}
+          pb="1.5rem"
+          borderBottom={
+            userProfile.experience?.length === index + 1
+              ? ''
+              : '1px solid rgba(0,0,0,0.2)'
+          }
+        >
+          <Stack dir="column">
+            <Heading fontSize={'xl'}>{experience.company}</Heading>
+            {experience.to && experience.from && (
+              <HStack fontSize={'14px'} color="blackAlpha.600">
+                <Text as="span">
+                  {changeToMonth(new Date(experience.from))}{' '}
+                </Text>
+                <Text as="span" color={'black'}>
+                  -
+                </Text>
+                <Text as="span">
+                  {experience.current
+                    ? 'Present'
+                    : changeToMonth(new Date(experience.to))}
+                </Text>
+              </HStack>
+            )}
+          </Stack>
+          <Stack dir="column">
+            <Heading
+              fontWeight={'700'}
+              fontSize={{ base: '12px', lg: 'md' }}
+              color="blackAlpha.600"
+            >
+              {experience.designation}
+            </Heading>
+            <Heading
+              fontWeight="400"
+              noOfLines={2}
+              fontSize={{ base: '13px', lg: 'md' }}
+              color="blackAlpha.500"
+            >
+              {experience.description}
+            </Heading>
+          </Stack>
+        </Stack>
+      </Stack>
+    );
+  }
+  function educationRender(edu: IEducation, index: number) {
+    return (
+      <VStack
+        key={index}
+        alignItems="flex-start"
+        color="blackAlpha.700"
+        fontSize={{ base: '12px', lg: '14px' }}
+        spacing={4}
+        pos="relative"
+        role="group"
+        w="full"
+        pb={'40px'}
+        borderBottom={'1px solid rgba(0,0,0,0.09)'}
+      >
+        <IconButton
+          onClick={() =>
+            deleteField(
+              { del: index, type: 'edu' },
+              toast,
+              user,
+              userProfile,
+              updateUserProfile
+            )
+          }
+          variant={'unstyled'}
+          _hover={{
+            bg: 'blackAlpha.100',
+          }}
+          display="none"
+          _groupHover={{ display: 'flex' }}
+          p="0.1rem"
+          size="sm"
+          pos="absolute"
+          top="0px"
+          right="0px"
+          color="blackAlpha.600"
+          aria-label="add experience"
+          icon={<IoCloseSharp size="18px" />}
+        />
+        <VStack alignItems={'flex-start'}>
+          <Heading
+            mt={0}
+            fontSize={{ base: 'lg', lg: '1.4rem' }}
+            color="blackAlpha.800"
+          >{`${edu.degree} , ${edu.school} ${edu.location || ''}`}</Heading>
 
-    updateUserProfile(res.data);
-  };
-  function toMonthName(monthNumber: number) {
-    const date = new Date();
-    date.setMonth(monthNumber - 1);
-
-    return date.toLocaleString('en-US', {
-      month: 'long',
-    });
+          {edu.to && edu.from && (
+            <HStack fontSize={'14px'} color="blackAlpha.600">
+              <Text as="span">{changeToMonth(new Date(edu.from))} </Text>
+              <Text as="span" color={'black'}>
+                -
+              </Text>
+              <Text as="span">
+                {edu.current ? 'Present' : changeToMonth(new Date(edu.to))}
+              </Text>
+            </HStack>
+          )}
+        </VStack>
+        <Stack dir="column" spacing={1} maxW={'80%'}>
+          <Text
+            color={'blackAlpha.700'}
+            fontSize={{ base: 'md', lg: 'lg' }}
+            fontWeight={700}
+          >
+            {edu.fieldOfStudy}
+          </Text>
+          <Text>{edu.description}</Text>
+        </Stack>
+      </VStack>
+    );
   }
 
   return (
@@ -69,7 +228,7 @@ const Education = () => {
           setHover(false);
         }}
         bg="white"
-        w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
+        w={{ base: '100%', md: '47%' }}
         rounded="lg"
         flexDirection={'column'}
         justifyContent="start"
@@ -77,8 +236,6 @@ const Education = () => {
         gap="1rem"
         p="1.5rem"
         alignItems="start"
-        border="1px solid"
-        borderColor={'blackAlpha.200'}
       >
         <VStack justify="space-between" align={'start'} w="full">
           <Stack
@@ -87,9 +244,16 @@ const Education = () => {
             align={'start'}
             w="full"
             role="group"
-            minH="50px"
+            minH="40px"
           >
-            <Heading color={'black'} fontSize="xl">
+            <Heading
+              color={'black'}
+              fontSize={{ base: 'xl', lg: '1.7rem' }}
+              borderBottom="1px solid"
+              borderColor={'blackAlpha.200'}
+              w={'80%'}
+              pb={'10px'}
+            >
               Education
             </Heading>
             <IconButton
@@ -98,8 +262,9 @@ const Education = () => {
               _hover={{
                 bg: 'blackAlpha.100',
               }}
-              display="none"
-              _groupHover={{ display: 'flex' }}
+              display="flex"
+              opacity={0}
+              _groupHover={{ opacity: 1 }}
               p="0.1rem"
               size="sm"
               alignItems="center"
@@ -109,53 +274,18 @@ const Education = () => {
               icon={<FiEdit2 size="18px" />}
             />
           </Stack>{' '}
-          {userProfile.education?.map((edu, index) => (
-            <VStack
-              key={index}
-              alignItems="flex-start"
-              color="black"
-              fontSize={'12px'}
-              border="1px solid gray"
-              borderColor="gray.300"
-              p={4}
-              rounded={'8px'}
-              pos="relative"
-              role="group"
-            >
-              <IconButton
-                onClick={() => deleteEdu(index)}
-                variant={'unstyled'}
-                _hover={{
-                  bg: 'blackAlpha.100',
-                }}
-                display="none"
-                _groupHover={{ display: 'flex' }}
-                p="0.1rem"
-                size="sm"
-                pos="absolute"
-                top="0px"
-                right="0px"
-                color="blackAlpha.600"
-                aria-label="add experience"
-                icon={<IoCloseSharp size="18px" />}
-              />
-              <Text>{`${edu.degree}, ${edu.school} ${
-                edu.location || ''
-              }`}</Text>
-              <Text>{`${edu.from} - ${edu.to}`}</Text>
-              <Text>{edu.description}</Text>
-            </VStack>
-          ))}
+          {userProfile.education?.map((edu: IEducation, index: number) =>
+            educationRender(edu, index)
+          )}
         </VStack>
-        <Divider />
         <Stack w="100%" direction="column">
           <Stack
-            h="2rem"
+            h="2.5rem"
             direction={'row'}
             alignItems="center"
             justify={'space-between'}
           >
-            <Heading color={'black'} fontSize="xl">
+            <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
               Experience
             </Heading>
             <IconButton
@@ -166,7 +296,9 @@ const Education = () => {
               }}
               p="0.1rem"
               size="sm"
-              display={hover && experience?.length > 0 ? 'flex' : 'none'}
+              display={
+                hover && experience && experience.length > 0 ? 'flex' : 'none'
+              }
               alignItems="center"
               justifyContent={'center'}
               color="blackAlpha.600"
@@ -176,43 +308,17 @@ const Education = () => {
           </Stack>
           <Flex
             w="100%"
-            py="1rem"
+            py={{ base: '1rem', lg: '2rem' }}
             gap="0.7rem"
             wrap="wrap"
             flexDir={'column'}
             color={'black'}
             maxW="36rem"
           >
-            {experience?.length ? (
-              experience?.map((experience: IExperience, index) => (
-                <Stack
-                  key={index}
-                  px="2rem"
-                  w="100%"
-                  py="0.5rem"
-                  direction={'row'}
-                >
-                  <Avatar src={experience?.image} size="md" bg="white" />
-                  <Stack w="full" direction={'column'}>
-                    <Heading fontSize={'xl'}>experience</Heading>
-                    <Text fontSize="md">
-                      <></>
-                    </Text>
-                    <Divider />
-                    <Heading fontWeight={'500'} fontSize={'lg'}>
-                      {experience.designation}
-                    </Heading>
-                    <Heading
-                      fontWeight="400"
-                      noOfLines={2}
-                      fontSize={'sm'}
-                      color="blackAlpha.500"
-                    >
-                      {experience.description}
-                    </Heading>
-                  </Stack>
-                </Stack>
-              ))
+            {userProfile.experience?.length ? (
+              experience?.map((experience: IExperience, index) =>
+                experienceRender(experience, index)
+              )
             ) : (
               <Stack
                 border={'1px dashed'}
@@ -223,7 +329,7 @@ const Education = () => {
                 direction={'column'}
                 w="full"
               >
-                <Text pb="1rem" color="blackAlpha.400">
+                <Text pb="1rem" color="blackAlpha.400" textAlign={'center'}>
                   You have not added any experiences yet.
                 </Text>
                 <Box

@@ -71,6 +71,7 @@ async function updateUserProfile(
     location,
     website,
     experience,
+    achievement,
     education,
     projects,
     social,
@@ -82,6 +83,7 @@ async function updateUserProfile(
     location?: string;
     website?: string;
     experience?: JSON[];
+    achievement?: string;
     education?: JSON[];
     projects?: JSON[];
     social?: SocialType;
@@ -98,12 +100,13 @@ async function updateUserProfile(
         location,
         website,
         experience,
+        achievement,
         education,
         projects,
         social,
       },
     });
-    console.log('user - ', user);
+    //console.log('user - ', user);
     res.status(200).json(user);
   } catch (e) {
     console.log('error - ', e);
