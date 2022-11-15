@@ -48,7 +48,7 @@ const Achievement = () => {
     <Center
       boxShadow="0px 35px 41px 10px rgba(0, 0, 0, 0.03)"
       bg="white"
-      w={{ base: '100%', md: '47%' }}
+      w="100%"
       rounded="lg"
       flexDirection={'column'}
       justifyContent="start"

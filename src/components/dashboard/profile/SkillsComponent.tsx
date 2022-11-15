@@ -80,7 +80,7 @@ const SkillsComponent = () => {
         setHover(false);
       }}
       bg="white"
-      w={{ base: '100%', md: '47%' }}
+      w="100%"
       rounded="lg"
       flexDirection={'column'}
       justifyContent="start"

@@ -30,7 +30,7 @@ const ProfileComponent = () => {
           setHover(false);
         }}
         bg={useColorModeValue('white', 'blackAlpha.600')}
-        w={{ base: '100%', md: '47%' }}
+        w="100%"
         rounded="lg"
         flexDirection={'column'}
         p="1.5rem"

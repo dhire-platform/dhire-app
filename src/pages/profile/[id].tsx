@@ -12,6 +12,7 @@ import {
   Text,
   useDisclosure,
   useMediaQuery,
+  VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -110,19 +111,19 @@ const User = () => {
                   <Flex
                     mx="auto"
                     w="100%"
-                    h={{ base: 'full', md: 'clamp(54rem,180vh, 60rem)' }}
+                    // h={{ base: 'full', md: 'clamp(54rem,180vh, 60rem)' }}
                     gap="2rem"
-                    flexWrap={'wrap'}
-                    alignItems="center"
-                    alignContent={'center'}
-                    justifyContent={'top'}
-                    flexDirection={{ base: 'row', md: 'column' }}
+                    flexDirection={{ base: 'column', md: 'row' }}
                   >
-                    <ProfileComponent />
-                    <Education />
-                    <SkillsComponent />
-                    <Achievement />
-                    <Projects />
+                    <VStack w={{ base: '100%', md: '47%' }} gap={'1rem'}>
+                      <ProfileComponent />
+                      <Education />
+                    </VStack>
+                    <VStack w={{ base: '100%', md: '47%' }} gap={'1rem'}>
+                      <SkillsComponent />
+                      <Achievement />
+                      <Projects />
+                    </VStack>
                   </Flex>
                 </Center>
               </TabPanel>

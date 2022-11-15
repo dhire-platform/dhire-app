@@ -50,11 +50,6 @@ const Education = () => {
         direction={'row'}
         role="group"
         pos="relative"
-        borderBottom={
-          userProfile.experience?.length === index + 1
-            ? ''
-            : '1px solid rgba(0,0,0,0.2)'
-        }
       >
         <IconButton
           onClick={() =>
@@ -228,7 +223,7 @@ const Education = () => {
           setHover(false);
         }}
         bg="white"
-        w={{ base: '100%', md: '47%' }}
+        w="100%"
         rounded="lg"
         flexDirection={'column'}
         justifyContent="start"
@@ -251,7 +246,7 @@ const Education = () => {
               fontSize={{ base: 'xl', lg: '1.7rem' }}
               borderBottom="1px solid"
               borderColor={'blackAlpha.200'}
-              w={'80%'}
+              w={{ base: '100%', md: '80%' }}
               pb={'10px'}
             >
               Education
