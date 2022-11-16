@@ -159,8 +159,10 @@ const Projects = () => {
 
                   <Text
                     my={{ base: '5px !important', lg: '15px !important' }}
-                    color="gray.800"
-                    fontSize={{ base: '13px', lg: 'md' }}
+                    fontWeight="400"
+                    noOfLines={2}
+                    fontSize={{ base: '12px', lg: '14px' }}
+                    color="blackAlpha.700"
                     w={{ base: '80%', sm: '100%', lg: '80%' }}
                   >
                     {project.description}

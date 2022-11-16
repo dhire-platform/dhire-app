@@ -59,7 +59,7 @@ const Achievement = () => {
       color="blackAlpha.200"
     >
       <Stack alignContent={'start'} direction={'row'}>
-        <Heading color={'black'} fontSize={{ base: 'xl', lg: '2rem' }}>
+        <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
           Achievement
         </Heading>
       </Stack>
@@ -68,7 +68,9 @@ const Achievement = () => {
           defaultValue={userProfile.achievement || 'Click this to edit.'}
           onSubmit={submit}
           w={'100%'}
-          fontSize={{ base: 'sm', md: 'md' }}
+          fontWeight="400"
+          fontSize={{ base: '12px', lg: '14px' }}
+          color="blackAlpha.700"
         >
           <EditablePreview />
           <EditableTextarea />

@@ -30,12 +30,12 @@ import { useFilter } from 'src/lib/hooks/useFilter';
 import { IFilter } from '@/interfaces/filter.interface';
 
 const animationKeyframes = keyframes`
-      from {
-        background-position: 0 0;
-      to {
-        background-position: 100% 100%;
-      }
-    `;
+        from {
+          background-position: 0 0;
+        to {
+          background-position: 100% 100%;
+        }
+      `;
 
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 
@@ -125,7 +125,7 @@ const Jobs = () => {
           </HStack>
         </HStack>
       </Box>
-      <Box // Background
+      <Box
         mx="auto"
         w="40rem"
         h="1.5rem"
@@ -137,33 +137,19 @@ const Jobs = () => {
         filter="blur(90px)"
       />
 
-      <Container
-        px={0}
-        pb="6rem"
-        pt="2rem"
-        maxW="full"
-        bg="#FCFCFC"
-        minH="100vh"
-      >
+      <Container pb="6rem" pt="2rem" maxW="full" bg="#FCFCFC" minH="100vh">
         <Stack
-          flexDir={{ base: 'column', lg: 'row-reverse' }}
+          flexDir={'row-reverse'}
           ref={ref}
           position="sticky"
           mx="auto"
           maxW="fit-content"
           direction={'row'}
-          spacing={0}
-          gap={{ base: '0', md: 0, lg: '1.5rem' }}
-          p={{ base: '10px', md: '1rem' }}
+          gap="1.5rem"
+          p="1rem"
         >
           <Stack>
-            <Stack
-              spacing={'2rem'}
-              minW={{ base: 'auto', md: '15rem' }}
-              direction={'column'}
-              p="1rem"
-            >
-              {/* Job Type */}
+            <Stack spacing={'2rem'} minW="15rem" direction={'column'} p="1rem">
               <Stack direction={'column'}>
                 <Heading fontWeight="600" fontSize="xl">
                   Job Type
@@ -195,7 +181,6 @@ const Jobs = () => {
                   </Stack>{' '}
                 </CheckboxGroup>
               </Stack>
-              {/* SALARy */}
               <Stack gap="1rem">
                 <Heading fontWeight="600" fontSize="xl">
                   Salary
@@ -219,20 +204,10 @@ const Jobs = () => {
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                 >
-                  <RangeSliderMark
-                    value={0}
-                    mt="1"
-                    ml={{ base: '-5', md: '-2.5' }}
-                    fontSize="sm"
-                  >
+                  <RangeSliderMark value={0} mt="1" ml="-2.5" fontSize="sm">
                     0k
                   </RangeSliderMark>
-                  <RangeSliderMark
-                    value={300}
-                    mt="1"
-                    ml={{ base: '-5', md: '-2.5' }}
-                    fontSize="sm"
-                  >
+                  <RangeSliderMark value={300} mt="1" ml="-2.5" fontSize="sm">
                     300k
                   </RangeSliderMark>
                   <RangeSliderTrack>
@@ -260,7 +235,6 @@ const Jobs = () => {
                   </Tooltip>
                 </RangeSlider>
               </Stack>
-              {/* EXP */}
               <Stack direction={'column'}>
                 {' '}
                 <Heading fontWeight="600" fontSize="xl">
@@ -284,9 +258,10 @@ const Jobs = () => {
             </Stack>
           </Stack>
           <Center
-            // minW="42rem"
+            minW="42rem"
             gap="1.3rem"
-            p={{ base: '0px', md: '1rem' }}
+            p="1rem"
+            w="fit-content"
             flexDirection="column"
           >
             <Stack
@@ -295,7 +270,7 @@ const Jobs = () => {
               justifyContent="space-between"
               w="100%"
             >
-              <Text color={'gray.400'}>
+              <Text color="gray.400">
                 Showing {filteredData.length} results
               </Text>
               <Stack direction={'row'}>
@@ -345,7 +320,11 @@ const Jobs = () => {
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
             ) : (
-              currentData.map((item, index) => <Card key={index} {...item} />)
+              currentData.map((item, index) => (
+                <a key={index} href={`job/${item.id}`}>
+                  <Card key={index} {...item} />
+                </a>
+              ))
             )}
             <Pagination
               onPageChange={(page: number) => {

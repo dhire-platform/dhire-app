@@ -88,7 +88,7 @@ const ProfileComponent = () => {
         </Stack>
         <Heading
           fontWeight="400"
-          fontSize={{ base: '13px', lg: 'md' }}
+          fontSize={{ base: '12px', lg: '14px' }}
           noOfLines={3}
           color={'blackAlpha.800'}
           w="100%"

@@ -44,7 +44,8 @@ const Education = () => {
     return (
       <Stack
         key={index}
-        px={{ base: '0', lg: '2rem' }}
+        px={{ base: '0', lg: '1rem' }}
+        py={index !== 1 ? 3 : 0}
         w="100%"
         gap={[0, 5]}
         direction={'row'}
@@ -86,7 +87,7 @@ const Education = () => {
         </Box>
         <Stack
           w="full"
-          spacing={[5, 5, 7]}
+          spacing={5}
           direction={'column'}
           pb="1.5rem"
           borderBottom={
@@ -121,14 +122,14 @@ const Education = () => {
             >
               {experience.designation}
             </Heading>
-            <Heading
+            <Text
               fontWeight="400"
               noOfLines={2}
-              fontSize={{ base: '13px', lg: 'md' }}
-              color="blackAlpha.500"
+              fontSize={{ base: '12px', lg: '14px' }}
+              color="blackAlpha.700"
             >
               {experience.description}
-            </Heading>
+            </Text>
           </Stack>
         </Stack>
       </Stack>
@@ -303,7 +304,7 @@ const Education = () => {
           </Stack>
           <Flex
             w="100%"
-            py={{ base: '1rem', lg: '2rem' }}
+            py={'1.5rem'}
             gap="0.7rem"
             wrap="wrap"
             flexDir={'column'}

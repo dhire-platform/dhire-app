@@ -7,10 +7,9 @@ import {
   Stack,
   Tag,
   Text,
-  Image,
   useDimensions,
 } from '@chakra-ui/react';
-//import Image from 'next/image';
+import Image from 'next/image';
 import React, { RefObject, useRef } from 'react';
 import { RiMapPin2Line } from 'react-icons/ri';
 import { IJob } from '@/interfaces/store/data/job.interface';
@@ -64,80 +63,60 @@ const Card: React.FC<IJob> = (props) => {
       transition="all 0.2s ease-in"
       ref={elementRef as RefObject<HTMLDivElement>}
       my="1rem"
-      maxW="4xl"
+      maxW="3xl"
       bg="white"
-      p={{ base: '1.2rem', md: '2.2rem' }}
+      p={'2.2rem'}
       rounded="md"
       boxShadow="0px 35px 41px 10px rgba(0, 0, 0, 0.03)"
     >
-      <Stack direction={'column'} gap={{ base: '10px', md: '0.8rem' }}>
-        <Stack
-          alignItems={'flex-start'}
-          flexDirection={{ base: 'column', md: 'row' }}
-          gap={{ md: '1rem' }}
-        >
-          <Stack
-            w={'full'}
-            alignItems={'flex-start'}
-            flexDirection={'row'}
-            fontSize={{ base: '14px', md: 'md' }}
+      <Stack direction={'column'} gap="0.8rem">
+        <Stack alignItems={'flex-start'} flexDirection={'row'} gap="1rem">
+          <Center
+            m="0.5rem"
+            w={{ base: '4rem', md: 'full' }}
+            h={{ base: '4rem', md: '4rem' }}
+            maxW="4rem"
+            position="relative"
           >
-            <Center
-              m="0.5rem"
-              w={{ base: 'full', md: 'full' }}
-              h={{ base: '4rem', md: '4rem' }}
-              maxW="4rem"
-              position="relative"
+            <Image
+              src={job_company_image}
+              alt="Job Logo"
+              layout="fill"
+              objectFit="contain"
+              style={{
+                borderRadius: '6px',
+              }}
+            />
+          </Center>
+          <Stack mt="0" mr="auto" w="150%" direction={'column'}>
+            <Heading noOfLines={1} lineHeight="140%" fontSize={'24px'}>
+              {job_title}
+            </Heading>
+            <Stack
+              justify="space-between"
+              w="70%"
+              direction="row"
+              color="gray.400"
             >
-              <Image
-                src={'https://xsgames.co/randomusers/avatar.php?g=female'}
-                alt="Job Logo"
-                rounded={'full'}
-                //layout="fill"
-                objectFit="contain"
-              />
-            </Center>
-            <Stack mt="0" mr="auto" w="150%" direction={'column'} spacing={1}>
-              <Heading
-                noOfLines={1}
-                lineHeight="140%"
-                fontSize={{ base: 'xl', md: '24px' }}
-              >
-                {job_title}
-              </Heading>
-              <Stack
-                justify="space-between"
-                w="70%"
-                direction="row"
-                color="gray.400"
-              >
-                <Text>{job_company}</Text>
-                <Stack direction="row" align={'center'}>
-                  <Icon as={RiMapPin2Line} w={4} h={4} color="gray.400" />
-                  <Text w="max-content">
-                    {job_location ? job_location : 'Remote'}
-                  </Text>
-                </Stack>
+              <Text>{job_company}</Text>
+              <Stack direction="row" align={'center'}>
+                <Icon as={RiMapPin2Line} w={4} h={4} color="gray.400" />
+                <Text>{job_location ? job_location : 'Remote'}</Text>
               </Stack>
             </Stack>
           </Stack>
           <Center m="0" w="full">
-            <Heading
-              ml={{ base: 3, md: 'auto' }}
-              mr={{ base: 'auto', md: 0 }}
-              fontSize={{ base: 'xl', md: '22px' }}
-            >
+            <Heading ml="auto" fontSize="22px">
               ${job_salary_min}K - ${job_salary_max}K
             </Heading>
           </Center>
         </Stack>
         <Box>
           <Text
-            noOfLines={[3, 3, 2]}
+            noOfLines={2}
             textAlign={'start'}
             color="gray.500"
             fontWeight={'500'}
-            fontSize={{ base: '15px', md: 'lg' }}
           >
             {job_description}
           </Text>

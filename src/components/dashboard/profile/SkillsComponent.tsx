@@ -1,3 +1,4 @@
+import { ISkill } from '@/interfaces/store/data/skills.interface';
 import {
   Box,
   Center,
@@ -38,8 +39,8 @@ const SkillsComponent = () => {
     userProfile.skills?.map((skill: any) => skill.name) || []
   );
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-  const skillArr = userProfile.skills?.map((skill) => skill.name)! as string[];
-  const skills = skillArr as string[];
+  //const skillArr = userProfile.skills?.map((skill) => skill.name)! as string[];
+  //const skills = skillArr as string[];
   const toast = useToast();
   const handleTagsChange = useCallback(
     (_event: SyntheticEvent, tags: string[]) => {
@@ -132,7 +133,7 @@ const SkillsComponent = () => {
             icon={<MdDone size="18px" />}
           />
         </Stack>
-      ) : skills?.[0] ? (
+      ) : userProfile.skills?.[0] ? (
         <>
           <Stack
             h="2rem"
@@ -140,7 +141,7 @@ const SkillsComponent = () => {
             justifyContent="space-between"
             direction={'row'}
           >
-            <Heading color={'black'} fontSize="xl">
+            <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
               Skills
             </Heading>
             <IconButton
@@ -166,14 +167,15 @@ const SkillsComponent = () => {
             color={'black'}
             maxW="36rem"
           >
-            {skills?.map((skill: string, index: any) => (
+            {userProfile.skills?.map((value: ISkill, index: number) => (
               <Tag
                 background="blackAlpha.50"
                 p="0.4rem 0.8rem"
+                borderRadius={'20px'}
                 fontWeight={'400'}
                 key={index}
               >
-                {skill}
+                {value.name} : {value.level?.toLowerCase()}
               </Tag>
             ))}
           </Flex>
