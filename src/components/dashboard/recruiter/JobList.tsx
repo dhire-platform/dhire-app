@@ -9,7 +9,7 @@ const JobsList = ({ openJob }: any) => {
         let jobs = [];
         for (let i = 0; i < 10; i++) {
           jobs.push(
-            <Box onClick={() => openJob(true)} cursor="pointer">
+            <Box onClick={() => openJob(true)} cursor="pointer" key={i}>
               <Card key={i} {...Data[i]} />
             </Box>
           );

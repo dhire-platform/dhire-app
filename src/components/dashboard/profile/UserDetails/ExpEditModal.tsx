@@ -75,6 +75,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
 
       updateUserProfile(res.data);
       setExperience(experienceData);
+      reset();
       onClose();
     } catch (e: any) {
       console.log(e.response.data.error);
@@ -83,6 +84,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm();
 

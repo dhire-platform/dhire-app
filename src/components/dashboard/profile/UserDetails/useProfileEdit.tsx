@@ -8,6 +8,7 @@ import { useProfileStore } from 'src/app/store/profile/profileStore';
 const useProfileEdit = ({
   isOpen,
   onClose,
+  reset,
 }: any): ((values: any) => Promise<any>) => {
   const { updateUserProfile } = useProfileStore();
 
@@ -28,6 +29,7 @@ const useProfileEdit = ({
       .catch((err) => {
         console.log('error in update user profile route', err);
       });
+    reset();
     onClose();
     set_edit_mode(false);
   }

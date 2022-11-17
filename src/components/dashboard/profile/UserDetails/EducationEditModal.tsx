@@ -63,13 +63,14 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
       education: eduArray,
     });
     updateUserProfile(res.data);
+    reset();
     onClose();
   };
 
   const {
     handleSubmit,
     register,
-
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({});
 

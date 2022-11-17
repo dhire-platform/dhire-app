@@ -22,7 +22,6 @@ export const LevelInput = ({
   name,
   setName,
 }: any) => {
-  console.log(tags);
   const deleteTag = (del: number) => {
     let newArr = tags.filter((tag: any, index: number) => index !== del);
     setTags(newArr);

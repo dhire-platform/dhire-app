@@ -63,13 +63,14 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
       projects: projectArray,
     });
     updateUserProfile(res.data);
+    reset();
     onClose();
   };
 
   const {
     handleSubmit,
     register,
-
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({});
 

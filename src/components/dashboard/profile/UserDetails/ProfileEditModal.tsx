@@ -29,13 +29,14 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
-  const onSubmit = useProfileEdit({ isOpen, onClose });
-
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({});
+
+  const onSubmit = useProfileEdit({ isOpen, onClose, reset });
 
   return (
     <Modal
@@ -54,37 +55,6 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
-            {/* Full Name */}
-            {/* <FormControl isRequired>
-              <FormLabel htmlFor="name">Full name</FormLabel>
-              <Input
-                isRequired
-                id="name"
-                placeholder="Name"
-                {...register('name', {
-                  required: 'This is required',
-                  minLength: {
-                    value: 4,
-                    message: 'Minimum length should be 4',
-                  },
-                  pattern: {
-                    value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                    message:
-                      'Entered value cant start/end or contain only white spacing',
-                  },
-                })}
-              />
-              <ErrorMessage
-                errors={errors}
-                name="name"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
-              />
-            </FormControl> */}
-
             {/*userName */}
             {router.pathname === '/profile' && (
               <FormControl isRequired>
