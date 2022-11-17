@@ -17,8 +17,15 @@ export const ActionButtons = () => {
         onClose={onEditClose}
         onOpen={onEditOpen}
       />
-      <Button onClick={onOpen}>Post A Job</Button>
-      <Button variant={'outline'} borderColor="black" onClick={onEditOpen}>
+      <Button onClick={onOpen} size={['xs', 'sm', 'sm', 'md']}>
+        Post A Job
+      </Button>
+      <Button
+        variant={'outline'}
+        borderColor="black"
+        size={['xs', 'sm', 'sm', 'md']}
+        onClick={onEditOpen}
+      >
         Edit
       </Button>
     </HStack>

@@ -144,7 +144,7 @@ const Recruiter = () => {
                   ) : jobDetails ? (
                     <Applications openUser={setUserDetails} />
                   ) : (
-                    <VStack pt={3}>
+                    <VStack pt={3} w="95%">
                       <ActionButtons />
                       <JobsList openJob={setJobDetails} />
                     </VStack>

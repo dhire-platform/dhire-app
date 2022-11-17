@@ -32,26 +32,37 @@ const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 const UserCard = ({ openUser }: any) => {
   const [bookmark, setBookmark] = useState(false);
   return (
-    <VStack minW="300px" spacing={0} my={3} w="fit-content">
+    <VStack
+      minW="200px"
+      spacing={0}
+      my={3}
+      w="fit-content"
+      mx={{ base: 'auto', lg: '0' }}
+    >
       <VStack
+        w="100%"
         bg="white"
         borderRadius="8px 8px 0 0"
         spacing={5}
-        p={'1.5rem 2rem'}
+        p={{ base: '1.2rem', lg: '1.5rem 2rem' }}
         alignItems="left"
       >
         <HStack justifyContent="flex-start" pos="relative">
           <Image
             src="https://xsgames.co/randomusers/avatar.php?g=female"
-            w="60px"
-            h="60px"
+            w={['50px', '60px']}
+            h={['50px', '60px']}
             borderRadius={'50%'}
           />
           <VStack alignItems="left" spacing={0}>
-            <Heading as="h2" fontSize={'1.3rem'} fontWeight={500}>
+            <Heading as="h2" fontSize={['1.2rem', '1.3rem']} fontWeight={500}>
               Kia Antonoc
             </Heading>
-            <HStack fontSize={'14px'} fontWeight={500} color="gray.500">
+            <HStack
+              fontSize={['12px', '14px']}
+              fontWeight={500}
+              color="gray.500"
+            >
               <Text as="span">Java Developer</Text>
               <Box w={'5px'} h={'5px'} rounded="full" bg="gray.600"></Box>
               <Text as="span">5 years</Text>
@@ -63,7 +74,7 @@ const UserCard = ({ openUser }: any) => {
             pos="absolute"
             right={'-10px'}
             top={0}
-            fontSize={'1.3rem'}
+            fontSize={{ base: '1rem', lg: '1.3rem' }}
             cursor="pointer"
             onClick={() => setBookmark(!bookmark)}
           />
@@ -72,7 +83,7 @@ const UserCard = ({ openUser }: any) => {
           alignItems="left"
           color={'gray.500'}
           fontWeight={500}
-          fontSize={['14px']}
+          fontSize={['12px', '14px']}
         >
           <HStack color="blue" animation={animation1}>
             <Icon as={MdVerified} w={4} h={4} />
@@ -108,7 +119,7 @@ const UserCard = ({ openUser }: any) => {
         color="#444"
         w="100%"
         justifyContent={'space-between'}
-        p={'1rem'}
+        p={['0.8rem', '1rem']}
         bg="white"
         border={'1px solid rgba(0,0,0,0.1)'}
         borderRadius={'0 0 8px 8px'}
@@ -117,11 +128,16 @@ const UserCard = ({ openUser }: any) => {
           bg="transparent"
           border="1px solid #444"
           color="gray.600"
+          size={['xs', 'sm', 'sm', 'md']}
           onClick={() => openUser(true)}
         >
           View More
         </Button>
-        <HStack fontSize={'1.2rem'} gap={1} color={'gray.400'}>
+        <HStack
+          fontSize={['15px', '1rem', '1.2rem']}
+          gap={1}
+          color={'gray.400'}
+        >
           <Icon as={BsGithub} _hover={{ color: 'gray.600' }} cursor="pointer" />
           <Icon
             as={BsTwitter}

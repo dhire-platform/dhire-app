@@ -38,21 +38,31 @@ const HireNavBar = () => {
   ];
   function renderButton(button: { text: string; icon: any }, index: number) {
     return (
-      <Tab border="none">
+      <Tab border="none" px={[0, 0, 2]}>
         <Button
+          as="div"
           bg={selectedBtn !== index ? 'white' : 'black'}
           color={selectedBtn === index ? 'white' : 'black'}
+          fontSize={['12px']}
+          size={{ base: 'sm', lg: 'md' }}
           key={index}
           onClick={() => setSelectedBtn(index)}
         >
-          <Icon as={button.icon} w={5} h={5} mr={2} />
-          {button.text}
+          <Icon as={button.icon} w={[4, 5]} h={[4, 5]} mr={[0, 0, 2]} />
+          <Text display={['none', 'none', 'block']}>{button.text}</Text>
         </Button>
       </Tab>
     );
   }
   return (
-    <HStack w="full" justifyContent={'space-between'}>
+    <HStack
+      w="full"
+      p={2}
+      pt={0}
+      alignItems={'flex-end'}
+      justifyContent={'space-between'}
+      flexDir="column-reverse"
+    >
       <TabList border="none">
         <HStack>
           {buttons.map((button: { text: string; icon: any }, index) => {
@@ -61,7 +71,7 @@ const HireNavBar = () => {
         </HStack>
       </TabList>
       <HStack>
-        <Button>Post a job</Button>
+        <Button size={{ base: 'sm', lg: 'md' }}>Post a job</Button>
         <Popover>
           <PopoverTrigger>
             <Center

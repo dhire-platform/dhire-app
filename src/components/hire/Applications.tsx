@@ -44,17 +44,18 @@ export const Applications = ({ openUser }: any) => {
       justifyContent={'top'}
       flexDirection={{ base: 'row', md: 'column' }}
     >
-      <Container
-        maxW="full"
-        p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
-      >
-        <VStack w={'full'} alignItems="flex-start" my={'2rem'}>
-          <Heading as="h1" fontSize={['2.5rem']} fontWeight={500}>
+      <Container maxW="full" p={{ base: '0', sm: '1rem', lg: '1rem 3rem' }}>
+        <VStack w={'full'} alignItems="flex-start" my={'2rem'} px="1rem">
+          <Heading
+            as="h1"
+            fontSize={['1.8rem', '2rem', '2.5rem']}
+            fontWeight={500}
+          >
             Applications
           </Heading>
           <Heading
             as="h2"
-            fontSize={['1rem']}
+            fontSize={['12px', '14px', '1rem']}
             fontWeight={500}
             color="gray.500"
           >
@@ -81,7 +82,8 @@ export const Applications = ({ openUser }: any) => {
                 borderRadius="8px"
                 my="0"
                 flexWrap="wrap"
-                gap={'10px 40px '}
+                justifyContent={{ lg: 'flex-start' }}
+                gap={{ base: '20px', lg: '10px 40px ' }}
               >
                 <UserCard openUser={openUser} />
                 <UserCard openUser={openUser} />

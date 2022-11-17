@@ -128,7 +128,7 @@ const User = () => {
               </TabPanel>
               <TabPanel p={0}>
                 <Text as="div" size="xl" fontWeight="600">
-                  <Container minW="full">
+                  <Container minW="full" p={[0, 0, '1rem']}>
                     <Jobs />
                   </Container>
                 </Text>

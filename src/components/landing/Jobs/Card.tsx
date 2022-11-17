@@ -78,12 +78,14 @@ const Card: React.FC<IJob> = (props) => {
         >
           <Stack
             w={'full'}
-            alignItems={'flex-start'}
+            alignItems={{ base: 'center', md: 'flex-start' }}
             flexDirection={'row'}
-            fontSize={{ base: '14px', md: 'md' }}
+            fontSize={{ base: '10px', sm: '12px', md: 'md' }}
           >
             <Center
               m="0.5rem"
+              minW="40px"
+              minH="40px"
               w={{ base: 'full', md: 'full' }}
               h={{ base: '4rem', md: '4rem' }}
               maxW="4rem"
@@ -101,7 +103,7 @@ const Card: React.FC<IJob> = (props) => {
               <Heading
                 noOfLines={1}
                 lineHeight="140%"
-                fontSize={{ base: 'xl', md: '24px' }}
+                fontSize={['17px', '20px', '24px']}
               >
                 {job_title}
               </Heading>
@@ -125,7 +127,7 @@ const Card: React.FC<IJob> = (props) => {
             <Heading
               ml={{ base: 3, md: 'auto' }}
               mr={{ base: 'auto', md: 0 }}
-              fontSize={{ base: 'xl', md: '22px' }}
+              fontSize={['15px', '20px', '24px']}
             >
               ${job_salary_min}K - ${job_salary_max}K
             </Heading>
@@ -137,14 +139,16 @@ const Card: React.FC<IJob> = (props) => {
             textAlign={'start'}
             color="gray.500"
             fontWeight={'500'}
-            fontSize={{ base: '15px', md: 'lg' }}
+            fontSize={['12px', '15px', 'md']}
           >
             {job_description}
           </Text>
         </Box>
         <Box display={'flex'} gap="1rem">
-          <Tag>{getExperienceType(job_experience_level)}</Tag>
-          <Tag>{getJobType(job_type)}</Tag>
+          <Tag fontSize={['10px', '15px', 'lg']}>
+            {getExperienceType(job_experience_level)}
+          </Tag>
+          <Tag fontSize={['10px', '15px', 'lg']}>{getJobType(job_type)}</Tag>
         </Box>
       </Stack>
     </Container>
