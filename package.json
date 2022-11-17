@@ -12,6 +12,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "vercel-build": "prisma generate && prisma db push && next build",
+    "prisma:generate": "prisma generate",
     "prettier": "prettier --write .",
     "prepare": "husky install"
   },
