@@ -265,6 +265,7 @@ const Jobs = () => {
           <Center
             // minW="42rem"
             gap="1.3rem"
+            w="full"
             p={{ base: '0px', md: '1rem' }}
             flexDirection="column"
           >
@@ -306,8 +307,8 @@ const Jobs = () => {
               <Center
                 textAlign={'center'}
                 flexDirection={'column'}
-                w="100%"
-                maxW="3xl"
+                alignItems="center"
+                w="full"
                 h="100%"
               >
                 <Heading

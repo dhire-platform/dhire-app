@@ -43,7 +43,7 @@ const UserApplication = ({ setUserDetails }: any) => {
         w="full"
         bg="rgba(255,255,255,0.6)"
         overflow="hidden"
-        gap={'50px'}
+        gap={['30px', '50px']}
         pb="2rem"
       >
         <Box
@@ -51,12 +51,17 @@ const UserApplication = ({ setUserDetails }: any) => {
           h="100px"
           bg="linear-gradient(90deg, rgba(127, 127, 213, 0.44) 0.93%, #86A8E7 59.1%, #91EAE4 120.46%)"
         >
-          <VStack pos="relative" top="50%" left={'-40%'}>
+          <VStack
+            pos="relative"
+            top="50%"
+            alignItems={'flex-start'}
+            px={['10px', '30px']}
+          >
             <Box p={1} bg="white" rounded={'full'}>
               <Image
                 src="https://xsgames.co/randomusers/avatar.php?g=female"
-                w="100px"
-                h="100px"
+                w={['80px', '100px']}
+                h={['80px', '100px']}
                 borderRadius={'50%'}
               />
             </Box>
@@ -66,7 +71,8 @@ const UserApplication = ({ setUserDetails }: any) => {
           alignItems="flex-start"
           w="full"
           color={'#333'}
-          p={'0px 30px 20px 30px'}
+          px={['10px', '30px']}
+          pb={[0, '20px']}
           spacing={0}
         >
           {/* NAME, LOCATION */}
@@ -77,15 +83,21 @@ const UserApplication = ({ setUserDetails }: any) => {
             pb={5}
             borderBottom="1px solid #D7D7D7"
           >
-            <VStack alignItems={'flex-start'} spacing={0}>
-              <Heading fontSize={'2rem'}>Tushar Rao</Heading>
+            <VStack
+              alignItems={'flex-start'}
+              spacing={0}
+              fontSize={['13px', 'md']}
+            >
+              <Heading fontSize={['1.7rem', '2rem']}>Tushar Rao</Heading>
               <Text color="#8e8e8e">Product, Design, Research</Text>
               <Text color="#A8A8A8">San Francisco Bay Area, United States</Text>
             </VStack>
-            <Button rounded={'none'} w="150px">
-              <HStack>
+            <Button rounded={'none'} w={['110px', '150px']} size={['sm', 'md']}>
+              <HStack as="span">
                 <Icon as={AiOutlinePlus} />
-                <Text as="span">Shortlist</Text>
+                <Text as="span" fontSize={['13px', '1rem']}>
+                  Shortlist
+                </Text>
               </HStack>
             </Button>
           </HStack>
@@ -96,10 +108,10 @@ const UserApplication = ({ setUserDetails }: any) => {
             alignItems="flex-start"
             borderBottom="1px solid #D7D7D7"
           >
-            <Heading fontWeight={600} fontSize={['1.8rem']}>
+            <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
               About
             </Heading>
-            <Text color="gray.500">
+            <Text color="gray.500" fontSize={['sm', 'md']}>
               {' '}
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil
               quas asperiores unde illum sequi repellat, officiis necessitatibus
@@ -114,6 +126,7 @@ const UserApplication = ({ setUserDetails }: any) => {
 
           <HStack
             w="full"
+            flexDir={{ base: 'column', lg: 'row' }}
             alignItems={'flex-start'}
             spacing={0}
             borderBottom={'1px solid #D7D7D7'}
@@ -122,55 +135,68 @@ const UserApplication = ({ setUserDetails }: any) => {
             <VStack
               alignSelf={'stretch'}
               alignItems="flex-start"
-              w="40%"
-              py={8}
+              w={{ base: 'full', lg: '40%' }}
+              py={[5, 8]}
               pr={5}
               spacing={3}
-              borderRight="1px solid #D7D7D7"
+              borderRight={{ lg: '1px solid #D7D7D7' }}
             >
-              <Heading fontWeight={600} fontSize={['1.8rem']}>
+              <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
                 Experience
               </Heading>
               <VStack>
                 <HStack
-                  gap={5}
+                  gap={[0, 5]}
                   alignItems="flex-start"
                   borderBottom="1px solid #D7D7D7"
-                  py={9}
+                  py={[5, 9]}
                 >
-                  <Icon as={FcGoogle} fontSize="4rem" />
-                  <VStack alignItems={'flex-start'} spacing={5}>
-                    <VStack alignItems={'flex-start'} spacing={1}>
-                      <Heading fontSize={['1.5rem']}>Google</Heading>
-                      <Text color={'#8e8e8e'} fontSize="md">
+                  <Icon as={FcGoogle} fontSize={['3rem', '4rem']} />
+                  <VStack alignItems={'flex-start'} spacing={[3, 5]}>
+                    <VStack alignItems={'flex-start'} spacing={[0, 1]}>
+                      <Heading fontSize={['lg', '1.5rem']}>Google</Heading>
+                      <Text color={'#8e8e8e'} fontSize={['sm', 'md']}>
                         Aug 2022 - Present
                       </Text>
                     </VStack>
-                    <VStack alignItems={'flex-start'} spacing={1}>
+                    <VStack
+                      alignItems={'flex-start'}
+                      spacing={1}
+                      fontSize={['sm', '15px']}
+                    >
                       <Text color="gray.600" fontWeight={600}>
                         Lead UX Designer
                       </Text>
-                      <Text color="blackAlpha.700" fontSize={'15px'} w={'90%'}>
+                      <Text color="blackAlpha.700" w={{ lg: '90%' }}>
                         Design full feature of batmobile autopilot. Userfloe,
                         high feadility mockup.
                       </Text>
                     </VStack>
                   </VStack>
                 </HStack>
-                <HStack gap={5} alignItems="flex-start" py={5}>
-                  <Icon as={FcGoogle} fontSize="4rem" />
-                  <VStack alignItems={'flex-start'} spacing={5}>
-                    <VStack alignItems={'flex-start'} spacing={1}>
-                      <Heading fontSize={['1.5rem']}>Google</Heading>
-                      <Text color={'#8e8e8e'} fontSize="md">
+                <HStack
+                  gap={[0, 5]}
+                  alignItems="flex-start"
+                  borderBottom="1px solid #D7D7D7"
+                  py={[5, 9]}
+                >
+                  <Icon as={FcGoogle} fontSize={['3rem', '4rem']} />
+                  <VStack alignItems={'flex-start'} spacing={[3, 5]}>
+                    <VStack alignItems={'flex-start'} spacing={[0, 1]}>
+                      <Heading fontSize={['lg', '1.5rem']}>Google</Heading>
+                      <Text color={'#8e8e8e'} fontSize={['sm', 'md']}>
                         Aug 2022 - Present
                       </Text>
                     </VStack>
-                    <VStack alignItems={'flex-start'} spacing={1}>
+                    <VStack
+                      alignItems={'flex-start'}
+                      spacing={1}
+                      fontSize={['13px', '15px']}
+                    >
                       <Text color="gray.600" fontWeight={600}>
                         Lead UX Designer
                       </Text>
-                      <Text color="blackAlpha.700" fontSize={'15px'} w={'90%'}>
+                      <Text color="blackAlpha.700" w={{ lg: '90%' }}>
                         Design full feature of batmobile autopilot. Userfloe,
                         high feadility mockup.
                       </Text>
@@ -180,19 +206,20 @@ const UserApplication = ({ setUserDetails }: any) => {
               </VStack>
             </VStack>
 
-            <Stack w="60%">
+            <Stack w={{ base: 'full', md: '60%' }}>
               {/* EDUCATION */}
               <Stack
                 py={8}
+                pt={[0, 8]}
                 px={5}
                 gap={3}
                 alignItems="flex-start"
                 borderBottom="1px solid #D7D7D7"
               >
-                <Heading fontWeight={600} fontSize={['1.8rem']}>
+                <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
                   Eductaion
                 </Heading>
-                <Text color="gray.500">
+                <Text color="gray.500" fontSize={['sm', 'md']}>
                   CBSC Animation, AAFT Chhattisgarh, Raipur 2022.
                 </Text>
               </Stack>
@@ -206,7 +233,7 @@ const UserApplication = ({ setUserDetails }: any) => {
                 alignItems="flex-start"
                 borderBottom="1px solid #D7D7D7"
               >
-                <Heading fontWeight={600} fontSize={['1.8rem']}>
+                <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
                   Skills
                 </Heading>
                 <HStack flexWrap={'wrap'} spacing={0} gap={3}>
@@ -215,7 +242,7 @@ const UserApplication = ({ setUserDetails }: any) => {
                     for (let i = 0; i < 20; i++) {
                       tags.push(
                         <Tag background="blackAlpha.100" px={5} py={'5px'}>
-                          <TagLabel>HTML</TagLabel>
+                          <TagLabel fontSize={['12px', '15px']}>html</TagLabel>
                         </Tag>
                       );
                     }
@@ -225,35 +252,44 @@ const UserApplication = ({ setUserDetails }: any) => {
               </Stack>
 
               {/* ACHIEVEMENTS */}
-              <VStack px={5} py={8} pb={'50px'} alignItems="flex-start" gap={5}>
-                <Heading fontWeight={600} fontSize={['1.8rem']}>
-                  About
+              <VStack
+                px={5}
+                py={[5, 8]}
+                pb={'50px'}
+                alignItems="flex-start"
+                gap={5}
+              >
+                <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
+                  Achievements
                 </Heading>
-                <Text color="gray.500">
+                <Text color="gray.500" fontSize={['sm', 'md']}>
                   {' '}
                   Lorem ipsum dolor, sit amet consectetur adipisicing elit.
                   Nihil quas asperiores unde illum sequi repellat, officiis
                   necessitatibus laborum? Dicta, nemo inventore. Iure laudantium
                   odit autem nesciunt sint consequatur quas distinctio! Lorem
-                  ipsum dolor, sit amet consectetur adipisicing elit. Nihil quas
-                  asperiores unde illum sequi repellat, officiis necessitatibus
-                  laborum? Dicta, nemo inventore. Iure laudantium odit autem
-                  nesciunt sint consequatur quas distinctio!
+                  ipsum dolor, sit amet consectetur adipisicing elit.
                 </Text>
               </VStack>
             </Stack>
           </HStack>
         </VStack>
-        <HStack gap={5} w="full" justifyContent={'center'} pr={'10%'}>
-          <Button w="150px">
+        <HStack
+          gap={5}
+          w="full"
+          justifyContent={'center'}
+          pr={{ base: 0, md: '10%' }}
+        >
+          <Button w={['110px', '150px']} size={['sm', 'md']}>
             <HStack>
               <Icon as={AiOutlinePlus} />
               <Text as="span">Shortlist</Text>
             </HStack>
           </Button>
           <Button
-            w="150px"
+            w={['110px', '150px']}
             bg={'red.500'}
+            size={['sm', 'md']}
             _hover={{
               bg: 'red.400',
               transform: 'translateY(-0.1rem)',

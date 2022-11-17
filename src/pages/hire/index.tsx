@@ -32,9 +32,9 @@ const index = () => {
   return (
     <Container
       maxW="full"
+      zIndex={2}
       p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
     >
-      <HireNavBar />
       <Flex
         w="full"
         bg="rgba(255,255,255,0.4)"

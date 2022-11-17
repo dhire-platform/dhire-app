@@ -36,7 +36,7 @@ const SkillsComponent = () => {
   const setSkills = useProfileStore((state: any) => state.setSkills);
   const [edit, setEdit] = useState(false);
   const [allSkills, setAllSkills] = useState(
-    userProfile.skills?.map((skill: any) => skill.name) || []
+    userProfile.skills?.map((skill: any) => skill) || []
   );
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   //const skillArr = userProfile.skills?.map((skill) => skill.name)! as string[];

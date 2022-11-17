@@ -145,10 +145,10 @@ const Card: React.FC<IJob> = (props) => {
           </Text>
         </Box>
         <Box display={'flex'} gap="1rem">
-          <Tag fontSize={['10px', '15px', 'lg']}>
+          <Tag fontSize={['10px', '13px']}>
             {getExperienceType(job_experience_level)}
           </Tag>
-          <Tag fontSize={['10px', '15px', 'lg']}>{getJobType(job_type)}</Tag>
+          <Tag fontSize={['10px', '13px']}>{getJobType(job_type)}</Tag>
         </Box>
       </Stack>
     </Container>

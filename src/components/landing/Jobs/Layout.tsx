@@ -32,7 +32,7 @@ const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 
 const Layout: React.FC<Props> = ({ children, data, setData }) => {
   return (
-    <Container overflow="hidden" h="fit-content" maxW="full" p="0">
+    <Container overflow="hidden" h="fit-content" maxW="full" p="0" zIndex={2}>
       <VStack>
         <Heading
           py="4rem"

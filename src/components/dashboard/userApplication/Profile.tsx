@@ -49,7 +49,7 @@ const Profile = () => {
     );
   };
   return (
-    <Container h="fit-content" maxW="full" p="0">
+    <Container h="fit-content" maxW="full" p="0" pb="10%">
       <ProgressModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <VStack spacing={0}>
         <Box
