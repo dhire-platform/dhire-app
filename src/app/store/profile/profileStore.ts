@@ -106,6 +106,15 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
       })
     );
   },
+  resetUser: () => {
+    console.log('reset');
+    set({
+      user,
+      userProfile,
+      recruiterProfile,
+      company,
+    });
+  },
 
   userProfile: userProfile,
   createNewUserProfile: (data: IUserProfile): Promise<IStoreDataResponse> => {

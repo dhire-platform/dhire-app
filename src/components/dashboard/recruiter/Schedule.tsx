@@ -12,7 +12,12 @@ import { MdVerified } from 'react-icons/md';
 
 export const Schedule = () => {
   return (
-    <VStack bg="white" w="95%" p="1.2rem 2rem" borderRadius="10px">
+    <VStack
+      bg="white"
+      w="95%"
+      p={['1.2rem 10px', '1.2rem 2rem']}
+      borderRadius="10px"
+    >
       <HStack
         w="full"
         pb="1.2rem"
@@ -41,20 +46,25 @@ export const Schedule = () => {
         borderBottom="1px solid #F3EDED"
         pb={'1.2rem'}
       >
-        <HStack gap={3} py={2}>
-          <Avatar />
-          <VStack spacing={0} alignItems="flex-start">
-            <HStack>
-              <Text fontSize={'xl'} fontWeight={600}>
+        <HStack gap={3} py={2} alignItems="flex-start">
+          <Avatar size={['sm', 'md']} />
+          <VStack spacing={0} alignItems={'flex-start'} gap={2}>
+            <HStack
+              flexDir={['column', 'row']}
+              alignItems={['flex-start', 'center']}
+              spacing={0}
+              gap={[0, 2, 4]}
+            >
+              <Text fontSize={['lg', 'xl']} fontWeight={600}>
                 Vijay{' '}
               </Text>
-              <HStack fontSize={'sm'} color="gray.500">
+              <HStack fontSize={['xs', 'sm']} color="gray.500">
                 <Text>13 Mar 2022 </Text>
                 <HStack w={2} h={2} bg="gray.700" rounded={'full'}></HStack>
                 <Text>04:23 PM</Text>
               </HStack>
             </HStack>
-            <Text fontSize={'sm'} color="gray.500" fontWeight={500}>
+            <Text fontSize={['xs', 'sm']} color="gray.500" fontWeight={500}>
               Sccessfully Interviewed
             </Text>
           </VStack>
@@ -62,14 +72,18 @@ export const Schedule = () => {
         <Icon as={MdVerified} w={6} h={6} color="green" />
       </HStack>
       <HStack w="full" justifyContent={'space-between'} pb={'1.2rem'}>
-        <HStack gap={3} py={2}>
-          <Avatar />
-          <VStack spacing={0} alignItems="flex-start">
-            <HStack>
-              <Text fontSize={'xl'} fontWeight={600}>
+        <HStack gap={3} py={2} alignItems="flex-start">
+          <Avatar size={['sm', 'md']} />
+          <VStack spacing={0} alignItems="flex-start" gap={2}>
+            <HStack
+              flexDir={['column', 'row']}
+              alignItems="flex-start"
+              spacing={0}
+            >
+              <Text fontSize={['lg', 'xl']} fontWeight={600}>
                 Vijay{' '}
               </Text>
-              <HStack fontSize={'sm'} color="gray.500">
+              <HStack fontSize={['xs', 'sm']} color="gray.500">
                 <Text>13 Mar 2022 </Text>
                 <HStack w={2} h={2} bg="gray.700" rounded={'full'}></HStack>
                 <Text>04:23 PM</Text>

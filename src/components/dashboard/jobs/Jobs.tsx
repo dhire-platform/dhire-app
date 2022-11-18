@@ -28,6 +28,7 @@ import Pagination from 'src/components/Pagination/Pagination';
 import { IJob } from '@/interfaces/store/data/job.interface';
 import { useFilter } from 'src/lib/hooks/useFilter';
 import { IFilter } from '@/interfaces/filter.interface';
+import { SearchBar } from './SearchBar';
 
 const animationKeyframes = keyframes`
       from {
@@ -80,52 +81,11 @@ const Jobs = () => {
   }, [filters]);
 
   return (
-    <Container h="fit-content" maxW="full" p="0">
-      <Box bg="white" rounded="md" p="0.5rem 2rem">
-        <HStack fontSize={'md'} justifyContent="space-between">
-          <HStack>
-            <Icon as={FiSearch} w={7} h={7} color="gray.300" />
-            <chakra.input
-              onChange={(event: { target: { value: any } }) => {
-                setReqFilter({
-                  filter_type: 'job_title',
-                  filter_values:
-                    event.target.value === ''
-                      ? []
-                      : [event.target.value.toLowerCase()],
-                  search: true,
-                });
-              }}
-              placeholder="Search Jobs..."
-              _active={{ outline: '0' }}
-              _focus={{ outline: '0' }}
-            />
-          </HStack>
-          <HStack fontSize={'md'}>
-            <Box h="4rem" w="6px" color="gray.500"></Box>
-            <Icon as={RiMapPin2Line} w={7} h={7} color="gray.300" />
-            <chakra.select
-              bg="white"
-              name="location"
-              placeholder="Select option"
-              onChange={(event: { target: { value: any } }) => {
-                setReqFilter({
-                  filter_type: 'job_location',
-                  filter_values:
-                    event.target.value === '' ? [] : [event.target.value],
-                });
-              }}
-            >
-              <option value="">ALL</option>
-              <option value="London, UK">London, UK</option>
-              <option value="California, US">California, US</option>
-              <option value="New Delhi, India">New Delhi, India</option>
-              <option value="Banglore, India">Banglore, India</option>
-            </chakra.select>
-          </HStack>
-        </HStack>
+    <Container h="fit-content" maxW="full" p={['0', 0, '1rem']}>
+      <Box bg="white" rounded="md" p={[3, '0.5rem 2rem']}>
+        <SearchBar setReqFilter={setReqFilter} />
       </Box>
-      <Box
+      {/* <Box // Background
         mx="auto"
         w="40rem"
         h="1.5rem"
@@ -135,23 +95,38 @@ const Jobs = () => {
         blur="2xl"
         opacity="0.5"
         filter="blur(90px)"
-      />
+      /> */}
 
-      <Container pb="6rem" pt="2rem" maxW="full" bg="#FCFCFC" minH="100vh">
+      <Container
+        px={[0, '0.8rem']}
+        pb="6rem"
+        pt="1.5rem"
+        mt="2rem"
+        maxW="full"
+        bg="#FCFCFC"
+        minH="100vh"
+      >
         <Stack
-          flexDir={'row-reverse'}
+          flexDir={{ base: 'column', lg: 'row-reverse' }}
           ref={ref}
           position="sticky"
           mx="auto"
-          maxW="fit-content"
+          maxW="100%"
           direction={'row'}
-          gap="1.5rem"
-          p="1rem"
+          spacing={0}
+          gap={{ base: '0', md: 0, lg: '1.5rem' }}
+          p={{ base: '10px', md: '1rem' }}
         >
           <Stack>
-            <Stack spacing={'2rem'} minW="15rem" direction={'column'} p="1rem">
+            <Stack
+              spacing={'2rem'}
+              minW={{ base: 'auto', md: '15rem' }}
+              direction={'column'}
+              p="1rem"
+            >
+              {/* Job Type */}
               <Stack direction={'column'}>
-                <Heading fontWeight="600" fontSize="xl">
+                <Heading fontWeight="600" fontSize={{ base: 'lg', md: 'xl' }}>
                   Job Type
                 </Heading>
                 <CheckboxGroup
@@ -162,27 +137,35 @@ const Jobs = () => {
                     });
                   }}
                 >
-                  <Stack direction={'column'} p="1rem">
-                    <Checkbox value="1" size={'md'}>
+                  <Stack
+                    direction={{ base: 'column', sm: 'row', lg: 'column' }}
+                    spacing={0}
+                    gap={[2, 4, 4, 3]}
+                    p="1rem"
+                    wrap={'wrap'}
+                    w="full"
+                  >
+                    <Checkbox value="1" size={['sm', 'md']}>
                       Full Time Job
                     </Checkbox>
-                    <Checkbox value="2" size={'md'}>
+                    <Checkbox value="2" size={['sm', 'md']}>
                       Part Time Job
                     </Checkbox>
-                    <Checkbox value="3" size={'md'}>
+                    <Checkbox value="3" size={['sm', 'md']}>
                       Freelance Job
                     </Checkbox>
-                    <Checkbox value="4" size={'md'}>
+                    <Checkbox value="4" size={['sm', 'md']}>
                       Remote Job
                     </Checkbox>
-                    <Checkbox value="5" size={'md'}>
+                    <Checkbox value="5" size={['sm', 'md']}>
                       Internship
                     </Checkbox>
                   </Stack>{' '}
                 </CheckboxGroup>
               </Stack>
+              {/* SALARy */}
               <Stack gap="1rem">
-                <Heading fontWeight="600" fontSize="xl">
+                <Heading fontWeight="600" fontSize={{ base: 'lg', md: 'xl' }}>
                   Salary
                 </Heading>
                 <RangeSlider
@@ -204,10 +187,20 @@ const Jobs = () => {
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                 >
-                  <RangeSliderMark value={0} mt="1" ml="-2.5" fontSize="sm">
+                  <RangeSliderMark
+                    value={0}
+                    mt="1"
+                    ml={{ base: '-5', md: '-2.5' }}
+                    fontSize={['xs', 'sm']}
+                  >
                     0k
                   </RangeSliderMark>
-                  <RangeSliderMark value={300} mt="1" ml="-2.5" fontSize="sm">
+                  <RangeSliderMark
+                    value={300}
+                    mt="1"
+                    ml={{ base: '-5', md: '-2.5' }}
+                    fontSize={['xs', 'sm']}
+                  >
                     300k
                   </RangeSliderMark>
                   <RangeSliderTrack>
@@ -235,9 +228,10 @@ const Jobs = () => {
                   </Tooltip>
                 </RangeSlider>
               </Stack>
+              {/* EXP */}
               <Stack direction={'column'}>
                 {' '}
-                <Heading fontWeight="600" fontSize="xl">
+                <Heading fontWeight="600" fontSize={{ base: 'lg', md: 'xl' }}>
                   Experience
                 </Heading>
                 <CheckboxGroup
@@ -248,20 +242,31 @@ const Jobs = () => {
                     });
                   }}
                 >
-                  <Stack direction={'column'} p="1rem">
-                    <Checkbox value="1">Entry Level</Checkbox>
-                    <Checkbox value="2">Intermediate Level</Checkbox>
-                    <Checkbox value="3">Senior Level</Checkbox>
+                  <Stack
+                    direction={{ base: 'column', sm: 'row', lg: 'column' }}
+                    spacing={0}
+                    gap={[2, 4, 4, 3]}
+                    p="1rem"
+                  >
+                    <Checkbox value="1" size={['sm', 'md']}>
+                      Entry Level
+                    </Checkbox>
+                    <Checkbox value="2" size={['sm', 'md']}>
+                      Intermediate Level
+                    </Checkbox>
+                    <Checkbox value="3" size={['sm', 'md']}>
+                      Senior Level
+                    </Checkbox>
                   </Stack>
                 </CheckboxGroup>
               </Stack>
             </Stack>
           </Stack>
           <Center
-            minW="42rem"
+            // minW="42rem"
             gap="1.3rem"
-            p="1rem"
-            w="fit-content"
+            w="full"
+            p={{ base: '0px', md: '1rem' }}
             flexDirection="column"
           >
             <Stack
@@ -269,8 +274,9 @@ const Jobs = () => {
               direction={'row'}
               justifyContent="space-between"
               w="100%"
+              fontSize={['10px', '14px']}
             >
-              <Text color="gray.400">
+              <Text color={'gray.400'}>
                 Showing {filteredData.length} results
               </Text>
               <Stack direction={'row'}>
@@ -301,8 +307,8 @@ const Jobs = () => {
               <Center
                 textAlign={'center'}
                 flexDirection={'column'}
-                w="100%"
-                maxW="3xl"
+                alignItems="center"
+                w="full"
                 h="100%"
               >
                 <Heading
@@ -314,23 +320,19 @@ const Jobs = () => {
                 >
                   🫣
                 </Heading>
-                <Text maxW="14rem" fontSize="xl">
+                <Text maxW="14rem" fontSize={{ base: 'lg', md: 'xl' }}>
                   Sorry We could not find any match for that.
                 </Text>
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
             ) : (
-              currentData.map((item, index) => (
-                <a key={index} href={`job/${item.id}`}>
-                  <Card key={index} {...item} />
-                </a>
-              ))
+              currentData.map((item, index) => <Card key={index} {...item} />)
             )}
             <Pagination
               onPageChange={(page: number) => {
                 setCurrentPage(page);
               }}
-              siblingCount={4}
+              siblingCount={1}
               currentPage={currentPage}
               totalCount={filteredData.length}
               pageSize={PageSize}

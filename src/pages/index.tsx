@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         description={`${config.general.name} is a decentralized hiring platform`}
         image={`https://solana.ghost.io/content/images/2022/06/solana-network-upgrades.png`}
       />
-      <Container maxW="full" p="0">
+      <Container maxW="full" p="0" zIndex={2}>
         <Hero />
         <Scroll />
         <ChooseUs />

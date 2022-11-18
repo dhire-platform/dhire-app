@@ -117,18 +117,17 @@ const Recruiter = () => {
               </Tab>
             </TabList>
             <TabPanels ml={nav_width}>
-              <TabPanel>
+              <TabPanel p={[2, 4]}>
                 <Center w="full">
                   <Flex
                     w="full"
                     mx="auto"
                     minH={{ base: 'full', md: 'clamp(54rem,180vh, 60rem)' }}
                     gap="2rem"
-                    flexWrap={'wrap'}
                     alignItems="center"
                     alignContent={'center'}
                     justifyContent={'top'}
-                    flexDirection={{ base: 'row', md: 'column' }}
+                    flexDirection={'column'}
                   >
                     <ActionButtons />
                     <AboutOrganisation />
@@ -144,7 +143,7 @@ const Recruiter = () => {
                   ) : jobDetails ? (
                     <Applications openUser={setUserDetails} />
                   ) : (
-                    <VStack pt={3}>
+                    <VStack pt={3} w="95%">
                       <ActionButtons />
                       <JobsList openJob={setJobDetails} />
                     </VStack>

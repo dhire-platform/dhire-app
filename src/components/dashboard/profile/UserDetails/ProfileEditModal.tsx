@@ -29,13 +29,14 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
-  const onSubmit = useProfileEdit({ isOpen, onClose });
-
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({});
+
+  const onSubmit = useProfileEdit({ isOpen, onClose, reset });
 
   return (
     <Modal
@@ -54,37 +55,6 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
-            {/* Full Name */}
-            {/* <FormControl isRequired>
-              <FormLabel htmlFor="name">Full name</FormLabel>
-              <Input
-                isRequired
-                id="name"
-                placeholder="Name"
-                {...register('name', {
-                  required: 'This is required',
-                  minLength: {
-                    value: 4,
-                    message: 'Minimum length should be 4',
-                  },
-                  pattern: {
-                    value: /^[^\s]+(?:$|.*[^\s]+$)/,
-                    message:
-                      'Entered value cant start/end or contain only white spacing',
-                  },
-                })}
-              />
-              <ErrorMessage
-                errors={errors}
-                name="name"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
-              />
-            </FormControl> */}
-
             {/*userName */}
             {router.pathname === '/profile' && (
               <FormControl isRequired>
@@ -152,13 +122,32 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               />
             </FormControl>
 
+            {/* Location */}
+            <FormControl>
+              <FormLabel htmlFor="location">Location</FormLabel>
+              <Input
+                id="location"
+                placeholder="Your location"
+                {...register('location')}
+              />
+              <ErrorMessage
+                errors={errors}
+                name="location"
+                render={({ message }) => (
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
+                    {message}
+                  </Text>
+                )}
+              />
+            </FormControl>
+
             {/* About */}
             <FormControl>
-              <FormLabel htmlFor="name">About</FormLabel>
+              <FormLabel htmlFor="bio">About</FormLabel>
               <Textarea
-                id="about"
+                id="bio"
                 placeholder="About You"
-                {...register('about', {
+                {...register('bio', {
                   maxLength: {
                     value: 200,
                     message: 'Maximum length should be 200',
@@ -167,7 +156,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               />
               <ErrorMessage
                 errors={errors}
-                name="about"
+                name="bio"
                 render={({ message }) => (
                   <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}

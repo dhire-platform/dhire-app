@@ -30,7 +30,7 @@ const ProfileComponent = () => {
           setHover(false);
         }}
         bg={useColorModeValue('white', 'blackAlpha.600')}
-        w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
+        w="100%"
         rounded="lg"
         flexDirection={'column'}
         p="1.5rem"
@@ -60,9 +60,12 @@ const ProfileComponent = () => {
               direction={'column'}
             >
               <Heading color={'black'} fontSize="xl">
-                {user?.name}
+                {user?.name}{' '}
+                {userProfile?.location?.trim()
+                  ? `(${userProfile?.location.trim()})`
+                  : ''}
               </Heading>
-              <Text marginBlock="0" margin="0.1rem" color="blackAlpha.500">
+              <Text marginBlock="0" margin="0" color="blackAlpha.500">
                 @{user?.username}
               </Text>
             </Stack>
@@ -84,10 +87,10 @@ const ProfileComponent = () => {
           />
         </Stack>
         <Heading
-          fontWeight="300"
-          fontSize={'md'}
+          fontWeight="400"
+          fontSize={{ base: '12px', lg: '14px' }}
           noOfLines={3}
-          color={'black'}
+          color={'blackAlpha.800'}
           w="100%"
           maxW="36rem"
           mt={userProfile?.bio && '1rem'}

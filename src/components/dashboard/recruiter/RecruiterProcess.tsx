@@ -24,9 +24,17 @@ import { HiTrendingUp } from 'react-icons/hi';
 export const RecruiterProcess = () => {
   const { recruiterProfile } = useProfileStore();
   return (
-    <HStack w="95%" mt={3} spacing={0} flexWrap="wrap" gap={5}>
+    <HStack w="95%" mt={3} spacing={0} flexWrap="wrap" gap={5} flex={1}>
       {/* COMPANY SIZE */}
-      <VStack gap={3} maxW={{ base: '100%', md: '30%' }}>
+      <VStack
+        gap={3}
+        spacing={0}
+        maxW={{ base: '100%', xl: '30%' }}
+        flexDir={{ base: 'column', sm: 'row', xl: 'column' }}
+        justifyContent="space-evenly"
+        alignSelf="stretch"
+        w="full"
+      >
         <VStack
           bg="white"
           borderRadius="10px"
@@ -73,36 +81,52 @@ export const RecruiterProcess = () => {
         p={'1.5rem 1rem'}
         alignSelf={'stretch'}
         gap={5}
+        maxW={{ md: '600px' }}
         flex={1}
       >
-        <Heading fontSize={['18px', '20px', '22px']} ml={5}>
+        <Heading fontSize={['18px', '20px', '22px']} ml={[0, 5]}>
           Recruiter Process
         </Heading>
-        <TableContainer>
+        <TableContainer w="full">
           <Table variant="simple">
-            <Thead>
+            <Thead fontSize={['11px', '12px', '16px']}>
               <Tr>
-                <Th border={'none'} minW={'100px'}>
+                <Th
+                  p={[1, 2, 2, 6]}
+                  border={'none'}
+                  minW={['40px', '60px', '100px']}
+                >
                   Name
                 </Th>
-                <Th border={'none'} minW={'100px'}>
+                <Th
+                  p={[1, 2, 2, 6]}
+                  border={'none'}
+                  minW={['40px', '60px', '100px']}
+                >
                   Department
                 </Th>
-                <Th border={'none'} minW={'100px'}>
+                <Th
+                  p={[1, 2, 2, 6]}
+                  border={'none'}
+                  minW={['40px', '60px', '100px']}
+                >
                   Type
                 </Th>
               </Tr>
             </Thead>
             <Tbody fontSize={['11px', '12px', '16px']}>
               <Tr>
-                <Td>
-                  <HStack spacing={3}>
-                    <Avatar size="xs" />
+                <Td p={[1, 2, 2, 6]}>
+                  <HStack spacing={[0, 3]}>
+                    <Avatar
+                      size={'xs'}
+                      display={{ base: 'none', sm: 'block' }}
+                    />
                     <Text as="span">Vijay</Text>
                   </HStack>
                 </Td>
-                <Td>Devops</Td>
-                <Td>
+                <Td p={[1, 2, 2, 6]}>Devops</Td>
+                <Td p={[1, 2, 2, 6]}>
                   <HStack>
                     <Box
                       w={'10px'}
@@ -124,7 +148,7 @@ export const RecruiterProcess = () => {
         bg="white"
         borderRadius="10px"
         flex={1}
-        minW={'150px'}
+        minW={'max-content'}
         p={'1.5rem 1rem'}
         alignSelf={'stretch'}
         gap={5}

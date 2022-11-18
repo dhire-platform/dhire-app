@@ -1,5 +1,5 @@
 export interface IExperience {
-  company?: Company;
+  company?: string;
   image?: string;
   designation?: string;
   from?: Date;

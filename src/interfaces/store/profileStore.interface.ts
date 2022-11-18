@@ -30,7 +30,7 @@ export interface IProfileStore {
   user: IUser;
   createNewUser: (data: IUser) => Promise<IStoreDataResponse>;
   updateUser: (data: IUser) => void;
-
+  resetUser: () => void;
   userProfile: IUserProfile;
   createNewUserProfile: (data: IUserProfile) => Promise<IStoreDataResponse>;
   updateUserProfile: (data: IUserProfile) => void;

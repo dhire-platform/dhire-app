@@ -20,6 +20,7 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
     user,
     updateWallet,
     updateUser,
+    resetUser,
     updateUserProfile,
     updateRecruiterProfile,
     updateCompany,
@@ -40,7 +41,7 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
       // the screen refreshes due to this it takes time for wallet to throw wallet.connected = true
       console.log('wallet not connected');
       removePersistanceUser();
-      //  removeUser();
+      resetUser();
       updateWallet({
         connected: false,
         loading: false,
@@ -94,7 +95,7 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
           onOpen();
         });
     }
-  }, [wallet.connected]);
+  }, [wallet.connected, wallet.publicKey]);
 
   return user;
 };

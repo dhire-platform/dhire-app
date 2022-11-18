@@ -1,11 +1,13 @@
 import { Box, Container, useMediaQuery } from '@chakra-ui/react';
+import { useWallet } from '@solana/wallet-adapter-react';
 import React from 'react';
 
 const Background = () => {
   const [isLargerThan720] = useMediaQuery('(min-width: 720px)');
-
+  const wallet = useWallet();
   return (
     <Container
+      zIndex={1}
       maxW={'full'}
       display="flex"
       alignItems={'center'}

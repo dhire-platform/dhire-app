@@ -1,10 +1,14 @@
 import {
+  Box,
   Center,
   chakra,
   Checkbox,
   CheckboxGroup,
   Container,
   Heading,
+  HStack,
+  Icon,
+  keyframes,
   RangeSlider,
   RangeSliderFilledTrack,
   RangeSliderMark,
@@ -15,14 +19,25 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
+import { FiSearch } from 'react-icons/fi';
+import { RiMapPin2Line } from 'react-icons/ri';
 import { useInView } from 'react-intersection-observer';
 import Card from 'src/components/landing/Jobs/Card';
 import Data from 'src/components/landing/Jobs/Data.json';
-import Layout from 'src/components/landing/Jobs/Layout';
 import Pagination from 'src/components/Pagination/Pagination';
-import { IFilter } from '@/interfaces/filter.interface';
 import { IJob } from '@/interfaces/store/data/job.interface';
 import { useFilter } from 'src/lib/hooks/useFilter';
+import { IFilter } from '@/interfaces/filter.interface';
+
+const animationKeyframes = keyframes`
+        from {
+          background-position: 0 0;
+        to {
+          background-position: 100% 100%;
+        }
+      `;
+
+const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 
 const Jobs = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -53,47 +68,90 @@ const Jobs = () => {
     req_filter.push(filter);
     setFilters(req_filter);
   };
+
   useEffect(() => {
     let newArray = useFilter({
       all_filters: filters,
       fullArray: Data,
     });
+    //console.log(newArray[0]);
     setFilteredData(newArray);
     setCurrentPage(1);
   }, [filters]);
+
   return (
-    <Layout data={filteredData} setData={setReqFilter}>
-      <Container
-        px={[0, '0.8rem']}
-        pb="6rem"
-        pt="1.5rem"
-        mt="2rem"
-        maxW="full"
-        bg="#FCFCFC"
-        minH="100vh"
-        zIndex={2}
-      >
+    <Container h="fit-content" maxW="full" p="0">
+      <Box bg="white" rounded="md" p="0.5rem 2rem">
+        <HStack fontSize={'md'} justifyContent="space-between">
+          <HStack>
+            <Icon as={FiSearch} w={7} h={7} color="gray.300" />
+            <chakra.input
+              onChange={(event: { target: { value: any } }) => {
+                setReqFilter({
+                  filter_type: 'job_title',
+                  filter_values:
+                    event.target.value === ''
+                      ? []
+                      : [event.target.value.toLowerCase()],
+                  search: true,
+                });
+              }}
+              placeholder="Search Jobs..."
+              _active={{ outline: '0' }}
+              _focus={{ outline: '0' }}
+            />
+          </HStack>
+          <HStack fontSize={'md'}>
+            <Box h="4rem" w="6px" color="gray.500"></Box>
+            <Icon as={RiMapPin2Line} w={7} h={7} color="gray.300" />
+            <chakra.select
+              bg="white"
+              name="location"
+              placeholder="Select option"
+              onChange={(event: { target: { value: any } }) => {
+                setReqFilter({
+                  filter_type: 'job_location',
+                  filter_values:
+                    event.target.value === '' ? [] : [event.target.value],
+                });
+              }}
+            >
+              <option value="">ALL</option>
+              <option value="London, UK">London, UK</option>
+              <option value="California, US">California, US</option>
+              <option value="New Delhi, India">New Delhi, India</option>
+              <option value="Banglore, India">Banglore, India</option>
+            </chakra.select>
+          </HStack>
+        </HStack>
+      </Box>
+      <Box
+        mx="auto"
+        w="40rem"
+        h="1.5rem"
+        bg="#81F2F8"
+        transform={'translateY(3rem)'}
+        rounded={'full'}
+        blur="2xl"
+        opacity="0.5"
+        filter="blur(90px)"
+      />
+
+      <Container pb="6rem" pt="2rem" maxW="full" bg="#FCFCFC" minH="100vh">
         <Stack
-          flexDir={{ base: 'column', lg: 'row-reverse' }}
+          flexDir={'row-reverse'}
           ref={ref}
           position="sticky"
           mx="auto"
-          maxW="100%"
+          maxW="fit-content"
           direction={'row'}
-          spacing={0}
-          gap={{ base: '0', md: 0, lg: '1.5rem' }}
-          p={{ base: '10px', md: '1rem' }}
+          gap="1.5rem"
+          p="1rem"
         >
           <Stack>
-            <Stack
-              spacing={'2rem'}
-              minW={{ base: 'auto', md: '15rem' }}
-              direction={'column'}
-              p="1rem"
-            >
-              {/* Job Type */}
+            <Stack spacing={'2rem'} minW="15rem" direction={'column'} p="1rem">
               <Stack direction={'column'}>
-                <Heading fontWeight="600" fontSize={{ base: 'lg', md: 'xl' }}>
+                <Heading fontWeight="600" fontSize="xl">
                   Job Type
                 </Heading>
                 <CheckboxGroup
@@ -104,35 +162,27 @@ const Jobs = () => {
                     });
                   }}
                 >
-                  <Stack
-                    direction={{ base: 'column', sm: 'row', lg: 'column' }}
-                    spacing={0}
-                    gap={[2, 4, 4, 3]}
-                    p="1rem"
-                    wrap={'wrap'}
-                    w="full"
-                  >
-                    <Checkbox value="1" size={['sm', 'md']}>
+                  <Stack direction={'column'} p="1rem">
+                    <Checkbox value="1" size={'md'}>
                       Full Time Job
                     </Checkbox>
-                    <Checkbox value="2" size={['sm', 'md']}>
+                    <Checkbox value="2" size={'md'}>
                       Part Time Job
                     </Checkbox>
-                    <Checkbox value="3" size={['sm', 'md']}>
+                    <Checkbox value="3" size={'md'}>
                       Freelance Job
                     </Checkbox>
-                    <Checkbox value="4" size={['sm', 'md']}>
+                    <Checkbox value="4" size={'md'}>
                       Remote Job
                     </Checkbox>
-                    <Checkbox value="5" size={['sm', 'md']}>
+                    <Checkbox value="5" size={'md'}>
                       Internship
                     </Checkbox>
                   </Stack>{' '}
                 </CheckboxGroup>
               </Stack>
-              {/* SALARy */}
               <Stack gap="1rem">
-                <Heading fontWeight="600" fontSize={{ base: 'lg', md: 'xl' }}>
+                <Heading fontWeight="600" fontSize="xl">
                   Salary
                 </Heading>
                 <RangeSlider
@@ -154,20 +204,10 @@ const Jobs = () => {
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                 >
-                  <RangeSliderMark
-                    value={0}
-                    mt="1"
-                    ml={{ base: '-5', md: '-2.5' }}
-                    fontSize={['xs', 'sm']}
-                  >
+                  <RangeSliderMark value={0} mt="1" ml="-2.5" fontSize="sm">
                     0k
                   </RangeSliderMark>
-                  <RangeSliderMark
-                    value={300}
-                    mt="1"
-                    ml={{ base: '-5', md: '-2.5' }}
-                    fontSize={['xs', 'sm']}
-                  >
+                  <RangeSliderMark value={300} mt="1" ml="-2.5" fontSize="sm">
                     300k
                   </RangeSliderMark>
                   <RangeSliderTrack>
@@ -195,10 +235,9 @@ const Jobs = () => {
                   </Tooltip>
                 </RangeSlider>
               </Stack>
-              {/* EXP */}
               <Stack direction={'column'}>
                 {' '}
-                <Heading fontWeight="600" fontSize={{ base: 'lg', md: 'xl' }}>
+                <Heading fontWeight="600" fontSize="xl">
                   Experience
                 </Heading>
                 <CheckboxGroup
@@ -209,31 +248,20 @@ const Jobs = () => {
                     });
                   }}
                 >
-                  <Stack
-                    direction={{ base: 'column', sm: 'row', lg: 'column' }}
-                    spacing={0}
-                    gap={[2, 4, 4, 3]}
-                    p="1rem"
-                  >
-                    <Checkbox value="1" size={['sm', 'md']}>
-                      Entry Level
-                    </Checkbox>
-                    <Checkbox value="2" size={['sm', 'md']}>
-                      Intermediate Level
-                    </Checkbox>
-                    <Checkbox value="3" size={['sm', 'md']}>
-                      Senior Level
-                    </Checkbox>
+                  <Stack direction={'column'} p="1rem">
+                    <Checkbox value="1">Entry Level</Checkbox>
+                    <Checkbox value="2">Intermediate Level</Checkbox>
+                    <Checkbox value="3">Senior Level</Checkbox>
                   </Stack>
                 </CheckboxGroup>
               </Stack>
             </Stack>
           </Stack>
           <Center
-            // minW="42rem"
+            minW="42rem"
             gap="1.3rem"
-            w="full"
-            p={{ base: '0px', md: '1rem' }}
+            p="1rem"
+            w="fit-content"
             flexDirection="column"
           >
             <Stack
@@ -241,9 +269,8 @@ const Jobs = () => {
               direction={'row'}
               justifyContent="space-between"
               w="100%"
-              fontSize={['10px', '14px']}
             >
-              <Text color={'gray.400'}>
+              <Text color="gray.400">
                 Showing {filteredData.length} results
               </Text>
               <Stack direction={'row'}>
@@ -274,8 +301,8 @@ const Jobs = () => {
               <Center
                 textAlign={'center'}
                 flexDirection={'column'}
-                alignItems="center"
-                w="full"
+                w="100%"
+                maxW="3xl"
                 h="100%"
               >
                 <Heading
@@ -287,19 +314,23 @@ const Jobs = () => {
                 >
                   🫣
                 </Heading>
-                <Text maxW="14rem" fontSize={{ base: 'lg', md: 'xl' }}>
+                <Text maxW="14rem" fontSize="xl">
                   Sorry We could not find any match for that.
                 </Text>
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
             ) : (
-              currentData.map((item, index) => <Card key={index} {...item} />)
+              currentData.map((item, index) => (
+                <a key={index} href={`job/${item.id}`}>
+                  <Card key={index} {...item} />
+                </a>
+              ))
             )}
             <Pagination
               onPageChange={(page: number) => {
                 setCurrentPage(page);
               }}
-              siblingCount={1}
+              siblingCount={4}
               currentPage={currentPage}
               totalCount={filteredData.length}
               pageSize={PageSize}
@@ -307,7 +338,7 @@ const Jobs = () => {
           </Center>
         </Stack>
       </Container>
-    </Layout>
+    </Container>
   );
 };
 

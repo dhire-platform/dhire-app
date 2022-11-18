@@ -1,3 +1,4 @@
+import { ISkill } from '@/interfaces/store/data/skills.interface';
 import {
   Box,
   Center,
@@ -6,37 +7,67 @@ import {
   FormLabel,
   Heading,
   IconButton,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  Select,
   Stack,
   Tag,
+  TagCloseButton,
+  TagLabel,
   Text,
+  useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { MdDone } from 'react-icons/md';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
+import { SkillLevel } from 'src/lib/enums/enums';
 import ChakraTagInput from 'src/lib/helpers/ChakraTagInput';
+import { LevelInput } from 'src/lib/helpers/LevelInput/LevelInput';
 
 const SkillsComponent = () => {
   const [hover, setHover] = useState(false);
-  const { user, userProfile } = useProfileStore();
+  const [submit, setSubmit] = useState(false);
+  const [skill, setSkill] = useState<string>('');
+  const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.BEGINNER);
+  const { user, userProfile, updateUserProfile } = useProfileStore();
   const setSkills = useProfileStore((state: any) => state.setSkills);
   const [edit, setEdit] = useState(false);
-  const [tags, setTags] = useState(
-    userProfile.skills?.map((skill: any) => skill.name)
+  const [allSkills, setAllSkills] = useState(
+    userProfile.skills?.map((skill: any) => skill) || []
   );
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-  const skillArr = userProfile.skills?.map((skill) => skill.name)! as string[];
-  const skills = skillArr as string[];
-
+  //const skillArr = userProfile.skills?.map((skill) => skill.name)! as string[];
+  //const skills = skillArr as string[];
+  const toast = useToast();
   const handleTagsChange = useCallback(
     (_event: SyntheticEvent, tags: string[]) => {
-      setTags(tags);
+      setAllSkills(tags);
     },
     []
   );
 
-  const submitHandler = () => {
-    setSkills(tags);
+  const submitHandler = async () => {
+    setSubmit(true);
+    const res = await axios.put('/api/userProfile/' + user.id, {
+      skills: allSkills,
+    });
+    toast({
+      position: 'top',
+      title: 'DONE !!',
+      description: 'Successfully Added.',
+      status: 'success',
+      duration: 1000,
+      isClosable: true,
+      containerStyle: {
+        marginTop: '10%',
+      },
+    });
+    updateUserProfile(res.data);
+    setSkills(allSkills);
+    setSubmit(false);
     setEdit(false);
   };
 
@@ -50,7 +81,7 @@ const SkillsComponent = () => {
         setHover(false);
       }}
       bg="white"
-      w={{ base: '100%', md: 'clamp(16rem, 42vw, 36rem)' }}
+      w="100%"
       rounded="lg"
       flexDirection={'column'}
       justifyContent="start"
@@ -74,22 +105,27 @@ const SkillsComponent = () => {
                   Skills
                 </Heading>
               </Stack>
+              <LevelInput
+                tags={allSkills}
+                setTags={setAllSkills}
+                name={skill}
+                setName={setSkill}
+                level={skillLevel}
+                setLevel={setSkillLevel}
+              />
             </FormLabel>
-            <ChakraTagInput
-              tags={tags}
-              onTagsChange={handleTagsChange}
-              //  colorScheme='red'
-            />
           </FormControl>
           <IconButton
             onClick={() => submitHandler()}
+            disabled={submit}
             variant={'unstyled'}
             _hover={{
               bg: 'blackAlpha.100',
             }}
             p="0.1rem"
             size="sm"
-            display={hover ? 'flex' : 'none'}
+            display="flex"
+            opacity={hover ? 1 : 0}
             alignItems="center"
             justifyContent={'center'}
             color="blackAlpha.600"
@@ -97,7 +133,7 @@ const SkillsComponent = () => {
             icon={<MdDone size="18px" />}
           />
         </Stack>
-      ) : skills?.[0] ? (
+      ) : userProfile.skills?.[0] ? (
         <>
           <Stack
             h="2rem"
@@ -105,7 +141,7 @@ const SkillsComponent = () => {
             justifyContent="space-between"
             direction={'row'}
           >
-            <Heading color={'black'} fontSize="xl">
+            <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
               Skills
             </Heading>
             <IconButton
@@ -131,14 +167,15 @@ const SkillsComponent = () => {
             color={'black'}
             maxW="36rem"
           >
-            {skills?.map((skill: string, index: any) => (
+            {userProfile.skills?.map((value: ISkill, index: number) => (
               <Tag
                 background="blackAlpha.50"
                 p="0.4rem 0.8rem"
+                borderRadius={'20px'}
                 fontWeight={'400'}
                 key={index}
               >
-                {skill}
+                {value.name} : {value.level?.toLowerCase()}
               </Tag>
             ))}
           </Flex>
@@ -163,7 +200,7 @@ const SkillsComponent = () => {
             >
               Skills
             </Heading>
-            <Text pb="1.5rem" color="blackAlpha.400">
+            <Text pb="1.5rem" color="blackAlpha.400" textAlign={'center'}>
               Add Your Skills by editing your profile.
             </Text>
             <Box

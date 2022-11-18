@@ -7,14 +7,15 @@ import { IExperience } from './experience.interface';
 
 export interface IUserProfile {
   userId?: string;
-  bio?: string;
-  image?: string;
-  skills?: ISkill[];
+  bio?: string; // done
+  image?: string; // done
+  skills?: ISkill[]; // done
   location?: string;
   website?: string;
-  experience?: IExperience[];
-  education?: IEducation[];
-  projects?: IProject[];
+  achievement?: string;
+  experience?: IExperience[]; // done
+  education?: IEducation[]; // done
+  projects?: IProject[]; // =>
   social?: ISocial;
 }
 

@@ -40,7 +40,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       p="0"
       zIndex="1"
     >
-      {user.wallet?.walletId ? '' : <Background />}
+      {!wallet.connected ? <Background /> : ''}
       {wallet.connected &&
         (!userDetails.id || router.pathname === '/') &&
         !isOpen &&

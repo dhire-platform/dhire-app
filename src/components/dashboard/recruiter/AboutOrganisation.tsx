@@ -8,7 +8,8 @@ export const AboutOrganisation = () => {
       bg="white"
       borderRadius="10px"
       gap={3}
-      p={'1.8em 3em'}
+      p={['1.5rem', '1.8em 3em']}
+      flex={1}
       alignItems="flex-start"
     >
       <Heading fontSize={['20px', '22px', '25px']}>
