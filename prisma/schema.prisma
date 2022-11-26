@@ -82,13 +82,13 @@ model JobPost {
   to                     DateTime
   company                Company           @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   companyId              String            @map("companyId") @db.ObjectId
-  minSalary                 Int
-  maxSalary                 Int
+  minSalary              Int
+  maxSalary              Int
   jobLevel               SkillLevel
   jobType                JobType[]
   salaryType             SalaryType
   skills                 Skill[]
-  applicants             String[]          @default([])
+  applicants             Applicant[]
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
   RecruiterProfile       RecruiterProfile? @relation(fields: [recruiterProfileUserId], references: [userId])
@@ -109,12 +109,28 @@ enum SkillLevel {
 }
 
 enum JobType {
-  FULLTIME 
+  FULLTIME
   PARTTIME
   INTERNSHIP
   REMOTE
   FREELANCE
 }
+
+type Applicant {
+  user_id             String
+  interview_step      String
+  next_interview_date DateTime
+  archieved           Boolean
+  status              ApplicantStatus
+}
+
+enum ApplicantStatus {
+  NOTVIEWED
+  SHORTLISTED
+  SELECTED
+  REJECTED
+}
+
 type Skill {
   name  String
   level SkillLevel
