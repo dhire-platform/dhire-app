@@ -39,7 +39,7 @@ const animationKeyframes = keyframes`
     `;
 
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
-
+// USED IN USERPROFILE DASHBOARD
 const Jobs = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filteredData, setFilteredData] = useState<IJob[]>(Data);
@@ -326,7 +326,8 @@ const Jobs = () => {
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
             ) : (
-              currentData.map((item, index) => <Card key={index} {...item} />)
+              /* currentData.map((item, index) => <Card key={index} {...item} />) */
+              <Text>Comming Soon</Text>
             )}
             <Pagination
               onPageChange={(page: number) => {

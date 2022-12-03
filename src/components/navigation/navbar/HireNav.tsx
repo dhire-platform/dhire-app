@@ -38,7 +38,7 @@ const HireNavBar = () => {
   ];
   function renderButton(button: { text: string; icon: any }, index: number) {
     return (
-      <Tab border="none" px={[0, 0, 2]}>
+      <Tab border="none" my={2} p={0}>
         <Button
           as="div"
           bg={selectedBtn !== index ? 'white' : 'black'}
@@ -64,7 +64,7 @@ const HireNavBar = () => {
       flexDir="column-reverse"
     >
       <TabList border="none">
-        <HStack>
+        <HStack gap={[0, 2]}>
           {buttons.map((button: { text: string; icon: any }, index) => {
             return renderButton(button, index);
           })}

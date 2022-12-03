@@ -528,6 +528,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                 >
                   {allSkills?.map((skill, index) => (
                     <Tooltip
+                      key={index}
                       label="Click to delete"
                       borderRadius={'20px'}
                       fontSize="10px"

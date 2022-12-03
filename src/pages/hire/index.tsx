@@ -56,12 +56,13 @@ const index = () => {
             pageSize={3}
           />
         </HStack>
+        {/*  <UserCard />
         <UserCard />
         <UserCard />
         <UserCard />
         <UserCard />
-        <UserCard />
-        <UserCard />
+        // coming soon
+        <UserCard /> */}
       </Flex>
     </Container>
   );

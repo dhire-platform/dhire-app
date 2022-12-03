@@ -1,21 +1,17 @@
 import { Box, Heading, VStack } from '@chakra-ui/react';
+import { useJobStore } from 'src/app/store/job/jobStore';
 import Card from 'src/components/landing/Jobs/Card';
 import Data from 'src/components/landing/Jobs/Data.json';
-
 const JobsList = ({ openJob }: any) => {
+  const { job } = useJobStore();
+  console.log(job);
   return (
-    <VStack>
-      {(() => {
-        let jobs = [];
-        for (let i = 0; i < 10; i++) {
-          jobs.push(
-            <Box onClick={() => openJob(true)} cursor="pointer" key={i}>
-              <Card key={i} {...Data[i]} />
-            </Box>
-          );
-        }
-        return jobs;
-      })()}
+    <VStack maxW={'800px'}>
+      {job.map((item, index) => (
+        <Box onClick={() => openJob(item)} cursor="pointer" key={index}>
+          <Card key={index} {...item} />
+        </Box>
+      ))}
     </VStack>
   );
 };

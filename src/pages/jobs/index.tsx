@@ -293,7 +293,8 @@ const Jobs = () => {
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
             ) : (
-              currentData.map((item, index) => <Card key={index} {...item} />)
+              /* currentData.map((item, index) => <Card key={index} {...item} />) */
+              <Text>Comming Soon All jobs listed here</Text>
             )}
             <Pagination
               onPageChange={(page: number) => {

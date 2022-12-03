@@ -26,7 +26,7 @@ import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import ChakraTagInput from 'src/lib/helpers/ChakraTagInput';
 
-const UserApplication = ({ setUserDetails }: any) => {
+const UserApplication = ({ setUserDetails, userDetails }: any) => {
   return (
     <>
       <Icon
@@ -37,7 +37,7 @@ const UserApplication = ({ setUserDetails }: any) => {
         cursor="pointer"
         color={'white'}
         as={BiArrowBack}
-        onClick={() => setUserDetails(false)}
+        onClick={() => setUserDetails(undefined)}
       />
       <VStack
         w="full"
@@ -88,9 +88,16 @@ const UserApplication = ({ setUserDetails }: any) => {
               spacing={0}
               fontSize={['13px', 'md']}
             >
-              <Heading fontSize={['1.7rem', '2rem']}>Tushar Rao</Heading>
-              <Text color="#8e8e8e">Product, Design, Research</Text>
-              <Text color="#A8A8A8">San Francisco Bay Area, United States</Text>
+              <Heading fontSize={['1.7rem', '2rem']}>
+                Tushar Rao{/* userDetails.user.name */}
+              </Heading>
+              <Text color="#8e8e8e">
+                Product, Design, Research{/* ...userDetails.skills */}
+              </Text>
+              <Text color="#A8A8A8">
+                San Francisco Bay Area, United States
+                {/* userDetails.location */}
+              </Text>
             </VStack>
             <Button rounded={'none'} w={['110px', '150px']} size={['sm', 'md']}>
               <HStack as="span">
@@ -113,6 +120,7 @@ const UserApplication = ({ setUserDetails }: any) => {
             </Heading>
             <Text color="gray.500" fontSize={['sm', 'md']}>
               {' '}
+              {/* userDetails.bio */}
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil
               quas asperiores unde illum sequi repellat, officiis necessitatibus
               laborum? Dicta, nemo inventore. Iure laudantium odit autem
@@ -156,7 +164,7 @@ const UserApplication = ({ setUserDetails }: any) => {
                     <VStack alignItems={'flex-start'} spacing={[0, 1]}>
                       <Heading fontSize={['lg', '1.5rem']}>Google</Heading>
                       <Text color={'#8e8e8e'} fontSize={['sm', 'md']}>
-                        Aug 2022 - Present
+                        Aug 2022 - Present{/* exp.from - exp.to */}
                       </Text>
                     </VStack>
                     <VStack
@@ -165,11 +173,11 @@ const UserApplication = ({ setUserDetails }: any) => {
                       fontSize={['sm', '15px']}
                     >
                       <Text color="gray.600" fontWeight={600}>
-                        Lead UX Designer
+                        Lead UX Designer {/* exp.company */}
                       </Text>
                       <Text color="blackAlpha.700" w={{ lg: '90%' }}>
                         Design full feature of batmobile autopilot. Userfloe,
-                        high feadility mockup.
+                        high feadility mockup.{/* exp.description */}
                       </Text>
                     </VStack>
                   </VStack>
@@ -221,6 +229,7 @@ const UserApplication = ({ setUserDetails }: any) => {
                 </Heading>
                 <Text color="gray.500" fontSize={['sm', 'md']}>
                   CBSC Animation, AAFT Chhattisgarh, Raipur 2022.
+                  {/* edu.degree, edu.school, edu.location */}
                 </Text>
               </Stack>
 
@@ -264,6 +273,7 @@ const UserApplication = ({ setUserDetails }: any) => {
                 </Heading>
                 <Text color="gray.500" fontSize={['sm', 'md']}>
                   {' '}
+                  {/* userDetails.achievement */}
                   Lorem ipsum dolor, sit amet consectetur adipisicing elit.
                   Nihil quas asperiores unde illum sequi repellat, officiis
                   necessitatibus laborum? Dicta, nemo inventore. Iure laudantium
