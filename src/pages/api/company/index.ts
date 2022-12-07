@@ -18,8 +18,8 @@ async function createCompany(req: NextApiRequest, res: NextApiResponse) {
     type,
     industry,
     founded,
-    specializations,
-    benefits,
+    markets,
+    funding,
     location,
   } = req.body as {
     name: string;
@@ -30,8 +30,8 @@ async function createCompany(req: NextApiRequest, res: NextApiResponse) {
     type?: string;
     industry?: string;
     founded?: Date;
-    specializations?: string[];
-    benefits?: string[];
+    markets?: string[];
+    funding?: string[];
     location?: string;
   };
   try {
@@ -45,8 +45,8 @@ async function createCompany(req: NextApiRequest, res: NextApiResponse) {
         type,
         industry,
         founded,
-        specializations,
-        benefits,
+        markets,
+        funding,
         location,
       },
     });

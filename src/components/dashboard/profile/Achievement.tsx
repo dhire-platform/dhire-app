@@ -82,7 +82,7 @@ const Achievement = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit your Achievement</ModalHeader>
+          <ModalHeader>Add your achievements</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={handleSubmit(submit)}>
             <ModalBody
@@ -92,7 +92,6 @@ const Achievement = () => {
               pb={6}
             >
               <FormControl isRequired>
-                <FormLabel htmlFor="achievement">About</FormLabel>
                 <Textarea
                   id="achievement"
                   placeholder="About You"

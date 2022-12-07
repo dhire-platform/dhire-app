@@ -8,7 +8,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = "mongodb+srv://admin:nShbzrA4l6q0IhWs@dhire.orz9clr.mongodb.net/platform?ssl=true&connectTimeoutMS=5000&maxPoolSize=50"
 }
 
 model User {
@@ -65,8 +65,8 @@ model Company {
   type            String?
   industry        String?
   founded         DateTime?
-  specializations String[]
-  benefits        String[]
+  markets         String[]
+  funding         String[]
   location        String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -76,10 +76,9 @@ model Company {
 model JobPost {
   id                     String            @id @default(auto()) @map("_id") @db.ObjectId
   title                  String
-  description            String
+  description            String[]
   location               String
   from                   DateTime
-  to                     DateTime
   company                Company           @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   companyId              String            @map("companyId") @db.ObjectId
   minSalary              Int
@@ -89,6 +88,7 @@ model JobPost {
   salaryType             SalaryType
   skills                 Skill[]
   applicants             Applicant[]
+  benefits               String[]
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
   RecruiterProfile       RecruiterProfile? @relation(fields: [recruiterProfileUserId], references: [userId])

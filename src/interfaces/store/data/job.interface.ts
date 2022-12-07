@@ -28,7 +28,7 @@ export type Applicant = {
 
 export type IJobs = {
   title?: string;
-  description?: string;
+  description?: string[];
   location?: string;
   from?: Date;
   to?: Date;
@@ -41,5 +41,6 @@ export type IJobs = {
   applicants?: Applicant[];
   recruiterProfileUserId?: string; // this is user id
   skills: skill[];
+  benefits: string[];
   userId?: string;
 };

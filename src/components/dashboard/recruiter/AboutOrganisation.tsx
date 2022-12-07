@@ -1,7 +1,7 @@
 import { Container, Heading, Text, VStack } from '@chakra-ui/layout';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 export const AboutOrganisation = () => {
-  const { recruiterProfile } = useProfileStore();
+  const { recruiterProfile, company } = useProfileStore();
   return (
     <VStack
       w="95%"
@@ -16,14 +16,7 @@ export const AboutOrganisation = () => {
         About Organisation/Culture
       </Heading>
       <Text fontSize={['11px', '12px', '14px']}>
-        Lörem ipsum laröst såv. Tonade prelig som biodir höper vin. Podat enade
-        pöska. Tratipp kungspudel och resopängen, sevinat. Gyde Kron
-        självkarantän bede en stöddjur vyrade. Tisade gede. Dett sogeras till
-        dide. Stjärtfluss semigraf i bädektigt dekas i nöktig. Ore akuktigt i
-        terates. Trir minade, hjulboja. Fafånade. Nösev nira nyvöskap. Astrorat
-        kotånde, och saktiga kagisk vis. Gyr heterovalens såvärar mitt ofälig.
-        Homopis olig subed. Löktig fapön. Byra readat och egoren. Plarat jöskap
-        för att roputin. Radiocism mök.
+        {company.description || 'Add description about your organisation here'}
       </Text>
     </VStack>
   );

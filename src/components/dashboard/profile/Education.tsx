@@ -181,17 +181,23 @@ const Education = () => {
             color="blackAlpha.800"
           >{`${edu.degree} , ${edu.school} ${edu.location || ''}`}</Heading>
 
-          {edu.to && edu.from && (
+          {
             <HStack fontSize={'14px'} color="blackAlpha.600">
-              <Text as="span">{changeToMonth(new Date(edu.from))} </Text>
+              <Text as="span">
+                {edu.from && changeToMonth(new Date(edu.from))}{' '}
+              </Text>
               <Text as="span" color={'black'}>
                 -
               </Text>
               <Text as="span">
-                {edu.current ? 'Present' : changeToMonth(new Date(edu.to))}
+                {edu.current
+                  ? 'Present'
+                  : edu.to
+                  ? changeToMonth(new Date(edu.to))
+                  : ''}
               </Text>
             </HStack>
-          )}
+          }
         </VStack>
         <Stack dir="column" spacing={1} maxW={'80%'}>
           <Text

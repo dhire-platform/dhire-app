@@ -1,4 +1,10 @@
-import { JobType, SalaryType, Skill, SkillLevel, Applicant } from '@prisma/client';
+import {
+  JobType,
+  SalaryType,
+  Skill,
+  SkillLevel,
+  Applicant,
+} from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
 import prisma from 'prisma/client';
@@ -15,7 +21,6 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
     description,
     location,
     from,
-    to,
     companyId,
     minSalary,
     maxSalary,
@@ -26,12 +31,12 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
     recruiterProfileUserId,
     skills,
     userId,
+    benefits,
   } = req.body as {
     title: string;
-    description: string;
+    description: string[];
     location: string;
     from: Date;
-    to: Date;
     companyId: string;
     minSalary: number;
     maxSalary: number;
@@ -42,6 +47,7 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
     recruiterProfileUserId: string;
     skills: Skill[];
     userId: string;
+    benefits: string[];
   };
   try {
     const jobPost = await prisma.jobPost.create({
@@ -50,7 +56,6 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
         description,
         location,
         from,
-        to,
         company: {
           connect: {
             id: companyId,
@@ -73,6 +78,7 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
           },
         },
         skills,
+        benefits,
       },
     });
     res.status(200).json(jobPost);

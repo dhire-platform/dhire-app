@@ -27,6 +27,14 @@ import {
   Select,
   InputRightAddon,
   Tooltip,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  Box,
+  UnorderedList,
+  ListItem,
+  ListIcon,
+  List,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { useState } from 'react';
@@ -34,9 +42,13 @@ import { useForm } from 'react-hook-form';
 import { useJobStore } from 'src/app/store/job/jobStore';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { JobLevel, JobType, SkillLevel, SalaryType } from 'src/lib/enums/enums';
+import { EditableList } from 'src/lib/helpers/EditableInput/EditableList';
+import { MdCheckCircle } from 'react-icons/md';
 
 const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
   const [jobType, setJobType] = useState<JobType[]>();
+  const [benefits, setBenefits] = useState<string[]>();
+  const [jobDesc, setJobDesc] = useState<string[]>();
   const [allSkills, setAllSkills] = useState<skill[]>([]);
   const [skill, setSkill] = useState<string>('');
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.BEGINNER);
@@ -61,9 +73,13 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
       error = 'Salary range is incorrect.';
     } else if (allSkills.length === 0) {
       error = 'Please add some relevant skills';
+    } else if (benefits?.length === 0) {
+      console.log(benefits);
+      error = 'Please add benefits';
     } else {
       const newJob: IJobs = {
         ...data,
+        description: jobDesc,
         from: new Date(data.from),
         to: new Date(data.to),
         minSalary: parseInt(data.minSalary),
@@ -71,9 +87,11 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
         jobType,
         skills: allSkills,
         userId: user.id,
+        benefits,
         companyId: company.id,
         recruiterProfileUserId: recruiterProfile.userId,
       };
+      console.log(newJob);
       const result = await createJob(newJob);
       if (!result.message.includes('error')) {
         error = 'Successfully created new job.';
@@ -218,34 +236,6 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               <ErrorMessage
                 errors={errors}
                 name="from"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
-              />
-            </FormControl>
-            {/*Date to */}
-            <FormControl
-              minW={'250px'}
-              isRequired
-              w={{ base: '100%', md: '45%' }}
-            >
-              <FormLabel htmlFor="to">To</FormLabel>
-
-              <Input
-                size={{ base: 'sm', lg: 'md' }}
-                isRequired
-                type="date"
-                id="to"
-                {...register('to', {
-                  required: 'This is Required',
-                })}
-              />
-
-              <ErrorMessage
-                errors={errors}
-                name="to"
                 render={({ message }) => (
                   <Text fontSize="sm" color="red.500" py="0.5rem">
                     {message}
@@ -427,6 +417,42 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                 )}
               />
             </FormControl>
+            {/* Benifits */}
+            <FormControl minW={'280px'} w={{ base: '100%', md: '45%' }}>
+              <FormLabel>
+                Benefits{' '}
+                <Box as="span" color="red">
+                  *
+                </Box>
+              </FormLabel>
+              <EditableList list={benefits || []} setList={setBenefits} />
+              <Stack
+                direction={'row'}
+                w={'100%'}
+                flexWrap="wrap"
+                spacing={0}
+                gap={1}
+                alignContent={'flex-start'}
+                flexGrow={1}
+                p={1}
+                borderRadius="10px"
+              >
+                {benefits?.map(
+                  (item, index) =>
+                    item && (
+                      <Tag key={index} w="fit-content">
+                        <TagLabel>{item}</TagLabel>
+                        <TagCloseButton
+                          onClick={() => {
+                            let newArr = benefits.filter((b, i) => i !== index);
+                            setBenefits(newArr);
+                          }}
+                        />
+                      </Tag>
+                    )
+                )}
+              </Stack>
+            </FormControl>
             <Stack
               w={'full'}
               wrap={'wrap'}
@@ -434,26 +460,35 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               justifyContent={'space-between'}
             >
               {/*Description*/}
-              <FormControl
-                minW={'280px'}
-                isRequired
-                w={{ base: '100%', md: '45%' }}
-              >
-                <FormLabel htmlFor="description">Job Description</FormLabel>
+              <FormControl minW={'280px'} w={{ base: '100%', md: '45%' }}>
+                <FormLabel>
+                  Job Description{' '}
+                  <Box as="span" color="red">
+                    *
+                  </Box>
+                </FormLabel>
 
-                <Textarea
-                  id="description"
-                  h={{ base: '120px', md: '150px' }}
-                  placeholder="Write minimum 50 character description"
-                  {...register('description', {
-                    required: 'This is Required',
-                    minLength: {
-                      value: 50,
-                      message:
-                        'write at least 50 letter description about the job',
-                    },
-                  })}
-                />
+                <EditableList list={jobDesc || []} setList={setJobDesc} />
+                <UnorderedList
+                  fontSize="1rem"
+                  spacing={3}
+                  listStylePos={'inside'}
+                >
+                  {jobDesc?.map((item, index) => (
+                    <ListItem key={index} role="group" pl="10px">
+                      <Tag w="90%" bg="white">
+                        {item}
+                        <TagCloseButton
+                          ml="auto"
+                          onClick={() => {
+                            let newArr = jobDesc.filter((b, i) => i !== index);
+                            setJobDesc(newArr);
+                          }}
+                        />
+                      </Tag>
+                    </ListItem>
+                  ))}
+                </UnorderedList>
 
                 <ErrorMessage
                   errors={errors}
@@ -467,14 +502,13 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               </FormControl>
 
               {/* ADD SKILLS */}
-              <FormControl
-                isRequired
-                w={'45%'}
-                alignSelf={'stretch'}
-                display="flex"
-                flexDir={'column'}
-              >
-                <FormLabel>Add Skills</FormLabel>
+              <FormControl minW={'280px'} w={{ base: '100%', md: '45%' }}>
+                <FormLabel>
+                  Skills Required{' '}
+                  <Box as="span" color="red">
+                    *
+                  </Box>
+                </FormLabel>
 
                 <InputGroup size="sm" mb={3} display="flex">
                   <Select
@@ -497,17 +531,29 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                     size={'sm'}
                     flexGrow={1}
                     value={skill}
+                    onKeyPress={(e) => {
+                      if (e.charCode === 13) {
+                        e.preventDefault();
+                        if (skill && skillLevel) {
+                          let newObj = { name: skill, level: skillLevel };
+                          setAllSkills([...allSkills, newObj]);
+                          setSkill('');
+                          setSkillLevel(SkillLevel.BEGINNER);
+                        }
+                      }
+                    }}
                     onChange={(e) => setSkill(e.target.value)}
                   />
                   <InputRightAddon
                     cursor={'pointer'}
                     _hover={{ bg: 'gray.200' }}
                     onClick={() => {
-                      console.log(skill, skillLevel);
-                      let newObj = { name: skill, level: skillLevel };
-                      setAllSkills([...allSkills, newObj]);
-                      //setSkill('');
-                      setSkillLevel(SkillLevel.BEGINNER);
+                      if (skill && skillLevel) {
+                        let newObj = { name: skill, level: skillLevel };
+                        setAllSkills([...allSkills, newObj]);
+                        setSkill('');
+                        setSkillLevel(SkillLevel.BEGINNER);
+                      }
                     }}
                   >
                     +
@@ -523,43 +569,23 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                   alignContent={'flex-start'}
                   flexGrow={1}
                   p={1}
-                  border={'1px solid rgba(0,0,0,0.5)'}
                   borderRadius="10px"
                 >
                   {allSkills?.map((skill, index) => (
-                    <Tooltip
-                      key={index}
-                      label="Click to delete"
-                      borderRadius={'20px'}
-                      fontSize="10px"
-                      bg="gray.300"
-                      hasArrow
-                    >
-                      <HStack
-                        p={'5px 15px'}
-                        borderRadius="30px"
-                        bg={
-                          skill.level === SkillLevel.ADVANCED
-                            ? 'red.400'
-                            : skill.level === SkillLevel.INTERMEDIATE
-                            ? 'orange.400'
-                            : 'green.500'
-                        }
-                        w="fit-content"
-                        h="fit-content"
-                        color="white"
-                        cursor="pointer"
-                        fontSize={'12px'}
+                    <Tag key={index} w="fit-content">
+                      <TagLabel>
+                        {skill.level[0] + skill.level.toLowerCase().slice(1)}:{' '}
+                        {skill.name}
+                      </TagLabel>
+                      <TagCloseButton
                         onClick={(e) => {
                           let newSkills = allSkills.filter(
                             (item) => item !== skill
                           );
                           setAllSkills(newSkills);
                         }}
-                      >
-                        <Text key={index}>{skill.name}</Text>
-                      </HStack>
-                    </Tooltip>
+                      />
+                    </Tag>
                   ))}
                 </Stack>
               </FormControl>

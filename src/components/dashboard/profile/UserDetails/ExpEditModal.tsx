@@ -24,23 +24,28 @@ import {
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 
 const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
+  const [current, setCurrent] = useState<boolean>(false);
   const initialRef = useRef(null);
   const finalRef = useRef(null);
   const toast = useToast();
   const { user, userProfile, setExperience, updateUserProfile } =
     useProfileStore();
   async function onSubmit(values: any) {
-    const { company, image, designation, description, current }: IExperience =
-      values;
+    const { company, image, designation, description }: IExperience = values;
     const from: Date = new Date(values.from);
     const to: Date = new Date(values.to);
+    let dateDetails = current ? { current, to: undefined } : { to };
 
-    if (to && from && (to < from || from > new Date())) {
+    if (
+      (to && from && to < from) ||
+      (from && from > new Date()) ||
+      (to && to > new Date())
+    ) {
       toast({
         position: 'top',
         title: 'Error !!',
@@ -59,8 +64,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
       image,
       designation: designation,
       from: from,
-      to: to,
-      current,
+      ...dateDetails,
       location: 'remote',
       description: description,
     };
@@ -76,6 +80,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
       updateUserProfile(res.data);
       setExperience(experienceData);
       reset();
+      setCurrent(false);
       onClose();
     } catch (e: any) {
       console.log(e.response.data.error);
@@ -175,18 +180,26 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
             {/* from/To */}
             <Stack direction={'row'}>
               <FormControl>
-                <FormLabel htmlFor="date">From</FormLabel>
-                <Input id="from" type={'date'} {...register('from')} />
+                <FormLabel htmlFor="from">From</FormLabel>
+                <Input id="from" type={'from'} {...register('from')} />
               </FormControl>
-              <FormControl>
-                <FormLabel htmlFor="date">To</FormLabel>
-                <Input id="to" type={'date'} {...register('to')} />
+              <FormControl isRequired={!current}>
+                <FormLabel htmlFor="to">To</FormLabel>
+                <Input
+                  disabled={current}
+                  type="date"
+                  id="to"
+                  {...register('to')}
+                />
               </FormControl>
             </Stack>
 
-            {/* Current (ongoing/present) */}
+            {/* Current Disable to when current checked*/}
             <FormControl>
-              <Checkbox {...register('current')}> Ongoing </Checkbox>
+              <Checkbox onChange={(e) => setCurrent(e.target.checked)}>
+                {' '}
+                current{' '}
+              </Checkbox>
             </FormControl>
             {/* Job Description */}
             <FormControl>

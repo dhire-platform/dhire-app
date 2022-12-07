@@ -63,6 +63,7 @@ const index = () => {
         <UserCard />
         // coming soon
         <UserCard /> */}
+        <Heading>Coming Soon...</Heading>
       </Flex>
     </Container>
   );

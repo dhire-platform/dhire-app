@@ -6,9 +6,14 @@ const JobsList = ({ openJob }: any) => {
   const { job } = useJobStore();
   console.log(job);
   return (
-    <VStack maxW={'800px'}>
+    <VStack maxW={'800px'} w="100%">
       {job.map((item, index) => (
-        <Box onClick={() => openJob(item)} cursor="pointer" key={index}>
+        <Box
+          onClick={() => openJob(item)}
+          cursor="pointer"
+          key={index}
+          w={'full'}
+        >
           <Card key={index} {...item} />
         </Box>
       ))}

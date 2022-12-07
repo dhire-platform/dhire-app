@@ -21,11 +21,12 @@ import {
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 
 const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
+  const [current, setCurrent] = useState(false);
   const { user, userProfile, updateUserProfile } = useProfileStore();
   const toast = useToast();
   const initialRef = useRef(null);
@@ -33,15 +34,18 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
 
   const onSubmit = async (values: any) => {
     // useToast when date.to < date.from
+    let dateDetails = current
+      ? { current, to: undefined }
+      : { to: new Date(values.to) };
     let project: IProject = {
       ...values,
-      to: new Date(values.to),
+      ...dateDetails,
       from: new Date(values.from),
     };
     if (
-      project.to &&
-      project.from &&
-      (project.to < project.from || project.from > new Date())
+      (project.to && project.from && project.to < project.from) ||
+      (project.from && project.from > new Date()) ||
+      (project.to && project.to > new Date())
     ) {
       toast({
         position: 'top',
@@ -64,6 +68,7 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
     });
     updateUserProfile(res.data);
     reset();
+    setCurrent(false);
     onClose();
   };
 
@@ -163,30 +168,22 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
               />
             </FormControl>
 
-            {/* to */}
-            <FormControl isRequired>
+            <FormControl isRequired={!current}>
               <FormLabel htmlFor="to">To</FormLabel>
               <Input
+                disabled={current}
                 type="date"
                 id="to"
-                {...register('to', {
-                  required: 'This is Required',
-                })}
-              />
-              <ErrorMessage
-                errors={errors}
-                name="to"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
+                {...register('to')}
               />
             </FormControl>
 
-            {/* current */}
+            {/* Current Disable to when current checked*/}
             <FormControl>
-              <Checkbox {...register('current')}> Ongoing </Checkbox>
+              <Checkbox onChange={(e) => setCurrent(e.target.checked)}>
+                {' '}
+                current{' '}
+              </Checkbox>
             </FormControl>
 
             {/* Description */}

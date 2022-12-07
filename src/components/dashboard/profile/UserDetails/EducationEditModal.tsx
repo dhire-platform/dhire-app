@@ -23,13 +23,14 @@ import {
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import useProfileEdit from './useProfileEdit';
 
 const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
   const { user, userProfile, updateUserProfile } = useProfileStore();
+  const [current, setCurrent] = useState<boolean>(false);
   const router = useRouter();
   const toast = useToast();
   const initialRef = useRef(null);
@@ -37,12 +38,19 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
 
   const onSubmit = async (values: any) => {
     // useToast when date.to < date.from
+    let dateDetails = current
+      ? { current, to: undefined }
+      : { to: new Date(values.to) };
     let edu: IEducation = {
       ...values,
-      to: new Date(values.to),
+      ...dateDetails,
       from: new Date(values.from),
     };
-    if (edu.to && edu.from && (edu.to < edu.from || edu.from > new Date())) {
+    if (
+      (edu.to && edu.from && edu.to < edu.from) ||
+      (edu.from && edu.from > new Date()) ||
+      (edu.to && edu.to > new Date())
+    ) {
       toast({
         position: 'top',
         title: 'Error !!',
@@ -63,6 +71,7 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
       education: eduArray,
     });
     updateUserProfile(res.data);
+    setCurrent(false);
     reset();
     onClose();
   };
@@ -73,7 +82,6 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm({});
-
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -167,14 +175,13 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
             </FormControl>
 
             {/* to */}
-            <FormControl isRequired>
+            <FormControl isRequired={!current}>
               <FormLabel htmlFor="to">To</FormLabel>
               <Input
+                disabled={current}
                 type="date"
                 id="to"
-                {...register('to', {
-                  required: 'This is Required',
-                })}
+                {...register('to')}
               />
               <ErrorMessage
                 errors={errors}
@@ -189,7 +196,10 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
 
             {/* current */}
             <FormControl>
-              <Checkbox {...register('current')}> Ongoing </Checkbox>
+              <Checkbox onChange={(e) => setCurrent(e.target.checked)}>
+                {' '}
+                current{' '}
+              </Checkbox>
             </FormControl>
 
             {/* Location */}

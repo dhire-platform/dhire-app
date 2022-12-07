@@ -27,7 +27,7 @@ import { BiFilterAlt } from 'react-icons/bi';
 import { AiOutlineBell } from 'react-icons/ai';
 import { RiHandCoinLine } from 'react-icons/ri';
 
-const HireNavBar = () => {
+const HireNavBar = ({ postJobAction }: any) => {
   const [selectedBtn, setSelectedBtn] = useState<number>(0);
   let buttons = [
     { text: 'Inbox', icon: HiOutlineMail },
@@ -71,7 +71,9 @@ const HireNavBar = () => {
         </HStack>
       </TabList>
       <HStack>
-        <Button size={{ base: 'sm', lg: 'md' }}>Post a job</Button>
+        <Button size={{ base: 'sm', lg: 'md' }} onClick={postJobAction}>
+          Post a job
+        </Button>
         <Popover>
           <PopoverTrigger>
             <Center
