@@ -34,9 +34,9 @@ const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 type props = {
   openUser: any;
-  jobDetails: IJobs;
+  applicantDetails: IJobs;
 };
-export const Applications = ({ openUser, jobDetails }: props) => {
+export const Applications = ({ openUser, applicantDetails }: props) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { onClose, onOpen, isOpen } = useDisclosure();
   return (
@@ -75,7 +75,7 @@ export const Applications = ({ openUser, jobDetails }: props) => {
             <HireNavBar postJobAction={onOpen} />
             <TabPanels>
               <TabPanel>
-                {jobDetails.applicants?.length ? (
+                {applicantDetails.applicants?.length ? (
                   <>
                     <HStack width={'full'} justifyContent="flex-end" mt={0}>
                       <Pagination
@@ -96,7 +96,7 @@ export const Applications = ({ openUser, jobDetails }: props) => {
                       justifyContent={{ lg: 'flex-start' }}
                       gap={{ base: '20px', lg: '10px 40px ' }}
                     >
-                      {jobDetails.applicants.map((applicant, index) => (
+                      {applicantDetails.applicants.map((applicant, index) => (
                         <UserCard
                           key={index}
                           user={applicant}

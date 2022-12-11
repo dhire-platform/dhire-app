@@ -41,18 +41,43 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useJobStore } from 'src/app/store/job/jobStore';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
-import { JobLevel, JobType, SkillLevel, SalaryType } from 'src/lib/enums/enums';
+import {
+  JobLevel,
+  JobType,
+  SkillLevel,
+  SalaryType,
+  Mode,
+} from 'src/lib/enums/enums';
 import { EditableList } from 'src/lib/helpers/EditableInput/EditableList';
-import { MdCheckCircle } from 'react-icons/md';
+import axios from 'axios';
 
-const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
-  const [jobType, setJobType] = useState<JobType[]>();
-  const [benefits, setBenefits] = useState<string[]>();
-  const [jobDesc, setJobDesc] = useState<string[]>();
-  const [allSkills, setAllSkills] = useState<skill[]>([]);
+type JobModalProps = {
+  isOpen: any;
+  onOpen: any;
+  onClose: any;
+  jobDetails?: IJobs;
+  mode?: Mode;
+  setJobDetails?: any;
+};
+const PostJobModal = ({
+  isOpen,
+  onOpen,
+  onClose,
+  jobDetails,
+  setJobDetails,
+  mode,
+}: JobModalProps) => {
+  const [jobType, setJobType] = useState<JobType[]>(jobDetails?.jobType || []);
+  const [benefits, setBenefits] = useState<string[]>(
+    jobDetails?.benefits || []
+  );
+  const [jobDesc, setJobDesc] = useState<string[]>(
+    jobDetails?.description || []
+  );
+  const [allSkills, setAllSkills] = useState<skill[]>(jobDetails?.skills || []);
   const [skill, setSkill] = useState<string>('');
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.BEGINNER);
-  const { job, createJob } = useJobStore();
+  const { job, createJob, editJob } = useJobStore();
   const { recruiterProfile, company, user } = useProfileStore();
   const toast = useToast();
   const {
@@ -74,7 +99,6 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
     } else if (allSkills.length === 0) {
       error = 'Please add some relevant skills';
     } else if (benefits?.length === 0) {
-      console.log(benefits);
       error = 'Please add benefits';
     } else {
       const newJob: IJobs = {
@@ -91,15 +115,21 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
         companyId: company.id,
         recruiterProfileUserId: recruiterProfile.userId,
       };
-      console.log(newJob);
-      const result = await createJob(newJob);
-      if (!result.message.includes('error')) {
+      let result;
+      if (mode === Mode.EDIT) {
+        result = await editJob({ ...jobDetails, ...newJob });
+        setJobDetails(newJob);
+        error = 'Successfully edited job details.';
+      } else {
+        result = await createJob(newJob);
+        setAllSkills([]);
+        setJobType([]);
         error = 'Successfully created new job.';
+      }
+      if (!result.message.includes('error')) {
         status = 'success';
       }
       reset();
-      setAllSkills([]);
-      setJobType([]);
       setSkill('');
       onClose();
     }
@@ -154,6 +184,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               <Input
                 size={{ base: 'sm', lg: 'md' }}
                 isRequired
+                defaultValue={jobDetails?.title}
                 id="title"
                 placeholder="Title"
                 {...register('title', {
@@ -192,6 +223,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                 isRequired
                 type="text"
                 id="location"
+                defaultValue={jobDetails?.location}
                 placeholder="Location"
                 {...register('location', {
                   required: 'This is Required',
@@ -228,6 +260,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                 size={{ base: 'sm', lg: 'md' }}
                 isRequired
                 type="date"
+                defaultValue={jobDetails?.from?.toString().split('T')[0]}
                 id="from"
                 {...register('from', {
                   required: 'This is Required',
@@ -259,6 +292,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                     isRequired
                     type="number"
                     id="minSalary"
+                    defaultValue={jobDetails?.minSalary}
                     {...register('minSalary', {
                       required: 'This is Required',
                     })}
@@ -282,6 +316,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
                     isRequired
                     type="number"
                     id="maxSalary"
+                    defaultValue={jobDetails?.maxSalary}
                     {...register('maxSalary', {
                       required: 'This is Required',
                     })}
@@ -303,7 +338,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
             <FormControl minW={'280px'} isRequired w={'45%'}>
               <FormLabel htmlFor="salaryType">Salary Type</FormLabel>
               <RadioGroup
-                defaultValue={SalaryType.CRYPTO}
+                defaultValue={jobDetails?.salaryType || SalaryType.CRYPTO}
                 size={{ base: 'sm', lg: 'md' }}
               >
                 <Stack spacing={5} direction="row" flexWrap={'wrap'}>
@@ -340,6 +375,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               <CheckboxGroup
                 size={{ base: 'sm', lg: 'md' }}
                 colorScheme="green"
+                defaultValue={jobType}
                 onChange={(value) => setJobType(value as JobType[])}
               >
                 <Stack
@@ -374,7 +410,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
             >
               <FormLabel htmlFor="jobLevel">Job Level</FormLabel>
               <RadioGroup
-                defaultValue={JobLevel.BEGINNER}
+                defaultValue={jobDetails?.jobLevel || JobLevel.BEGINNER}
                 size={{ base: 'sm', lg: 'md' }}
               >
                 <Stack spacing={0} direction="row" flexWrap={'wrap'}>
@@ -601,7 +637,7 @@ const PostJobModal = ({ isOpen, onOpen, onClose }: any) => {
               colorScheme="blue"
               mr={3}
             >
-              Create Job
+              {mode ? 'Save Changes' : 'Create Job'}
             </Button>
           </ModalFooter>
         </form>

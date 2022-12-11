@@ -14,11 +14,24 @@ import {
 import React, { RefObject, useRef } from 'react';
 import { RiMapPin2Line } from 'react-icons/ri';
 import { IJobs } from '@/interfaces/store/data/job.interface';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
 
 const Card: React.FC<IJobs> = (props) => {
   const elementRef = useRef() as RefObject<HTMLElement>;
   const dimensions = useDimensions(elementRef);
-
+  const { user, userProfile } = useProfileStore();
+  const recruiter = user.type;
+  const card_style =
+    recruiter === 'RECRUITER'
+      ? {}
+      : {
+          _hover: {
+            transform: 'scale(1.015)',
+            transition: 'all 0.2s ease-out',
+          },
+          transition: 'all 0.2s ease-in',
+          cursor: 'pointer',
+        };
   //console.log('card dimensions - ', dimensions?.contentBox.width);
   const {
     title,
@@ -33,11 +46,8 @@ const Card: React.FC<IJobs> = (props) => {
     text[0].toUpperCase() + text.slice(1).toString().toLowerCase();
   return (
     <Container
-      _hover={{
-        transform: 'scale(1.015)',
-        transition: 'all 0.2s ease-out',
-      }}
-      transition="all 0.2s ease-in"
+      pos="relative"
+      {...card_style}
       ref={elementRef as RefObject<HTMLDivElement>}
       my="1rem"
       maxW="4xl"
@@ -90,6 +100,7 @@ const Card: React.FC<IJobs> = (props) => {
                 color="gray.400"
               >
                 <Text>Google</Text>
+                {/* company name */}
                 <Stack direction="row" align={'center'}>
                   <Icon as={RiMapPin2Line} w={4} h={4} color="gray.400" />
                   <Text w="max-content">{location ? location : 'Remote'}</Text>

@@ -1,4 +1,11 @@
-import { Container, Heading, Text, VStack } from '@chakra-ui/layout';
+import {
+  Container,
+  Heading,
+  ListItem,
+  Text,
+  UnorderedList,
+  VStack,
+} from '@chakra-ui/layout';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 export const AboutOrganisation = () => {
   const { recruiterProfile, company } = useProfileStore();
@@ -15,9 +22,19 @@ export const AboutOrganisation = () => {
       <Heading fontSize={['20px', '22px', '25px']}>
         About Organisation/Culture
       </Heading>
-      <Text fontSize={['11px', '12px', '14px']}>
-        {company.description || 'Add description about your organisation here'}
-      </Text>
+      <UnorderedList
+        fontSize={['11px', '12px', '14px']}
+        alignItems={'flex-start'}
+        listStylePos={'inside'}
+      >
+        {!company.description
+          ? 'Add description about your organisation here'
+          : company.description
+              .split('\u2022')
+              .map(
+                (item, index) => item && <ListItem key={index}>{item}</ListItem>
+              )}
+      </UnorderedList>
     </VStack>
   );
 };

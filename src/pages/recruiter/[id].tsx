@@ -32,9 +32,11 @@ import { useJobStore } from 'src/app/store/job/jobStore';
 import { BsBriefcase } from 'react-icons/bs';
 import { IJobs } from '@/interfaces/store/data/job.interface';
 import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
+import { JobDetails } from 'src/components/hire/JobDetails';
 
 const Recruiter = () => {
   const [userDetails, setUserDetails] = useState<IUserProfile>();
+  const [applicantDetails, setApplicantDetails] = useState<IJobs>();
   const [jobDetails, setJobDetails] = useState<IJobs>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -104,6 +106,7 @@ const Recruiter = () => {
                 onClick={() => {
                   setUserDetails(undefined);
                   setJobDetails(undefined);
+                  setApplicantDetails(undefined);
                 }}
               >
                 <Icon as={BsBriefcase} display={{ lg: 'none' }} my={2} />
@@ -144,15 +147,23 @@ const Recruiter = () => {
                       setUserDetails={setUserDetails}
                       userDetails={userDetails}
                     />
-                  ) : jobDetails ? (
+                  ) : applicantDetails ? (
                     <Applications
                       openUser={setUserDetails}
-                      jobDetails={jobDetails}
+                      applicantDetails={applicantDetails}
+                    />
+                  ) : jobDetails ? (
+                    <JobDetails
+                      job={jobDetails}
+                      setJobDetails={setJobDetails}
                     />
                   ) : (
                     <VStack pt={3} w="95%">
                       <ActionButtons />
-                      <JobsList openJob={setJobDetails} />
+                      <JobsList
+                        openJob={setJobDetails}
+                        openApplicant={setApplicantDetails}
+                      />
                     </VStack>
                   )}
                 </Center>

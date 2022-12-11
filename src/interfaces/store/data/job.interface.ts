@@ -32,6 +32,7 @@ export type IJobs = {
   location?: string;
   from?: Date;
   to?: Date;
+  id?: string;
   companyId?: string; // this is userProfile id
   jobLevel?: JobLevel;
   jobType: JobType[];

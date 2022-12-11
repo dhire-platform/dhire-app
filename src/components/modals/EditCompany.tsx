@@ -367,9 +367,18 @@ const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
 
               <Textarea
                 id="description"
-                defaultValue={company.description}
+                defaultValue={company.description || '\u2022 '}
                 h={{ base: '120px', md: '150px' }}
-                placeholder="Write minimum 50 character description"
+                onKeyPress={(e: any) => {
+                  if (!e.target.value) {
+                    e.target.value = '\u2022 ';
+                  }
+                  if (e.charCode === 13) {
+                    e.preventDefault();
+                    e.target.value += '\n\u2022 ';
+                    console.log(e.target.value);
+                  }
+                }}
                 {...register('description', {
                   minLength: {
                     value: 50,

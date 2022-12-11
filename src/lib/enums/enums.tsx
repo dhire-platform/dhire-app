@@ -30,3 +30,8 @@ export enum ApplicantStatus {
   SELECTED = 'SELECTED',
   REJECTED = 'REJECTED',
 }
+
+export enum Mode {
+  CREATTE = 'CREATE',
+  EDIT = 'EDIT',
+}
