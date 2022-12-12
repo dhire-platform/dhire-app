@@ -73,20 +73,17 @@ export const JobDetails = ({
       >
         <VStack alignItems={'flex-start'}>
           <Heading fontWeight={600} fontSize="1.5rem">
-            About Company
+            Job Description
           </Heading>
           <UnorderedList
             fontSize={['11px', '12px', '14px']}
             alignItems={'flex-start'}
             listStylePos={'inside'}
           >
-            {company.description &&
-              company.description
-                .split('\u2022')
-                .map(
-                  (item, index) =>
-                    item && <ListItem key={index}>{item}</ListItem>
-                )}
+            {job.description &&
+              job.description.map(
+                (item, index) => item && <ListItem key={index}>{item}</ListItem>
+              )}
           </UnorderedList>
         </VStack>
         <VStack alignItems={'flex-start'}>

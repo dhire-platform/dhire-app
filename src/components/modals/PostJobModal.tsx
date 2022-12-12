@@ -23,18 +23,12 @@ import {
   CheckboxGroup,
   Checkbox,
   useToast,
-  chakra,
   Select,
   InputRightAddon,
-  Tooltip,
   Tag,
   TagLabel,
   TagCloseButton,
   Box,
-  UnorderedList,
-  ListItem,
-  ListIcon,
-  List,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import { useState } from 'react';
@@ -50,6 +44,7 @@ import {
 } from 'src/lib/enums/enums';
 import { EditableList } from 'src/lib/helpers/EditableInput/EditableList';
 import axios from 'axios';
+import { ListTextArea } from 'src/lib/helpers/ListTextArea/ListTextArea';
 
 type JobModalProps = {
   isOpen: any;
@@ -68,12 +63,6 @@ const PostJobModal = ({
   mode,
 }: JobModalProps) => {
   const [jobType, setJobType] = useState<JobType[]>(jobDetails?.jobType || []);
-  const [benefits, setBenefits] = useState<string[]>(
-    jobDetails?.benefits || []
-  );
-  const [jobDesc, setJobDesc] = useState<string[]>(
-    jobDetails?.description || []
-  );
   const [allSkills, setAllSkills] = useState<skill[]>(jobDetails?.skills || []);
   const [skill, setSkill] = useState<string>('');
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.BEGINNER);
@@ -98,12 +87,10 @@ const PostJobModal = ({
       error = 'Salary range is incorrect.';
     } else if (allSkills.length === 0) {
       error = 'Please add some relevant skills';
-    } else if (benefits?.length === 0) {
-      error = 'Please add benefits';
     } else {
       const newJob: IJobs = {
         ...data,
-        description: jobDesc,
+        description: data.description.split('\u2022 ').filter((s: string) => s),
         from: new Date(data.from),
         to: new Date(data.to),
         minSalary: parseInt(data.minSalary),
@@ -111,7 +98,7 @@ const PostJobModal = ({
         jobType,
         skills: allSkills,
         userId: user.id,
-        benefits,
+        benefits: data.benefits.split('\u2022 ').filter((s: string) => s),
         companyId: company.id,
         recruiterProfileUserId: recruiterProfile.userId,
       };
@@ -454,40 +441,36 @@ const PostJobModal = ({
               />
             </FormControl>
             {/* Benifits */}
-            <FormControl minW={'280px'} w={{ base: '100%', md: '45%' }}>
-              <FormLabel>
-                Benefits{' '}
-                <Box as="span" color="red">
-                  *
-                </Box>
-              </FormLabel>
-              <EditableList list={benefits || []} setList={setBenefits} />
-              <Stack
-                direction={'row'}
-                w={'100%'}
-                flexWrap="wrap"
-                spacing={0}
-                gap={1}
-                alignContent={'flex-start'}
-                flexGrow={1}
-                p={1}
-                borderRadius="10px"
-              >
-                {benefits?.map(
-                  (item, index) =>
-                    item && (
-                      <Tag key={index} w="fit-content">
-                        <TagLabel>{item}</TagLabel>
-                        <TagCloseButton
-                          onClick={() => {
-                            let newArr = benefits.filter((b, i) => i !== index);
-                            setBenefits(newArr);
-                          }}
-                        />
-                      </Tag>
-                    )
-                )}
-              </Stack>
+            <FormControl
+              minW={'280px'}
+              w={{ base: '100%', md: '45%' }}
+              isRequired
+            >
+              <FormLabel>Benefits </FormLabel>
+              <Textarea
+                id="benefits"
+                fontSize={{ base: 'sm', lg: 'md' }}
+                defaultValue={
+                  jobDetails?.benefits.reduce(
+                    (s, d, i) => (i === 0 ? s + d : s + '\u2022 ' + d),
+                    '\u2022 '
+                  ) || '\u2022 '
+                }
+                h={{ base: '120px', md: '150px' }}
+                onKeyPress={(e: any) => {
+                  if (!e.target.value) {
+                    e.target.value = '\u2022 ';
+                  }
+                  if (e.charCode === 13) {
+                    e.preventDefault();
+                    let val = e.target.value;
+                    let pos = e.target.selectionStart;
+                    e.target.value =
+                      val.slice(0, pos) + '\n\u2022 ' + val.slice(pos);
+                  }
+                }}
+                {...register('benefits')}
+              />
             </FormControl>
             <Stack
               w={'full'}
@@ -496,44 +479,36 @@ const PostJobModal = ({
               justifyContent={'space-between'}
             >
               {/*Description*/}
-              <FormControl minW={'280px'} w={{ base: '100%', md: '45%' }}>
-                <FormLabel>
-                  Job Description{' '}
-                  <Box as="span" color="red">
-                    *
-                  </Box>
-                </FormLabel>
+              <FormControl
+                minW={'280px'}
+                w={{ base: '100%', md: '45%' }}
+                isRequired
+              >
+                <FormLabel>Job Description </FormLabel>
 
-                <EditableList list={jobDesc || []} setList={setJobDesc} />
-                <UnorderedList
-                  fontSize="1rem"
-                  spacing={3}
-                  listStylePos={'inside'}
-                >
-                  {jobDesc?.map((item, index) => (
-                    <ListItem key={index} role="group" pl="10px">
-                      <Tag w="90%" bg="white">
-                        {item}
-                        <TagCloseButton
-                          ml="auto"
-                          onClick={() => {
-                            let newArr = jobDesc.filter((b, i) => i !== index);
-                            setJobDesc(newArr);
-                          }}
-                        />
-                      </Tag>
-                    </ListItem>
-                  ))}
-                </UnorderedList>
-
-                <ErrorMessage
-                  errors={errors}
-                  name="description"
-                  render={({ message }) => (
-                    <Text fontSize="sm" color="red.500" py="0.5rem">
-                      {message}
-                    </Text>
-                  )}
+                <Textarea
+                  id="description"
+                  fontSize={{ base: 'sm', lg: 'md' }}
+                  defaultValue={
+                    jobDetails?.description?.reduce(
+                      (s, d, i) => (i === 0 ? s + d : s + '\u2022 ' + d),
+                      '\u2022 '
+                    ) || '\u2022 '
+                  }
+                  h={{ base: '120px', md: '150px' }}
+                  onKeyPress={(e: any) => {
+                    if (!e.target.value) {
+                      e.target.value = '\u2022 ';
+                    }
+                    if (e.charCode === 13) {
+                      e.preventDefault();
+                      let val = e.target.value;
+                      let pos = e.target.selectionStart;
+                      e.target.value =
+                        val.slice(0, pos) + '\n\u2022 ' + val.slice(pos);
+                    }
+                  }}
+                  {...register('description')}
                 />
               </FormControl>
 
