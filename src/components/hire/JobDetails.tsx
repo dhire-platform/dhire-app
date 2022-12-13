@@ -83,12 +83,6 @@ export const JobDetails = ({
         </VStack>
         <VStack alignItems={'flex-start'}>
           <Heading fontWeight={600} fontSize="1.5rem">
-            Key Responsibilities
-          </Heading>
-          <Text>{job.description}</Text>
-        </VStack>
-        <VStack alignItems={'flex-start'}>
-          <Heading fontWeight={600} fontSize="1.5rem">
             Skills Required
           </Heading>
           <HStack flexWrap={'wrap'} gap={'20px'}>
