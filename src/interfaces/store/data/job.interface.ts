@@ -27,11 +27,10 @@ export type Applicant = {
 };
 
 export type IJobs = {
-  title?: string;
-  description?: string[];
-  location?: string;
-  from?: Date;
-  to?: Date;
+  title: string;
+  description: string[];
+  location: string;
+  from: Date;
   id?: string;
   companyId?: string; // this is userProfile id
   jobLevel?: JobLevel;

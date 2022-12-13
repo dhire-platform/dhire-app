@@ -19,15 +19,14 @@ const useProfileEdit = ({
     Object.keys(values).forEach((key: any) => {
       data = values[key] ? { ...data, [key]: values[key] } : data;
     });
-    console.log(data);
     axios
       .put(`/api/userProfile/` + user.id, data)
       .then((res) => {
-        console.log('update user profile route response', res);
+        //console.log('update user profile route response', res);
         updateUserProfile(res.data);
       })
       .catch((err) => {
-        console.log('error in update user profile route', err);
+        // console.log('error in update user profile route', err);
       });
     reset();
     onClose();

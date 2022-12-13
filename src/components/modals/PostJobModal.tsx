@@ -42,9 +42,6 @@ import {
   SalaryType,
   Mode,
 } from 'src/lib/enums/enums';
-import { EditableList } from 'src/lib/helpers/EditableInput/EditableList';
-import axios from 'axios';
-import { ListTextArea } from 'src/lib/helpers/ListTextArea/ListTextArea';
 
 type JobModalProps = {
   isOpen: any;
@@ -90,7 +87,9 @@ const PostJobModal = ({
     } else {
       const newJob: IJobs = {
         ...data,
-        description: data.description.split('\u2022 ').filter((s: string) => s),
+        description: data.description
+          .split('\n')
+          .filter((s: string) => s.trim()),
         from: new Date(data.from),
         to: new Date(data.to),
         minSalary: parseInt(data.minSalary),
@@ -107,16 +106,17 @@ const PostJobModal = ({
         result = await editJob({ ...jobDetails, ...newJob });
         setJobDetails(newJob);
         error = 'Successfully edited job details.';
+        reset(data);
       } else {
         result = await createJob(newJob);
         setAllSkills([]);
         setJobType([]);
         error = 'Successfully created new job.';
+        reset();
       }
       if (!result.message.includes('error')) {
         status = 'success';
       }
-      reset();
       setSkill('');
       onClose();
     }
@@ -247,7 +247,7 @@ const PostJobModal = ({
                 size={{ base: 'sm', lg: 'md' }}
                 isRequired
                 type="date"
-                defaultValue={jobDetails?.from?.toString().split('T')[0]}
+                defaultValue={jobDetails?.from.toString().split('T')[0]}
                 id="from"
                 {...register('from', {
                   required: 'This is Required',
@@ -440,6 +440,92 @@ const PostJobModal = ({
                 )}
               />
             </FormControl>
+            {/* ADD SKILLS */}
+            <FormControl minW={'280px'} w={{ base: '100%', md: '45%' }}>
+              <FormLabel>
+                Skills Required{' '}
+                <Box as="span" color="red">
+                  *
+                </Box>
+              </FormLabel>
+
+              <InputGroup size="sm" mb={3} display="flex">
+                <Select
+                  size="sm"
+                  w="fit-content"
+                  value={skillLevel}
+                  onChange={({ target }) => {
+                    let level = target.value as SkillLevel;
+                    setSkillLevel(level);
+                  }}
+                >
+                  <option value={SkillLevel.BEGINNER}>Beginner</option>
+                  <option value={SkillLevel.INTERMEDIATE}>Intermediate</option>
+                  <option value={SkillLevel.ADVANCED}>Advanced</option>
+                </Select>
+                <Input
+                  w="100px"
+                  size={'sm'}
+                  flexGrow={1}
+                  value={skill}
+                  onKeyPress={(e) => {
+                    if (e.charCode === 13) {
+                      e.preventDefault();
+                      if (skill && skillLevel) {
+                        let newObj = { name: skill, level: skillLevel };
+                        setAllSkills([...allSkills, newObj]);
+                        setSkill('');
+                        setSkillLevel(SkillLevel.BEGINNER);
+                      }
+                    }
+                  }}
+                  onChange={(e) => setSkill(e.target.value)}
+                />
+                <InputRightAddon
+                  cursor={'pointer'}
+                  _hover={{ bg: 'gray.200' }}
+                  onClick={() => {
+                    if (skill && skillLevel) {
+                      let newObj = { name: skill, level: skillLevel };
+                      setAllSkills([...allSkills, newObj]);
+                      setSkill('');
+                      setSkillLevel(SkillLevel.BEGINNER);
+                    }
+                  }}
+                >
+                  +
+                </InputRightAddon>
+              </InputGroup>
+
+              <Stack
+                direction={'row'}
+                w={'100%'}
+                flexWrap="wrap"
+                spacing={0}
+                gap={1}
+                alignContent={'flex-start'}
+                flexGrow={1}
+                p={1}
+                borderRadius="10px"
+              >
+                {allSkills?.map((skill, index) => (
+                  <Tag key={index} w="fit-content">
+                    <TagLabel>
+                      {skill.level[0] + skill.level.toLowerCase().slice(1)}:{' '}
+                      {skill.name}
+                    </TagLabel>
+                    <TagCloseButton
+                      onClick={(e) => {
+                        let newSkills = allSkills.filter(
+                          (item) => item !== skill
+                        );
+                        setAllSkills(newSkills);
+                      }}
+                    />
+                  </Tag>
+                ))}
+              </Stack>
+            </FormControl>
             {/* Benifits */}
             <FormControl
               minW={'280px'}
@@ -472,135 +558,35 @@ const PostJobModal = ({
                 {...register('benefits')}
               />
             </FormControl>
-            <Stack
-              w={'full'}
-              wrap={'wrap'}
-              direction="row"
-              justifyContent={'space-between'}
+
+            {/*Description*/}
+            <FormControl
+              minW={'280px'}
+              w={{ base: '100%', md: '45%' }}
+              isRequired
             >
-              {/*Description*/}
-              <FormControl
-                minW={'280px'}
-                w={{ base: '100%', md: '45%' }}
-                isRequired
-              >
-                <FormLabel>Job Description </FormLabel>
+              <FormLabel>Job Description </FormLabel>
 
-                <Textarea
-                  id="description"
-                  fontSize={{ base: 'sm', lg: 'md' }}
-                  defaultValue={
-                    jobDetails?.description?.reduce(
-                      (s, d, i) => (i === 0 ? s + d : s + '\u2022 ' + d),
-                      '\u2022 '
-                    ) || '\u2022 '
+              <Textarea
+                id="description"
+                fontSize={{ base: 'sm', lg: 'md' }}
+                defaultValue={
+                  jobDetails?.description?.reduce((s, d, i) => s + '\n ' + d) ||
+                  '\u2022 '
+                }
+                h={{ base: '120px', md: '150px' }}
+                onKeyPress={(e: any) => {
+                  if (e.charCode === 13) {
+                    e.preventDefault();
+                    let val = e.target.value;
+                    let pos = e.target.selectionStart;
+                    e.target.value =
+                      val.slice(0, pos) + '\n\u2022 ' + val.slice(pos);
                   }
-                  h={{ base: '120px', md: '150px' }}
-                  onKeyPress={(e: any) => {
-                    if (!e.target.value) {
-                      e.target.value = '\u2022 ';
-                    }
-                    if (e.charCode === 13) {
-                      e.preventDefault();
-                      let val = e.target.value;
-                      let pos = e.target.selectionStart;
-                      e.target.value =
-                        val.slice(0, pos) + '\n\u2022 ' + val.slice(pos);
-                    }
-                  }}
-                  {...register('description')}
-                />
-              </FormControl>
-
-              {/* ADD SKILLS */}
-              <FormControl minW={'280px'} w={{ base: '100%', md: '45%' }}>
-                <FormLabel>
-                  Skills Required{' '}
-                  <Box as="span" color="red">
-                    *
-                  </Box>
-                </FormLabel>
-
-                <InputGroup size="sm" mb={3} display="flex">
-                  <Select
-                    size="sm"
-                    w="fit-content"
-                    value={skillLevel}
-                    onChange={({ target }) => {
-                      let level = target.value as SkillLevel;
-                      setSkillLevel(level);
-                    }}
-                  >
-                    <option value={SkillLevel.BEGINNER}>Beginner</option>
-                    <option value={SkillLevel.INTERMEDIATE}>
-                      Intermediate
-                    </option>
-                    <option value={SkillLevel.ADVANCED}>Advanced</option>
-                  </Select>
-                  <Input
-                    w="100px"
-                    size={'sm'}
-                    flexGrow={1}
-                    value={skill}
-                    onKeyPress={(e) => {
-                      if (e.charCode === 13) {
-                        e.preventDefault();
-                        if (skill && skillLevel) {
-                          let newObj = { name: skill, level: skillLevel };
-                          setAllSkills([...allSkills, newObj]);
-                          setSkill('');
-                          setSkillLevel(SkillLevel.BEGINNER);
-                        }
-                      }
-                    }}
-                    onChange={(e) => setSkill(e.target.value)}
-                  />
-                  <InputRightAddon
-                    cursor={'pointer'}
-                    _hover={{ bg: 'gray.200' }}
-                    onClick={() => {
-                      if (skill && skillLevel) {
-                        let newObj = { name: skill, level: skillLevel };
-                        setAllSkills([...allSkills, newObj]);
-                        setSkill('');
-                        setSkillLevel(SkillLevel.BEGINNER);
-                      }
-                    }}
-                  >
-                    +
-                  </InputRightAddon>
-                </InputGroup>
-
-                <Stack
-                  direction={'row'}
-                  w={'100%'}
-                  flexWrap="wrap"
-                  spacing={0}
-                  gap={1}
-                  alignContent={'flex-start'}
-                  flexGrow={1}
-                  p={1}
-                  borderRadius="10px"
-                >
-                  {allSkills?.map((skill, index) => (
-                    <Tag key={index} w="fit-content">
-                      <TagLabel>
-                        {skill.level[0] + skill.level.toLowerCase().slice(1)}:{' '}
-                        {skill.name}
-                      </TagLabel>
-                      <TagCloseButton
-                        onClick={(e) => {
-                          let newSkills = allSkills.filter(
-                            (item) => item !== skill
-                          );
-                          setAllSkills(newSkills);
-                        }}
-                      />
-                    </Tag>
-                  ))}
-                </Stack>
-              </FormControl>
-            </Stack>
+                }}
+                {...register('description')}
+              />
+            </FormControl>
           </ModalBody>
 
           <ModalFooter p="0rem 1rem">

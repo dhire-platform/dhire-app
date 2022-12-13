@@ -42,7 +42,6 @@ export const EditableList = ({
           ref={btn}
           _hover={{ bg: 'gray.200' }}
           onClick={(e) => {
-            console.log('click');
             if (newListItem?.trim()) {
               list?.length
                 ? setList([...list, newListItem?.trim()])

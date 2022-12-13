@@ -13,7 +13,6 @@ import Card from 'src/components/landing/Jobs/Card';
 import { HiDotsVertical } from 'react-icons/hi';
 const JobsList = ({ openJob, openApplicant }: any) => {
   const { job } = useJobStore();
-  console.log(job);
   return (
     <VStack maxW={'800px'} w="100%">
       {job.map((item, index) => (

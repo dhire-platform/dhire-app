@@ -376,26 +376,9 @@ const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
                   if (e.charCode === 13) {
                     e.preventDefault();
                     e.target.value += '\n\u2022 ';
-                    console.log(e.target.value);
                   }
                 }}
-                {...register('description', {
-                  minLength: {
-                    value: 50,
-                    message:
-                      'write at least 50 letter description about the job',
-                  },
-                })}
-              />
-
-              <ErrorMessage
-                errors={errors}
-                name="description"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
+                {...register('description')}
               />
             </FormControl>
           </ModalBody>
