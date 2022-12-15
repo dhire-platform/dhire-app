@@ -16,7 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { FiEdit2 } from 'react-icons/fi';
+import { FiEdit, FiEdit2 } from 'react-icons/fi';
 import { IoCloseSharp } from 'react-icons/io5';
 import { VscAdd } from 'react-icons/vsc';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
@@ -27,9 +27,11 @@ import axios from 'axios';
 import { deleteField } from './useDeleteField';
 import { IEducation } from '@/interfaces/store/data/education.interface';
 import { changeToMonth } from 'src/lib/helpers/Date/changeToMonth';
+import { Mode } from 'src/lib/enums/enums';
 
 const Education = () => {
-  const [hover, setHover] = useState(false);
+  const [mode, setMode] = useState<Mode>();
+  const [selected, setSelected] = useState<any>();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -39,7 +41,27 @@ const Education = () => {
   } = useDisclosure();
   const { user, userProfile, education, updateUserProfile } = useProfileStore();
   const { experience } = userProfile;
-
+  function iconRender(icon: any, onClick: any, label: string) {
+    return (
+      <IconButton
+        onClick={onClick}
+        variant={'unstyled'}
+        _hover={{
+          bg: 'blackAlpha.100',
+        }}
+        display="flex"
+        opacity={0}
+        _groupHover={{ opacity: 1 }}
+        p="0.1rem"
+        size="sm"
+        alignItems="center"
+        justifyContent={'center'}
+        color="blackAlpha.600"
+        aria-label={label}
+        icon={icon}
+      />
+    );
+  }
   function experienceRender(experience: IExperience, index: number) {
     return (
       <Stack
@@ -52,31 +74,29 @@ const Education = () => {
         role="group"
         pos="relative"
       >
-        <IconButton
-          onClick={() =>
-            deleteField(
-              { del: index, type: 'exp' },
-              toast,
-              user,
-              userProfile,
-              updateUserProfile
-            )
-          }
-          variant={'unstyled'}
-          _hover={{
-            bg: 'blackAlpha.100',
-          }}
-          display="none"
-          _groupHover={{ display: 'flex' }}
-          p="0.1rem"
-          size="sm"
-          pos="absolute"
-          top="0px"
-          right="0px"
-          color="blackAlpha.600"
-          aria-label="add experience"
-          icon={<IoCloseSharp size="18px" />}
-        />
+        <HStack pos="absolute" right={0} top={2}>
+          {iconRender(
+            <FiEdit2 size="18px" />,
+            () => {
+              setMode(Mode.EDIT);
+              setSelected(experience);
+              onOpen();
+            },
+            'edit education'
+          )}
+          {iconRender(
+            <IoCloseSharp size="18px" />,
+            () =>
+              deleteField(
+                { del: index, type: 'exp' },
+                toast,
+                user,
+                userProfile,
+                updateUserProfile
+              ),
+            'delete experience'
+          )}
+        </HStack>
         <Box pt={1}>
           <Avatar
             name={experience?.company}
@@ -98,7 +118,7 @@ const Education = () => {
         >
           <Stack dir="column">
             <Heading fontSize={'xl'}>{experience.company}</Heading>
-            {experience.to && experience.from && (
+            {(experience.to || experience.current) && experience.from && (
               <HStack fontSize={'14px'} color="blackAlpha.600">
                 <Text as="span">
                   {changeToMonth(new Date(experience.from))}{' '}
@@ -107,7 +127,7 @@ const Education = () => {
                   -
                 </Text>
                 <Text as="span">
-                  {experience.current
+                  {!experience.to
                     ? 'Present'
                     : changeToMonth(new Date(experience.to))}
                 </Text>
@@ -149,31 +169,29 @@ const Education = () => {
         pb={'40px'}
         borderBottom={'1px solid rgba(0,0,0,0.09)'}
       >
-        <IconButton
-          onClick={() =>
-            deleteField(
-              { del: index, type: 'edu' },
-              toast,
-              user,
-              userProfile,
-              updateUserProfile
-            )
-          }
-          variant={'unstyled'}
-          _hover={{
-            bg: 'blackAlpha.100',
-          }}
-          display="none"
-          _groupHover={{ display: 'flex' }}
-          p="0.1rem"
-          size="sm"
-          pos="absolute"
-          top="0px"
-          right="0px"
-          color="blackAlpha.600"
-          aria-label="add experience"
-          icon={<IoCloseSharp size="18px" />}
-        />
+        <HStack pos="absolute" right={0} top={4}>
+          {iconRender(
+            <FiEdit2 size="18px" />,
+            () => {
+              setMode(Mode.EDIT);
+              setSelected(edu);
+              onEduOpen();
+            },
+            'edit education'
+          )}
+          {iconRender(
+            <IoCloseSharp size="18px" />,
+            () =>
+              deleteField(
+                { del: index, type: 'edu' },
+                toast,
+                user,
+                userProfile,
+                updateUserProfile
+              ),
+            'Delete Education'
+          )}
+        </HStack>
         <VStack alignItems={'flex-start'}>
           <Heading
             mt={0}
@@ -219,16 +237,18 @@ const Education = () => {
         isOpen={isEduOpen}
         onOpen={onEduOpen}
         onClose={onEduClose}
+        mode={mode}
+        item={selected}
       />
-      <ExpEditModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <ExpEditModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        mode={mode}
+        item={selected}
+      />
       <Center
         boxShadow="0px 35px 41px 10px rgba(0, 0, 0, 0.03)"
-        onMouseEnter={() => {
-          setHover(true);
-        }}
-        onMouseLeave={() => {
-          setHover(false);
-        }}
         bg="white"
         w="100%"
         rounded="lg"
@@ -258,23 +278,14 @@ const Education = () => {
             >
               Education
             </Heading>
-            <IconButton
-              onClick={onEduOpen}
-              variant={'unstyled'}
-              _hover={{
-                bg: 'blackAlpha.100',
-              }}
-              display="flex"
-              opacity={0}
-              _groupHover={{ opacity: 1 }}
-              p="0.1rem"
-              size="sm"
-              alignItems="center"
-              justifyContent={'center'}
-              color="blackAlpha.600"
-              aria-label="add experience"
-              icon={<FiEdit2 size="18px" />}
-            />
+            {iconRender(
+              <VscAdd size="18px" />,
+              () => {
+                setMode(Mode.CREATTE);
+                onEduOpen();
+              },
+              'add education'
+            )}
           </Stack>{' '}
           {userProfile.education?.map((edu: IEducation, index: number) =>
             educationRender(edu, index)
@@ -286,27 +297,19 @@ const Education = () => {
             direction={'row'}
             alignItems="center"
             justify={'space-between'}
+            role="group"
           >
             <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
               Experience
             </Heading>
-            <IconButton
-              onClick={onOpen}
-              variant={'unstyled'}
-              _hover={{
-                bg: 'blackAlpha.100',
-              }}
-              p="0.1rem"
-              size="sm"
-              display={
-                hover && experience && experience.length > 0 ? 'flex' : 'none'
-              }
-              alignItems="center"
-              justifyContent={'center'}
-              color="blackAlpha.600"
-              aria-label="add experience"
-              icon={<VscAdd size="18px" />}
-            />
+            {iconRender(
+              <VscAdd size="18px" />,
+              () => {
+                setMode(Mode.CREATTE);
+                onOpen();
+              },
+              'Add experience'
+            )}
           </Stack>
           <Flex
             w="100%"

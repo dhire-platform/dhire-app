@@ -24,11 +24,12 @@ import {
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
+import { Mode } from 'src/lib/enums/enums';
 
-const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
+const ExpEditModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
   const [current, setCurrent] = useState<boolean>(false);
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -36,10 +37,11 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
   const { user, userProfile, setExperience, updateUserProfile } =
     useProfileStore();
   async function onSubmit(values: any) {
-    const { company, image, designation, description }: IExperience = values;
     const from: Date = new Date(values.from);
     const to: Date = new Date(values.to);
-    let dateDetails = current ? { current, to: undefined } : { to };
+    let dateDetails = current
+      ? { current, to: undefined }
+      : { to, current: false };
 
     if (
       (to && from && to < from) ||
@@ -60,18 +62,20 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
       return;
     }
     const experienceData: IExperience = {
-      company: company,
-      image,
-      designation: designation,
-      from: from,
+      ...values,
+      from,
       ...dateDetails,
-      location: 'remote',
-      description: description,
     };
-
-    let expArray: IExperience[] = userProfile.experience?.length
-      ? [...userProfile.experience, experienceData]
-      : [experienceData];
+    let expArray: IExperience[];
+    if (mode === Mode.EDIT && userProfile.experience) {
+      let index = userProfile.experience?.findIndex((exp) => exp === item);
+      expArray = [...userProfile.experience];
+      expArray[index] = experienceData;
+    } else {
+      expArray = userProfile.experience?.length
+        ? [...userProfile.experience, experienceData]
+        : [experienceData];
+    }
     try {
       const res = await axios.put('/api/userProfile/' + user.id, {
         experience: expArray,
@@ -92,7 +96,16 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  useEffect(() => {
+    if (mode === Mode.EDIT) {
+      reset({
+        ...item,
+        from: item.from.split('T')[0],
+        to: item.to ? item.to.split('T')[0] : '',
+      });
+      setCurrent(item.current);
+    }
+  }, [isOpen]);
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -117,7 +130,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
             pb={6}
           >
             {/* CompanyName */}
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel htmlFor="company">Company Name</FormLabel>
               <Input
                 isRequired
@@ -157,7 +170,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
             </FormControl>
 
             {/*Designation */}
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel htmlFor="designation">Position</FormLabel>
               <Input
                 id="designation"
@@ -167,7 +180,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
             </FormControl>
 
             {/* Location */}
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel htmlFor="location">Location</FormLabel>
               <Input
                 type="text"
@@ -179,9 +192,9 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
 
             {/* from/To */}
             <Stack direction={'row'}>
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel htmlFor="from">From</FormLabel>
-                <Input id="from" type={'from'} {...register('from')} />
+                <Input id="from" type={'date'} {...register('from')} />
               </FormControl>
               <FormControl isRequired={!current}>
                 <FormLabel htmlFor="to">To</FormLabel>
@@ -196,13 +209,16 @@ const ExpEditModal = ({ isOpen, onOpen, onClose }: any) => {
 
             {/* Current Disable to when current checked*/}
             <FormControl>
-              <Checkbox onChange={(e) => setCurrent(e.target.checked)}>
+              <Checkbox
+                onChange={(e) => setCurrent(e.target.checked)}
+                defaultChecked={item && item.current}
+              >
                 {' '}
                 current{' '}
               </Checkbox>
             </FormControl>
             {/* Job Description */}
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel htmlFor="name">Job Description</FormLabel>
               <Input
                 id="description"

@@ -23,12 +23,12 @@ import {
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
-import useProfileEdit from './useProfileEdit';
+import { Mode } from 'src/lib/enums/enums';
 
-const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
+const EditEducationModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
   const { user, userProfile, updateUserProfile } = useProfileStore();
   const [current, setCurrent] = useState<boolean>(false);
   const router = useRouter();
@@ -40,7 +40,7 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
     // useToast when date.to < date.from
     let dateDetails = current
       ? { current, to: undefined }
-      : { to: new Date(values.to) };
+      : { to: new Date(values.to), current };
     let edu: IEducation = {
       ...values,
       ...dateDetails,
@@ -64,9 +64,16 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
       });
       return;
     }
-    let eduArray: IEducation[] = userProfile.education?.length
-      ? [...userProfile.education, edu]
-      : [edu];
+    let eduArray: IEducation[];
+    if (mode === Mode.EDIT && userProfile.education) {
+      let index = userProfile.education?.findIndex((edu) => edu === item);
+      eduArray = [...userProfile.education] || [];
+      eduArray[index] = edu;
+    } else {
+      eduArray = userProfile.education?.length
+        ? [...userProfile.education, edu]
+        : [edu];
+    }
     const res = await axios.put('/api/userProfile/' + user.id, {
       education: eduArray,
     });
@@ -82,6 +89,16 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm({});
+  useEffect(() => {
+    if (mode === Mode.EDIT) {
+      reset({
+        ...item,
+        from: item.from.split('T')[0],
+        to: item.to ? item.to.split('T')[0] : '',
+      });
+      setCurrent(item.current);
+    }
+  }, [isOpen]);
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -196,7 +213,10 @@ const EditEducationModal = ({ isOpen, onOpen, onClose }: any) => {
 
             {/* current */}
             <FormControl>
-              <Checkbox onChange={(e) => setCurrent(e.target.checked)}>
+              <Checkbox
+                onChange={(e) => setCurrent(e.target.checked)}
+                defaultChecked={item && item.current}
+              >
                 {' '}
                 current{' '}
               </Checkbox>

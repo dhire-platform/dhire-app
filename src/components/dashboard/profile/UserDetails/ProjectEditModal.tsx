@@ -21,11 +21,12 @@ import {
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
+import { Mode } from 'src/lib/enums/enums';
 
-const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
+const EditProjectModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
   const [current, setCurrent] = useState(false);
   const { user, userProfile, updateUserProfile } = useProfileStore();
   const toast = useToast();
@@ -36,7 +37,7 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
     // useToast when date.to < date.from
     let dateDetails = current
       ? { current, to: undefined }
-      : { to: new Date(values.to) };
+      : { to: new Date(values.to), current };
     let project: IProject = {
       ...values,
       ...dateDetails,
@@ -60,9 +61,16 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
       });
       return;
     }
-    let projectArray: IProject[] = userProfile.projects?.length
-      ? [...userProfile.projects, project]
-      : [project];
+    let projectArray: IProject[];
+    if (mode === Mode.EDIT && userProfile.projects) {
+      let index = userProfile.projects.findIndex((p) => p === item);
+      projectArray = [...userProfile.projects];
+      projectArray[index] = project;
+    } else {
+      projectArray = userProfile.projects?.length
+        ? [...userProfile.projects, project]
+        : [project];
+    }
     const res = await axios.put('/api/userProfile/' + user.id, {
       projects: projectArray,
     });
@@ -78,7 +86,16 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm({});
-
+  useEffect(() => {
+    if (mode === Mode.EDIT) {
+      reset({
+        ...item,
+        from: item.from.split('T')[0],
+        to: item.to ? item.to.split('T')[0] : '',
+      });
+      setCurrent(item.current);
+    }
+  }, [isOpen]);
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -180,7 +197,10 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
 
             {/* Current Disable to when current checked*/}
             <FormControl>
-              <Checkbox onChange={(e) => setCurrent(e.target.checked)}>
+              <Checkbox
+                onChange={(e) => setCurrent(e.target.checked)}
+                defaultChecked={item && item.current}
+              >
                 {' '}
                 current{' '}
               </Checkbox>
@@ -193,8 +213,8 @@ const EditProjectModal = ({ isOpen, onOpen, onClose }: any) => {
                 id="description"
                 {...register('description', {
                   maxLength: {
-                    value: 200,
-                    message: 'Maximum length should be 200',
+                    value: 500,
+                    message: 'Maximum length should be 500',
                   },
                 })}
               />

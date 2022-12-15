@@ -1,18 +1,36 @@
+import { ISocial } from '@/interfaces/store/data/socials.interface';
 import {
   Avatar,
   Center,
   Heading,
+  HStack,
   IconButton,
+  Link,
   Stack,
   Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
+import {
+  BsGithub,
+  BsInstagram,
+  BsLinkedin,
+  BsTwitter,
+  BsYoutube,
+} from 'react-icons/bs';
+import { FaFacebook } from 'react-icons/fa';
 import { useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import EditProfileComponent from './UserDetails/ProfileEditModal';
-
+const socials = {
+  youtube: <BsYoutube color="#A0AEC0" size="18px" />,
+  twitter: <BsTwitter color="#A0AEC0" size="18px" />,
+  facebook: <FaFacebook color="#A0AEC0" size="18px" />,
+  linkedin: <BsLinkedin color="#A0AEC0" size="18px" />,
+  instagram: <BsInstagram color="#A0AEC0" size="18px" />,
+  github: <BsGithub color="#A0AEC0" size="18px" />,
+};
 const ProfileComponent = () => {
   const [hover, setHover] = useState(false);
   const { userProfile, user } = useProfileStore();
@@ -97,6 +115,21 @@ const ProfileComponent = () => {
         >
           {userProfile?.bio}
         </Heading>
+        {userProfile.social && (
+          <HStack mt={4} gap={1}>
+            {Object.keys(userProfile.social).map(
+              (k, i) =>
+                userProfile.social && (
+                  <Link
+                    href={userProfile.social[k as keyof ISocial]}
+                    isExternal
+                  >
+                    {socials[k as keyof ISocial]}
+                  </Link>
+                )
+            )}
+          </HStack>
+        )}
       </Center>
     </>
   );

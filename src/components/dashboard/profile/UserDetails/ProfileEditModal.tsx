@@ -1,10 +1,13 @@
+import { ISocial } from '@/interfaces/store/data/socials.interface';
 import {
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
   InputGroup,
   InputLeftAddon,
+  InputLeftElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,9 +23,24 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import {
+  BsGithub,
+  BsInstagram,
+  BsLinkedin,
+  BsTwitter,
+  BsYoutube,
+} from 'react-icons/bs';
+import { FaFacebook } from 'react-icons/fa';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import useProfileEdit from './useProfileEdit';
-
+const socials = {
+  youtube: <BsYoutube color="#A0AEC0" size="18px" />,
+  twitter: <BsTwitter color="#A0AEC0" size="18px" />,
+  facebook: <FaFacebook color="#A0AEC0" size="18px" />,
+  linkedin: <BsLinkedin color="#A0AEC0" size="18px" />,
+  instagram: <BsInstagram color="#A0AEC0" size="18px" />,
+  github: <BsGithub color="#A0AEC0" size="18px" />,
+};
 const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   const { user, userProfile } = useProfileStore();
   const router = useRouter();
@@ -127,6 +145,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               <FormLabel htmlFor="location">Location</FormLabel>
               <Input
                 id="location"
+                defaultValue={userProfile.location}
                 placeholder="Your location"
                 {...register('location')}
               />
@@ -147,6 +166,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               <Textarea
                 id="bio"
                 placeholder="About You"
+                defaultValue={userProfile.bio}
                 {...register('bio', {
                   maxLength: {
                     value: 200,
@@ -163,6 +183,27 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                   </Text>
                 )}
               />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Socials</FormLabel>
+              <Flex wrap={'wrap'} gap={3} justifyContent="space-between">
+                {Object.keys(socials).map((key, index) => (
+                  <InputGroup w={{ base: '100%', md: '48%' }} key={index}>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      children={socials[key as keyof ISocial]}
+                    />
+                    <Input
+                      {...register(key)}
+                      defaultValue={
+                        userProfile.social
+                          ? userProfile.social[key as keyof ISocial]
+                          : ''
+                      }
+                    />
+                  </InputGroup>
+                ))}
+              </Flex>
             </FormControl>
           </ModalBody>
           <ModalFooter>
