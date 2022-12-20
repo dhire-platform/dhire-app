@@ -13,22 +13,38 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { BsBuilding } from 'react-icons/bs';
+import { FiArrowLeft } from 'react-icons/fi';
 import { RiMapPin2Line } from 'react-icons/ri';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { Mode } from 'src/lib/enums/enums';
+import { ApplyButton } from '../dashboard/jobs/ApplyButton';
 import PostJobModal from '../modals/PostJobModal';
 
 export const JobDetails = ({
   job,
   setJobDetails,
+  applyMode,
+  companyName,
 }: {
   job: IJobs;
   setJobDetails: any;
+  applyMode?: boolean;
+  companyName?: string;
 }) => {
   const { company } = useProfileStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <VStack w={'100%'} p={'20px'} gap={'30px'}>
+    <VStack w={'100%'} p={'20px'} gap={'30px'} pos={'relative'}>
+      <Icon
+        as={FiArrowLeft}
+        color={'black'}
+        fontSize={'1.5rem'}
+        cursor="pointer"
+        pos="absolute"
+        left="-10px"
+        top="0px"
+        onClick={() => setJobDetails(undefined)}
+      />
       <PostJobModal
         isOpen={isOpen}
         onOpen={onOpen}
@@ -51,16 +67,20 @@ export const JobDetails = ({
           <HStack gap={3}>
             <Center color="gray.400" gap={2}>
               <Icon as={BsBuilding} w={4} h={4} color="gray.400" />
-              <Text>{company.name}</Text>
+              <Text>{company.name || companyName}</Text>
             </Center>
             <Center color="gray.400" gap={2}>
               <Icon as={RiMapPin2Line} w={4} h={4} color="gray.400" />
               <Text>{job.location}</Text>
             </Center>
           </HStack>
-          <Button w="100px" onClick={onOpen}>
-            Edit
-          </Button>
+          {applyMode ? (
+            <ApplyButton job={job} />
+          ) : (
+            <Button w="100px" onClick={onOpen}>
+              Edit
+            </Button>
+          )}
         </HStack>
       </VStack>
       <VStack

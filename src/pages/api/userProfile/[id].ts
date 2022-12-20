@@ -57,6 +57,13 @@ async function getUserProfileById(
       where: {
         userId: id,
       },
+      include: {
+        Applicant: {
+          select: {
+            jobId: true,
+          },
+        },
+      },
     });
     res.status(200).json(user);
   } catch (e) {

@@ -19,9 +19,10 @@ export type IJob = {
   job_experience_level: number;
 };
 export type Applicant = {
-  user_id: string;
-  interview_step: string;
-  next_interview_date: Date;
+  user_id?: string;
+  jobId?: string;
+  interview_step?: string;
+  next_interview_date?: Date;
   archieved: boolean;
   status: ApplicantStatus;
 };
@@ -33,6 +34,7 @@ export type IJobs = {
   from: Date;
   id?: string;
   companyId?: string; // this is company id
+  company?: { name: string };
   jobLevel?: JobLevel; //else
   jobType: JobType[];
   minSalary?: number; //compare

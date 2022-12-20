@@ -124,7 +124,7 @@ model Applicant {
   user                UserProfile     @relation(fields: [user_id], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   user_id             String          @map("user_id") @db.ObjectId
   interview_step      String
-  next_interview_date DateTime
+  next_interview_date DateTime?
   archieved           Boolean
   status              ApplicantStatus
 }

@@ -16,7 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Jobs from 'src/components/dashboard/jobs/Jobs';
 import Achievement from 'src/components/dashboard/profile/Achievement';
 import Education from 'src/components/dashboard/profile/Education';
@@ -30,8 +30,11 @@ import { BiHomeAlt } from 'react-icons/bi';
 import { BsBriefcase } from 'react-icons/bs';
 import { FaUserAlt } from 'react-icons/fa';
 import Profile from 'src/components/dashboard/userApplication/Profile';
+import { IJobs } from '@/interfaces/store/data/job.interface';
+import { JobDetails } from 'src/components/hire/JobDetails';
 
 const User = () => {
+  const [selectedJob, setSelectedJob] = useState<IJobs>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const router = useRouter();
@@ -129,7 +132,16 @@ const User = () => {
               <TabPanel p={0}>
                 <Text as="div" size="xl" fontWeight="600">
                   <Container minW="full" p={[0, 0, '1rem']}>
-                    <Jobs />
+                    {selectedJob ? (
+                      <JobDetails
+                        job={selectedJob}
+                        setJobDetails={setSelectedJob}
+                        applyMode={true}
+                        companyName={selectedJob.company?.name}
+                      />
+                    ) : (
+                      <Jobs setSelectedJob={setSelectedJob} />
+                    )}
                   </Container>
                 </Text>
               </TabPanel>

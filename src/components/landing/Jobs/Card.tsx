@@ -19,7 +19,7 @@ import { useProfileStore } from 'src/app/store/profile/profileStore';
 const Card: React.FC<IJobs> = (props) => {
   const elementRef = useRef() as RefObject<HTMLElement>;
   const dimensions = useDimensions(elementRef);
-  const { user, userProfile } = useProfileStore();
+  const { user, userProfile, company: companyProfile } = useProfileStore();
   const recruiter = user.type;
   const card_style =
     recruiter === 'RECRUITER'
@@ -41,6 +41,7 @@ const Card: React.FC<IJobs> = (props) => {
     maxSalary,
     minSalary,
     location,
+    company,
   } = props;
   const firstLtrCaps = (text: any) =>
     text[0].toUpperCase() + text.slice(1).toString().toLowerCase();
@@ -99,7 +100,7 @@ const Card: React.FC<IJobs> = (props) => {
                 direction="row"
                 color="gray.400"
               >
-                <Text>Google</Text>
+                <Text>{companyProfile.name || company?.name}</Text>
                 {/* company name */}
                 <Stack direction="row" align={'center'}>
                   <Icon as={RiMapPin2Line} w={4} h={4} color="gray.400" />

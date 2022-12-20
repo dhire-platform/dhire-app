@@ -18,7 +18,7 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { RiMapPin2Line } from 'react-icons/ri';
 import { useInView } from 'react-intersection-observer';
@@ -30,18 +30,10 @@ import { IFilter } from '@/interfaces/filter.interface';
 import { SearchBar } from './SearchBar';
 import { useJobStore } from 'src/app/store/job/jobStore';
 import { JobLevel, JobType } from 'src/lib/enums/enums';
+import Link from 'next/link';
 
-const animationKeyframes = keyframes`
-      from {
-        background-position: 0 0;
-      to {
-        background-position: 100% 100%;
-      }
-    `;
-
-const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 // USED IN USERPROFILE DASHBOARD
-const Jobs = () => {
+const Jobs = ({ setSelectedJob }: any) => {
   const { job } = useJobStore();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filteredData, setFilteredData] = useState<IJobs[]>([]);
@@ -334,7 +326,11 @@ const Jobs = () => {
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
             ) : (
-              currentData.map((item, index) => <Card key={index} {...item} />)
+              currentData.map((item, index) => (
+                <Box w="full" key={index} onClick={() => setSelectedJob(item)}>
+                  <Card key={index} {...item} />
+                </Box>
+              ))
             )}
             <Pagination
               onPageChange={(page: number) => {

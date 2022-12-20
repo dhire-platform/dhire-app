@@ -17,6 +17,7 @@ export interface IUserProfile {
   education?: IEducation[]; // done
   projects?: IProject[]; // =>
   social?: ISocial;
+  Applicant?: any[];
 }
 
 export interface IRecruiterProfile {

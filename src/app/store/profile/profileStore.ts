@@ -199,7 +199,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
         });
     });
   },
-  updateRecruiterProfile: (data: IUserProfile) => {
+  updateRecruiterProfile: (data: IRecruiterProfile) => {
     set(
       produce((state) => {
         state.recruiterProfile = data;
