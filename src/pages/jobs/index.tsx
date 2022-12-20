@@ -17,27 +17,29 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Card from 'src/components/landing/Jobs/Card';
-import Data from 'src/components/landing/Jobs/Data.json';
 import Layout from 'src/components/landing/Jobs/Layout';
 import Pagination from 'src/components/Pagination/Pagination';
 import { IFilter } from '@/interfaces/filter.interface';
-import { IJob } from '@/interfaces/store/data/job.interface';
+import { IJob, IJobs } from '@/interfaces/store/data/job.interface';
 import { useFilter } from 'src/lib/hooks/useFilter';
+import { useJobStore } from 'src/app/store/job/jobStore';
+import { JobLevel, JobType } from 'src/lib/enums/enums';
+import axios from 'axios';
 
 const Jobs = () => {
+  const { job, updateJob } = useJobStore();
+  const [loaded, setLoaded] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [filteredData, setFilteredData] = useState<IJob[]>(Data);
+  const [filteredData, setFilteredData] = useState<IJobs[]>([]);
   const [sliderValue1, setSliderValue1] = useState(5);
   const [showTooltip, setShowTooltip] = useState(false);
   const [sliderValue2, setSliderValue2] = useState(5);
   const [filters, setFilters] = useState<IFilter[]>([]);
-
   const { ref, inView, entry } = useInView({
     threshold: 0.4,
   });
 
   const PageSize = 6;
-
   const currentData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
@@ -47,17 +49,31 @@ const Jobs = () => {
 
   const setReqFilter = (filter: IFilter) => {
     let existingFilters = filters;
+
     let req_filter = existingFilters.filter(
-      (item) => item.filter_type !== filter.filter_type
+      (item) =>
+        item.filter_type !== filter.filter_type && item.filter_values.length
     );
     req_filter.push(filter);
     setFilters(req_filter);
   };
   useEffect(() => {
+    if (!job.length && !loaded) {
+      axios.get('/api/jobPost').then(({ data }: any) => {
+        setLoaded(true);
+        updateJob(data);
+      });
+    } else if (job.length) {
+      setLoaded(true);
+      setFilteredData(job);
+    }
+  }, [job]);
+  useEffect(() => {
     let newArray = useFilter({
       all_filters: filters,
-      fullArray: Data,
+      fullArray: job || [],
     });
+    //console.log(newArray[0]);
     setFilteredData(newArray);
     setCurrentPage(1);
   }, [filters]);
@@ -99,7 +115,7 @@ const Jobs = () => {
                 <CheckboxGroup
                   onChange={(checked_fields: string[]) => {
                     setReqFilter({
-                      filter_type: 'job_type',
+                      filter_type: 'jobType',
                       filter_values: checked_fields,
                     });
                   }}
@@ -112,19 +128,19 @@ const Jobs = () => {
                     wrap={'wrap'}
                     w="full"
                   >
-                    <Checkbox value="1" size={['sm', 'md']}>
+                    <Checkbox value={JobType.FULLTIME} size={['sm', 'md']}>
                       Full Time Job
                     </Checkbox>
-                    <Checkbox value="2" size={['sm', 'md']}>
+                    <Checkbox value={JobType.PARTTIME} size={['sm', 'md']}>
                       Part Time Job
                     </Checkbox>
-                    <Checkbox value="3" size={['sm', 'md']}>
+                    <Checkbox value={JobType.FREELANCE} size={['sm', 'md']}>
                       Freelance Job
                     </Checkbox>
-                    <Checkbox value="4" size={['sm', 'md']}>
+                    <Checkbox value={JobType.REMOTE} size={['sm', 'md']}>
                       Remote Job
                     </Checkbox>
-                    <Checkbox value="5" size={['sm', 'md']}>
+                    <Checkbox value={JobType.INTERNSHIP} size={['sm', 'md']}>
                       Internship
                     </Checkbox>
                   </Stack>{' '}
@@ -142,9 +158,12 @@ const Jobs = () => {
                   colorScheme="blue"
                   onChangeEnd={(val) => {
                     let props = {
-                      filter_type: 'job_salary_max',
+                      filter_type: 'maxSalary',
                       filter_values: ['1'],
-                      compare: { min: val[0], max: val[1] },
+                      compare: {
+                        base: ['maxSalary', 'maxSalary'],
+                        compareTo: val,
+                      },
                     };
                     //console.log(val);
                     setReqFilter(props);
@@ -204,7 +223,7 @@ const Jobs = () => {
                 <CheckboxGroup
                   onChange={(checked_fields: string[]) => {
                     setReqFilter({
-                      filter_type: 'job_experience_level',
+                      filter_type: 'jobLevel',
                       filter_values: checked_fields,
                     });
                   }}
@@ -215,13 +234,13 @@ const Jobs = () => {
                     gap={[2, 4, 4, 3]}
                     p="1rem"
                   >
-                    <Checkbox value="1" size={['sm', 'md']}>
+                    <Checkbox value={JobLevel.BEGINNER} size={['sm', 'md']}>
                       Entry Level
                     </Checkbox>
-                    <Checkbox value="2" size={['sm', 'md']}>
+                    <Checkbox value={JobLevel.INTERMEDIATE} size={['sm', 'md']}>
                       Intermediate Level
                     </Checkbox>
-                    <Checkbox value="3" size={['sm', 'md']}>
+                    <Checkbox value={JobLevel.ADVANCED} size={['sm', 'md']}>
                       Senior Level
                     </Checkbox>
                   </Stack>
@@ -249,13 +268,13 @@ const Jobs = () => {
               <Stack direction={'row'}>
                 <Text color="gray.400">Sort by :</Text>
                 <chakra.select
-                  defaultValue="1"
+                  defaultValue="2"
                   bg="white"
                   name="cars"
                   id="cars"
                   onChange={(event: { target: { value: any } }) => {
                     setReqFilter({
-                      filter_type: 'created_at',
+                      filter_type: 'createdAt',
                       filter_values: ['1'],
                       sort:
                         event.target.value === '1'
@@ -270,7 +289,7 @@ const Jobs = () => {
                 </chakra.select>
               </Stack>
             </Stack>
-            {currentData.length === 0 ? (
+            {currentData.length === 0 && loaded ? (
               <Center
                 textAlign={'center'}
                 flexDirection={'column'}
@@ -292,9 +311,10 @@ const Jobs = () => {
                 </Text>
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
+            ) : loaded || job.length > 0 ? (
+              currentData.map((item, index) => <Card key={index} {...item} />)
             ) : (
-              /* currentData.map((item, index) => <Card key={index} {...item} />) */
-              <Text>Comming Soon All jobs listed here</Text>
+              <Text>Loading...</Text>
             )}
             <Pagination
               onPageChange={(page: number) => {

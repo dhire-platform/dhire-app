@@ -122,6 +122,7 @@ const ProfileComponent = () => {
                 userProfile.social && (
                   <Link
                     href={userProfile.social[k as keyof ISocial]}
+                    key={i}
                     isExternal
                   >
                     {socials[k as keyof ISocial]}

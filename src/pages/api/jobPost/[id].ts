@@ -80,7 +80,6 @@ async function updateJobPost(
     salaryType,
     jobLevel,
     jobType,
-    applicants,
     recruiterProfileUserId,
     skills,
     benefits,
@@ -95,7 +94,6 @@ async function updateJobPost(
     salaryType: SalaryType;
     jobLevel: SkillLevel;
     jobType: JobType[];
-    applicants?: Applicant[];
     recruiterProfileUserId: string;
     skills: Skill[];
     benefits: string[];
@@ -116,7 +114,6 @@ async function updateJobPost(
         salaryType,
         jobLevel,
         jobType,
-        applicants,
         recruiterProfileUserId,
         skills,
         benefits,

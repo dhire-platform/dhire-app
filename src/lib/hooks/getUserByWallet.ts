@@ -54,11 +54,13 @@ export default async function getUserByWallet(
       axios
         .get('/api/company/getJobs?id=' + userProfile.company)
         .then((res) => {
-          console.log(res.data);
-          updateJob(res.data.jobPosts);
+          updateJob(res.data);
         });
     } else {
-      updateUserProfile(userProfile);
+      axios.get('/api/jobPost').then((res) => {
+        updateJob(res.data.jobPosts);
+        updateUserProfile(userProfile);
+      });
     }
     // setWallet({
     //   walletId: userProfile.user?.wallet?.walletId,

@@ -74,8 +74,11 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
               setPersistanceUser(res.data);
               if (res.data.type === roleEnum.RECRUIT) {
                 const userProfile = userProfileResponse.data as IUserProfile;
-                updateUserProfile(userProfile);
-                router.push('/profile/' + res.data.id);
+                axios.get('/api/jobPost').then(({ data }: any) => {
+                  updateJob(data);
+                  updateUserProfile(userProfile);
+                  router.push('/profile/' + res.data.id);
+                });
                 return userProfile as IUserProfile;
               } else {
                 const userProfile =
@@ -84,7 +87,6 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
                 axios
                   .get('/api/company/getJobs?id=' + userProfile.company)
                   .then((res) => {
-                    console.log(res.data);
                     updateJob(res.data.jobPosts);
                   });
                 axios.get('/api/company/' + userProfile.company).then((res) => {

@@ -9,13 +9,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
 import prisma from 'prisma/client';
 
-async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
-  await NextCors(req, res, {
-    methods: ['POST'],
-    origin: '*',
-    optionsSuccessStatus: 200,
-  });
-
+async function postNewJob(req: NextApiRequest, res: NextApiResponse) {
   const {
     title,
     description,
@@ -27,7 +21,6 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
     salaryType,
     jobLevel,
     jobType,
-    applicants,
     recruiterProfileUserId,
     skills,
     userId,
@@ -43,7 +36,6 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
     salaryType: SalaryType;
     jobLevel: SkillLevel;
     jobType: JobType[];
-    applicants?: Applicant[];
     recruiterProfileUserId: string;
     skills: Skill[];
     userId: string;
@@ -61,7 +53,6 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
             id: companyId,
           },
         },
-        applicants,
         minSalary,
         maxSalary,
         salaryType,
@@ -84,6 +75,32 @@ async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
     res.status(200).json(jobPost);
   } catch (e) {
     res.status(400).json({ error: (e as Error).message });
+  }
+}
+async function getAllJobs(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const jobs = await prisma.jobPost.findMany();
+    res.status(200).json(jobs);
+  } catch (e) {
+    res.status(400).json({ error: (e as Error).message });
+  }
+}
+async function createJobPost(req: NextApiRequest, res: NextApiResponse) {
+  await NextCors(req, res, {
+    methods: ['GET', 'POST'],
+    origin: '*',
+    optionsSuccessStatus: 200,
+  });
+
+  switch (req.method) {
+    case 'GET':
+      await getAllJobs(req, res);
+      break;
+    case 'POST':
+      await postNewJob(req, res);
+      break;
+    default:
+      break;
   }
 }
 

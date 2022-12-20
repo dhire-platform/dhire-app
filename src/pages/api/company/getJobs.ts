@@ -45,7 +45,11 @@ async function getJobsByCompanyId(
         id: id,
       },
       select: {
-        jobPosts: true,
+        jobPosts: {
+          include: {
+            applicants: true,
+          },
+        },
       },
     });
     res.status(200).json(user);

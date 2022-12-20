@@ -17,7 +17,7 @@ export const SearchBar = ({ setReqFilter }: any) => {
           w={['70px', 'auto']}
           onChange={(event: { target: { value: any } }) => {
             setReqFilter({
-              filter_type: 'job_title',
+              filter_type: 'title',
               filter_values:
                 event.target.value === ''
                   ? []
@@ -40,7 +40,7 @@ export const SearchBar = ({ setReqFilter }: any) => {
           placeholder="Select option"
           onChange={(event: { target: { value: any } }) => {
             setReqFilter({
-              filter_type: 'job_location',
+              filter_type: 'location',
               filter_values:
                 event.target.value === '' ? [] : [event.target.value],
             });

@@ -29,18 +29,19 @@ export type Applicant = {
 export type IJobs = {
   title: string;
   description: string[];
-  location: string;
+  location: string; //search
   from: Date;
   id?: string;
-  companyId?: string; // this is userProfile id
-  jobLevel?: JobLevel;
+  companyId?: string; // this is company id
+  jobLevel?: JobLevel; //else
   jobType: JobType[];
-  minSalary?: number;
-  maxSalary?: number;
-  salaryType?: SalaryType;
+  minSalary?: number; //compare
+  maxSalary?: number; //compare
+  salaryType?: SalaryType; //else
   applicants?: Applicant[];
-  recruiterProfileUserId?: string; // this is user id
+  recruiterProfileUserId?: string; // this is recruiter id
   skills: skill[];
   benefits: string[];
   userId?: string;
+  createdAt?: Date;
 };

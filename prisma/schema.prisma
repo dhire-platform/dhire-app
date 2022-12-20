@@ -39,6 +39,7 @@ model UserProfile {
   social      SocialType?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+  Applicant   Applicant[]
 }
 
 model RecruiterProfile {
@@ -56,21 +57,21 @@ model RecruiterProfile {
 }
 
 model Company {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  website         String?
-  logo            String?
-  description     String?
-  size            Int?
-  type            String?
-  industry        String?
-  founded         DateTime?
-  markets         String[]
-  funding         String[]
-  location        String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  jobPosts        JobPost[]
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  website     String?
+  logo        String?
+  description String?
+  size        Int?
+  type        String?
+  industry    String?
+  founded     DateTime?
+  markets     String[]
+  funding     String[]
+  location    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  jobPosts    JobPost[]
 }
 
 model JobPost {
@@ -116,8 +117,12 @@ enum JobType {
   FREELANCE
 }
 
-type Applicant {
-  user_id             String
+model Applicant {
+  id                  String          @id @default(auto()) @map("_id") @db.ObjectId
+  job                 JobPost         @relation(fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  jobId               String          @map("jobId") @db.ObjectId
+  user                UserProfile     @relation(fields: [user_id], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  user_id             String          @map("user_id") @db.ObjectId
   interview_step      String
   next_interview_date DateTime
   archieved           Boolean
