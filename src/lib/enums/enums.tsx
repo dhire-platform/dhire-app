@@ -23,3 +23,15 @@ export enum SalaryType {
   CRYPTO = 'CRYPTO',
   FIAT = 'FIAT',
 }
+
+export enum ApplicantStatus {
+  NOTVIEWED = 'NOTVIEWED',
+  SHORTLISTED = 'SHORTLISTED',
+  SELECTED = 'SELECTED',
+  REJECTED = 'REJECTED',
+}
+
+export enum Mode {
+  CREATTE = 'CREATE',
+  EDIT = 'EDIT',
+}

@@ -1,4 +1,10 @@
-import { Skill, SocialType } from '@prisma/client';
+import {
+  EducationType,
+  ExperienceType,
+  ProjectType,
+  Skill,
+  SocialType,
+} from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
 import prisma from 'prisma/client';
@@ -51,6 +57,13 @@ async function getUserProfileById(
       where: {
         userId: id,
       },
+      include: {
+        Applicant: {
+          select: {
+            jobId: true,
+          },
+        },
+      },
     });
     res.status(200).json(user);
   } catch (e) {
@@ -82,10 +95,10 @@ async function updateUserProfile(
     skills?: Skill[];
     location?: string;
     website?: string;
-    experience?: JSON[];
+    experience?: ExperienceType[];
     achievement?: string;
-    education?: JSON[];
-    projects?: JSON[];
+    education?: EducationType[];
+    projects?: ProjectType[];
     social?: SocialType;
   };
   try {

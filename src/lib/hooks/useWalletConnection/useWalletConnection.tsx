@@ -10,12 +10,14 @@ import {
 } from '@/interfaces/store/data/userProfile.interface';
 import axios from 'axios';
 import { roleEnum } from 'src/lib/enums/enums';
+import { useJobStore } from 'src/app/store/job/jobStore';
 
 /** checks if wallet is connected or if the user is present in the local storage and then fetches user data*/
 export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
   const wallet = useWallet();
   const router = useRouter();
 
+  const { updateJob } = useJobStore();
   const {
     user,
     updateWallet,
@@ -72,13 +74,21 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
               setPersistanceUser(res.data);
               if (res.data.type === roleEnum.RECRUIT) {
                 const userProfile = userProfileResponse.data as IUserProfile;
-                updateUserProfile(userProfile);
-                router.push('/profile/' + res.data.id);
+                axios.get('/api/jobPost').then(({ data }: any) => {
+                  updateJob(data);
+                  updateUserProfile(userProfile);
+                  router.push('/profile/' + res.data.id);
+                });
                 return userProfile as IUserProfile;
               } else {
                 const userProfile =
                   userProfileResponse.data as IRecruiterProfile;
                 updateRecruiterProfile(userProfile);
+                axios
+                  .get('/api/company/getJobs?id=' + userProfile.company)
+                  .then((res) => {
+                    updateJob(res.data.jobPosts);
+                  });
                 axios.get('/api/company/' + userProfile.company).then((res) => {
                   setPersistanceCompany(res.data);
                   updateCompany(res.data);

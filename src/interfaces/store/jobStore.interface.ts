@@ -8,5 +8,6 @@ export interface IStoreDataResponse {
 export interface IJobStore {
   job: IJobs[];
   createJob: (data: IJobs) => any;
+  editJob: (data: IJobs) => any;
   updateJob: (data: IJobs) => any;
 }

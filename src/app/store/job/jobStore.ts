@@ -39,7 +39,7 @@ export const useJobStore = create<IJobStore>((set, get) => ({
           });
         })
         .catch((err) => {
-          console.log(err.response.data.error);
+          console.log(err);
           reject({
             success: true,
             message: 'error posting new job',
@@ -55,6 +55,36 @@ export const useJobStore = create<IJobStore>((set, get) => ({
         draft.job = data;
       })
     );
+  },
+
+  editJob: async (data: IJobs): Promise<IStoreDataResponse> => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put('/api/jobPost/' + data.id, data)
+        .then((newJob) => {
+          set(
+            produce((draft) => {
+              let newData = draft.job.filter(
+                (item: IJobs) => item.id !== newJob.data.id
+              );
+              draft.job = [...newData, newJob.data];
+            })
+          );
+          resolve({
+            success: true,
+            message: 'Job updated succesfully',
+            data: newJob.data,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          reject({
+            success: true,
+            message: 'error updating job',
+            data: err,
+          });
+        });
+    });
   },
 }));
 

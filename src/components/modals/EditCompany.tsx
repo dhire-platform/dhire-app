@@ -6,6 +6,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  ListItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,8 +14,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tag,
+  TagCloseButton,
   Text,
   Textarea,
+  UnorderedList,
   useToast,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
@@ -23,12 +27,12 @@ import { useCallback, useState, SyntheticEvent, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import ChakraTagInput from 'src/lib/helpers/ChakraTagInput';
-import ChakraTagInputTag from 'src/lib/helpers/ChakraTagInput/Tag';
+import { EditableList } from 'src/lib/helpers/EditableInput/EditableList';
 
 const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
   const { company, updateCompany } = useProfileStore();
-  const [specializations, setSpecializations] = useState<string[]>();
-  const [benefits, setBenefits] = useState<string[]>();
+  const [markets, setMarkets] = useState<string[]>();
+  const [funding, setFunding] = useState<string[]>();
   const toast = useToast();
   const {
     handleSubmit,
@@ -39,8 +43,8 @@ const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
   const submit = async (data: any) => {
     let newCompany: any = {};
 
-    if (specializations?.length) newCompany.specializations = specializations;
-    if (benefits?.length) newCompany.benefits = benefits;
+    if (markets?.length) newCompany.markets = markets;
+    if (funding?.length) newCompany.funding = funding;
 
     // Add only changed keys
     Object.keys(data).map((key) => {
@@ -74,20 +78,20 @@ const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
 
   const handleTagsChange = useCallback(
     (_event: SyntheticEvent, tags: string[]) => {
-      setSpecializations(tags);
+      setMarkets(tags);
     },
     []
   );
-  const handleBenefitsChange = useCallback(
+  const handleFundingChange = useCallback(
     (_event: SyntheticEvent, tags: string[]) => {
-      setBenefits(tags);
+      setFunding(tags);
     },
     []
   );
 
   useEffect(() => {
-    setSpecializations(company.specializations);
-    setBenefits(company.benefits);
+    setMarkets(company.markets);
+    setFunding(company.funding);
   }, [company]);
   return (
     <Modal
@@ -322,22 +326,39 @@ const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
               />
             </FormControl>
 
-            {/* SPECIALISATION */}
+            {/* Markets */}
             <FormControl w={{ base: '100%', md: '45%' }}>
-              <FormLabel>Specializations: </FormLabel>
-              <ChakraTagInput
-                tags={specializations}
-                onTagsChange={handleTagsChange}
-              />
+              <FormLabel>Markets: </FormLabel>
+              <ChakraTagInput tags={markets} onTagsChange={handleTagsChange} />
             </FormControl>
 
-            {/* Benefits */}
+            {/* funding */}
             <FormControl w={{ base: '100%', md: '45%' }}>
-              <FormLabel>Benefits: </FormLabel>
-              <ChakraTagInput
-                tags={benefits}
-                onTagsChange={handleBenefitsChange}
-              />
+              <FormLabel>Funding: </FormLabel>
+
+              <EditableList list={funding || []} setList={setFunding} />
+              <UnorderedList
+                fontSize="1rem"
+                spacing={3}
+                listStylePos={'inside'}
+              >
+                {funding?.map((item, index) => (
+                  <ListItem key={index} role="group" pl="10px">
+                    <Tag w="90%" bg="white">
+                      {item}
+                      <TagCloseButton
+                        ml="auto"
+                        onClick={() => {
+                          let newArr: any = funding.filter(
+                            (b, i) => i !== index
+                          );
+                          setFunding(newArr);
+                        }}
+                      />
+                    </Tag>
+                  </ListItem>
+                ))}
+              </UnorderedList>
             </FormControl>
 
             {/* Description */}
@@ -346,26 +367,18 @@ const EditCompany = ({ isOpen, onOpen, onClose }: any) => {
 
               <Textarea
                 id="description"
-                defaultValue={company.description}
+                defaultValue={company.description || '\u2022 '}
                 h={{ base: '120px', md: '150px' }}
-                placeholder="Write minimum 50 character description"
-                {...register('description', {
-                  minLength: {
-                    value: 50,
-                    message:
-                      'write at least 50 letter description about the job',
-                  },
-                })}
-              />
-
-              <ErrorMessage
-                errors={errors}
-                name="description"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
+                onKeyPress={(e: any) => {
+                  if (!e.target.value) {
+                    e.target.value = '\u2022 ';
+                  }
+                  if (e.charCode === 13) {
+                    e.preventDefault();
+                    e.target.value += '\n\u2022 ';
+                  }
+                }}
+                {...register('description')}
               />
             </FormControl>
           </ModalBody>

@@ -142,14 +142,14 @@ const UserTypeModal = ({
                       bg="#F4F4F4"
                       value={roleEnum.RECRUIT}
                     >
-                      {roleEnum.RECRUIT}
+                      Talent
                     </chakra.option>
                     <chakra.option
                       borderRadius={0}
                       bg="#F4F4F4"
                       value={roleEnum.RECRUITER}
                     >
-                      {roleEnum.RECRUITER}
+                      Earning Opportunity
                     </chakra.option>
                   </chakra.select>
                 </FormControl>

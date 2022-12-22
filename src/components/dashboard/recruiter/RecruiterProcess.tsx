@@ -20,9 +20,11 @@ import { Avatar } from '@chakra-ui/avatar';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/progress';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { HiTrendingUp } from 'react-icons/hi';
+import { useJobStore } from 'src/app/store/job/jobStore';
 
 export const RecruiterProcess = () => {
-  const { recruiterProfile } = useProfileStore();
+  const { company } = useProfileStore();
+  const { job } = useJobStore();
   return (
     <HStack w="95%" mt={3} spacing={0} flexWrap="wrap" gap={5} flex={1}>
       {/* COMPANY SIZE */}
@@ -30,11 +32,50 @@ export const RecruiterProcess = () => {
         gap={3}
         spacing={0}
         maxW={{ base: '100%', xl: '30%' }}
-        flexDir={{ base: 'column', sm: 'row', xl: 'column' }}
+        flexDir={{ base: 'column', md: 'row', xl: 'column' }}
         justifyContent="space-evenly"
         alignSelf="stretch"
         w="full"
       >
+        <HStack
+          w="full"
+          flexDir={{ base: 'column', sm: 'row' }}
+          gap={3}
+          spacing={0}
+        >
+          <VStack
+            bg="white"
+            borderRadius="10px"
+            p="1.2rem 2rem"
+            gap={2}
+            w="full"
+            alignItems={'flex-start'}
+          >
+            <Heading fontSize={['18px', '20px', '22px']}>Founded</Heading>
+            <HStack justifyContent={'space-between'} w="full">
+              <Text fontSize={['24px', '26px', '28px']} fontWeight={800}>
+                {company.founded
+                  ? new Date(company.founded).getFullYear()
+                  : '-'}
+              </Text>
+            </HStack>
+          </VStack>
+          <VStack
+            bg="white"
+            borderRadius="10px"
+            p="1.2rem 2rem"
+            gap={2}
+            w="full"
+            alignItems={'flex-start'}
+          >
+            <Heading fontSize={['18px', '20px', '22px']}>Size</Heading>
+            <HStack justifyContent={'space-between'} w="full">
+              <Text fontSize={['24px', '26px', '28px']} fontWeight={800}>
+                {company.size || '-'}
+              </Text>
+            </HStack>
+          </VStack>
+        </HStack>
         <VStack
           bg="white"
           borderRadius="10px"
@@ -43,31 +84,10 @@ export const RecruiterProcess = () => {
           w="full"
           alignItems={'flex-start'}
         >
-          <Heading fontSize={['18px', '20px', '22px']}>Company Size</Heading>
+          <Heading fontSize={['18px', '20px', '22px']}>Location</Heading>
           <HStack justifyContent={'space-between'} w="full">
             <Text fontSize={['24px', '26px', '28px']} fontWeight={800}>
-              135k
-            </Text>
-            <Text color="#48E245" fontSize={['15px', '15px', '20px']}>
-              <Icon as={HiTrendingUp}></Icon>+15
-            </Text>
-          </HStack>
-        </VStack>
-        <VStack
-          bg="white"
-          borderRadius="10px"
-          p="1.2rem 2rem"
-          gap={2}
-          w="full"
-          alignItems={'flex-start'}
-        >
-          <Heading fontSize={['18px', '20px', '22px']}>New Employees</Heading>
-          <HStack justifyContent={'space-between'} w="full">
-            <Text fontSize={['24px', '26px', '28px']} fontWeight={800}>
-              35
-            </Text>
-            <Text color="#48E245" fontSize={['15px', '15px', '20px']}>
-              <Icon as={HiTrendingUp}></Icon>+15
+              {company.location || '-'}
             </Text>
           </HStack>
         </VStack>
@@ -153,7 +173,7 @@ export const RecruiterProcess = () => {
         alignSelf={'stretch'}
         gap={5}
       >
-        <Heading fontSize={['18px', '20px', '22px']}>Work format</Heading>
+        <Heading fontSize={['18px', '20px', '22px']}>Jobs Posted</Heading>
         <CircularProgress
           value={40}
           color="#6125F2"
@@ -165,7 +185,7 @@ export const RecruiterProcess = () => {
             <VStack fontSize={'3xl'} spacing={0}>
               <Text fontSize={'md'}>Total</Text>
               <Text fontWeight={700} m={0}>
-                328
+                {job.length}
               </Text>
             </VStack>
           </CircularProgressLabel>
@@ -173,11 +193,11 @@ export const RecruiterProcess = () => {
         <HStack w="full" justifyContent={'space-evenly'}>
           <HStack>
             <Box w={5} h={5} rounded="full" bg="#DED2F7"></Box>
-            <Text>Remote</Text>
+            <Text>Open</Text>
           </HStack>
           <HStack>
             <Box w={5} h={5} rounded="full" bg="#6125F2"></Box>
-            <Text>On site</Text>
+            <Text>Closed</Text>
           </HStack>
         </HStack>
       </VStack>

@@ -8,7 +8,7 @@ export interface ICompany {
   type?: string;
   industry?: string;
   founded?: Date;
-  specializations?: string[];
-  benefits?: string[];
+  markets?: string[];
+  funding?: string[];
   location?: string;
 }

@@ -12,7 +12,7 @@ import React from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { RiMapPin2Line } from 'react-icons/ri';
 import { IFilter } from '@/interfaces/filter.interface';
-import { IJob } from '@/interfaces/store/data/job.interface';
+import { IJob, IJobs } from '@/interfaces/store/data/job.interface';
 
 const animationKeyframes = keyframes`
     from {
@@ -24,7 +24,7 @@ const animationKeyframes = keyframes`
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
-  data: IJob[];
+  data: IJobs[];
   setData: (filter: IFilter) => void;
 };
 
@@ -69,7 +69,7 @@ const Layout: React.FC<Props> = ({ children, data, setData }) => {
               <chakra.input
                 onChange={(event: { target: { value: any } }) => {
                   setData({
-                    filter_type: 'job_title',
+                    filter_type: 'title',
                     filter_values:
                       event.target.value === ''
                         ? []
@@ -92,7 +92,7 @@ const Layout: React.FC<Props> = ({ children, data, setData }) => {
                 placeholder="Select option"
                 onChange={(event: { target: { value: any } }) => {
                   setData({
-                    filter_type: 'job_location',
+                    filter_type: 'location',
                     filter_values:
                       event.target.value === '' ? [] : [event.target.value],
                   });

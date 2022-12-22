@@ -8,12 +8,14 @@ import {
   IRecruiterProfile,
   IUserProfile,
 } from '@/interfaces/store/data/userProfile.interface';
+import { useJobStore } from 'src/app/store/job/jobStore';
 
 export default async function getUserByWallet(
   walletId: string
 ): Promise<IUserProfile | undefined> {
   // const {  setWallet } = useProfileStore();
   const { setPersistanceUser, setPersistanceCompany } = usePersistanceStore();
+  const { updateJob } = useJobStore();
   const {
     updateCompany,
     updateUser,
@@ -49,8 +51,16 @@ export default async function getUserByWallet(
       setPersistanceCompany(companyDetails.data);
       updateCompany(companyDetails.data);
       updateRecruiterProfile(userProfile);
+      axios
+        .get('/api/company/getJobs?id=' + userProfile.company)
+        .then((res) => {
+          updateJob(res.data);
+        });
     } else {
-      updateUserProfile(userProfile);
+      axios.get('/api/jobPost').then((res) => {
+        updateJob(res.data.jobPosts);
+        updateUserProfile(userProfile);
+      });
     }
     // setWallet({
     //   walletId: userProfile.user?.wallet?.walletId,

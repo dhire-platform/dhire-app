@@ -18,20 +18,51 @@ import {
 } from '@chakra-ui/react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { VscAdd } from 'react-icons/vsc';
+import { useState, useEffect } from 'react';
 import { useLocalStore } from 'src/app/store/local/localStore';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { changeToMonth } from 'src/lib/helpers/Date/changeToMonth';
 import { deleteField } from './useDeleteField';
 import EditProjectModal from './UserDetails/ProjectEditModal';
+import { Mode } from 'src/lib/enums/enums';
+import { FiEdit2 } from 'react-icons/fi';
 
 const Projects = () => {
   const { userProfile, user, updateUserProfile } = useProfileStore();
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const [mode, setMode] = useState<Mode>();
+  const [selected, setSelected] = useState<any>();
   const toast = useToast();
-
+  function iconRender(icon: any, onClick: any, label: string) {
+    return (
+      <IconButton
+        onClick={onClick}
+        variant={'unstyled'}
+        _hover={{
+          bg: 'blackAlpha.100',
+        }}
+        display="flex"
+        opacity={0}
+        _groupHover={{ opacity: 1 }}
+        p="0.1rem"
+        size="sm"
+        alignItems="center"
+        justifyContent={'center'}
+        color="blackAlpha.600"
+        aria-label={label}
+        icon={icon}
+      />
+    );
+  }
   return (
     <>
-      <EditProjectModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <EditProjectModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        mode={mode}
+        item={selected}
+      />
       <Center
         boxShadow="0px 35px 41px 10px rgba(0, 0, 0, 0.03)"
         bg="white"
@@ -53,30 +84,19 @@ const Projects = () => {
               role="group"
               pos="relative"
               w={'100%'}
+              justifyContent="space-between"
             >
               <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.8rem' }}>
                 Projects
               </Heading>
-              <IconButton
-                onClick={onOpen}
-                display="flex"
-                justifyContent={'center'}
-                alignItems="center"
-                variant={'unstyled'}
-                _hover={{
-                  bg: 'blackAlpha.100',
-                }}
-                p="0.1rem"
-                size="sm"
-                pos="absolute"
-                top="0px"
-                right="0px"
-                visibility={'hidden'}
-                _groupHover={{ visibility: 'visible' }}
-                color="blackAlpha.600"
-                aria-label="add project"
-                icon={<VscAdd size="18px" />}
-              />
+              {iconRender(
+                <VscAdd size="18px" />,
+                () => {
+                  setMode(Mode.CREATTE);
+                  onOpen();
+                },
+                'add Project'
+              )}
             </Stack>
             <Flex
               gap="0.7rem"
@@ -102,31 +122,29 @@ const Projects = () => {
                       : '1px solid rgba(0,0,0,0.2)'
                   }
                 >
-                  <IconButton
-                    onClick={() =>
-                      deleteField(
-                        { del: index, type: 'project' },
-                        toast,
-                        user,
-                        userProfile,
-                        updateUserProfile
-                      )
-                    }
-                    variant={'unstyled'}
-                    _hover={{
-                      bg: 'blackAlpha.100',
-                    }}
-                    display="none"
-                    _groupHover={{ display: 'flex' }}
-                    p="0.1rem"
-                    size="sm"
-                    pos="absolute"
-                    top="0px"
-                    right="0px"
-                    color="blackAlpha.600"
-                    aria-label="delete project"
-                    icon={<IoCloseSharp size="18px" />}
-                  />
+                  <HStack pos="absolute" right={0} top={4}>
+                    {iconRender(
+                      <FiEdit2 size="18px" />,
+                      () => {
+                        setMode(Mode.EDIT);
+                        setSelected(project);
+                        onOpen();
+                      },
+                      'edit project'
+                    )}
+                    {iconRender(
+                      <IoCloseSharp size="18px" />,
+                      () =>
+                        deleteField(
+                          { del: index, type: 'project' },
+                          toast,
+                          user,
+                          userProfile,
+                          updateUserProfile
+                        ),
+                      'Delete project'
+                    )}
+                  </HStack>
                   <Heading
                     fontSize={{ base: 'lg', lg: '1.4rem' }}
                     color="blackAlpha.800"

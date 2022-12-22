@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Jobs from 'src/components/dashboard/jobs/Jobs';
 import EditProfileComponent from 'src/components/dashboard/profile/UserDetails/ProfileEditModal';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { roleEnum } from 'src/lib/enums/enums';
@@ -31,10 +30,14 @@ import { BiArrowBack, BiHome, BiHomeAlt } from 'react-icons/bi';
 import JobsList from 'src/components/dashboard/recruiter/JobList';
 import { useJobStore } from 'src/app/store/job/jobStore';
 import { BsBriefcase } from 'react-icons/bs';
+import { IJobs } from '@/interfaces/store/data/job.interface';
+import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
+import { JobDetails } from 'src/components/hire/JobDetails';
 
 const Recruiter = () => {
-  const [userDetails, setUserDetails] = useState<boolean>(false);
-  const [jobDetails, setJobDetails] = useState<boolean>(false);
+  const [userDetails, setUserDetails] = useState<IUserProfile>();
+  const [applicantDetails, setApplicantDetails] = useState<IJobs>();
+  const [jobDetails, setJobDetails] = useState<IJobs>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const router = useRouter();
@@ -101,8 +104,9 @@ const Recruiter = () => {
                 fontWeight="600"
                 w="100%"
                 onClick={() => {
-                  setUserDetails(false);
-                  setJobDetails(false);
+                  setUserDetails(undefined);
+                  setJobDetails(undefined);
+                  setApplicantDetails(undefined);
                 }}
               >
                 <Icon as={BsBriefcase} display={{ lg: 'none' }} my={2} />
@@ -139,13 +143,27 @@ const Recruiter = () => {
               <TabPanel p={0}>
                 <Center w="full" pos="relative">
                   {userDetails ? (
-                    <UserApplication setUserDetails={setUserDetails} />
+                    <UserApplication
+                      setUserDetails={setUserDetails}
+                      userDetails={userDetails}
+                    />
+                  ) : applicantDetails ? (
+                    <Applications
+                      openUser={setUserDetails}
+                      applicantDetails={applicantDetails}
+                    />
                   ) : jobDetails ? (
-                    <Applications openUser={setUserDetails} />
+                    <JobDetails
+                      job={jobDetails}
+                      setJobDetails={setJobDetails}
+                    />
                   ) : (
                     <VStack pt={3} w="95%">
                       <ActionButtons />
-                      <JobsList openJob={setJobDetails} />
+                      <JobsList
+                        openJob={setJobDetails}
+                        openApplicant={setApplicantDetails}
+                      />
                     </VStack>
                   )}
                 </Center>

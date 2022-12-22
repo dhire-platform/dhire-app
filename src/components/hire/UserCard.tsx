@@ -19,6 +19,7 @@ import { BsDiscord, BsGithub, BsTwitter } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import { GrBookmark } from 'react-icons/gr';
 import { ImBookmark } from 'react-icons/im';
+import { Applicant } from '@/interfaces/store/data/job.interface';
 const animationKeyframes = keyframes`
       from {
         background-position: 0 0;
@@ -28,11 +29,13 @@ const animationKeyframes = keyframes`
     `;
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
-
-const UserCard = ({ openUser }: any) => {
+type userCardProps = { openUser: any; key: number; user: Applicant };
+const UserCard = ({ openUser, key, user }: userCardProps) => {
   const [bookmark, setBookmark] = useState(false);
+
   return (
     <VStack
+      key={key}
       minW="200px"
       spacing={0}
       my={3}
@@ -56,7 +59,7 @@ const UserCard = ({ openUser }: any) => {
           />
           <VStack alignItems="left" spacing={0}>
             <Heading as="h2" fontSize={['1.2rem', '1.3rem']} fontWeight={500}>
-              Kia Antonoc
+              Kia Antonoc {/* user.user.name */}
             </Heading>
             <HStack
               fontSize={['12px', '14px']}
@@ -64,8 +67,10 @@ const UserCard = ({ openUser }: any) => {
               color="gray.500"
             >
               <Text as="span">Java Developer</Text>
+              {/* user.bio.slice(0,10)...  / user.experience[0].designation*/}
               <Box w={'5px'} h={'5px'} rounded="full" bg="gray.600"></Box>
               <Text as="span">5 years</Text>
+              {/* user.experience[0].to - user.experience[0].from */}
             </HStack>
           </VStack>
 
@@ -88,7 +93,7 @@ const UserCard = ({ openUser }: any) => {
           <HStack color="blue" animation={animation1}>
             <Icon as={MdVerified} w={4} h={4} />
             <Text as="span" fontWeight={600}>
-              Verified
+              Verified{/* user.verified */}
             </Text>
           </HStack>
           <HStack>
@@ -96,20 +101,21 @@ const UserCard = ({ openUser }: any) => {
             <Text>
               Current job:{' '}
               <Text as="span" color="gray.600">
-                Product Designer at Figma
+                Product Designer at Figma{/* user.experience(current) */}
               </Text>
             </Text>
           </HStack>
           <HStack>
             <Icon as={TbAsterisk} w={3} h={3} />
-            <Text>3 years of experience</Text>
+            <Text>3 years of experience</Text>{' '}
+            {/* new Date() - user.experience[0].from */}
           </HStack>
           <HStack>
             <Icon as={TbAsterisk} w={3} h={3} />
             <Text>
               Preffered Location:{' '}
               <Text as="span" color="gray.600">
-                CA, LA
+                CA, LA{/* user.location */}
               </Text>
             </Text>
           </HStack>
@@ -129,7 +135,7 @@ const UserCard = ({ openUser }: any) => {
           border="1px solid #444"
           color="gray.600"
           size={['xs', 'sm', 'sm', 'md']}
-          onClick={() => openUser(true)}
+          onClick={() => openUser(user.user_id)}
         >
           View More
         </Button>
