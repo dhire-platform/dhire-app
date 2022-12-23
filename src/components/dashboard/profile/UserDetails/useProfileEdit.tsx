@@ -15,6 +15,7 @@ const useProfileEdit = ({
   const { set_edit_mode } = useLocalStore();
   async function onSubmit(values: any) {
     let data: IUserProfile = {};
+    let result = 'success';
     let { youtube, twitter, facebook, linkedin, instagram, github } = values;
     let social = { youtube, twitter, facebook, linkedin, instagram, github };
     Object.keys(values).forEach((key: any) => {
@@ -28,18 +29,18 @@ const useProfileEdit = ({
         ? { ...data, social: { ...data.social, [key]: values[key] } }
         : data;
     });
-    axios
-      .put(`/api/userProfile/` + user.id, data)
-      .then((res) => {
-        //console.log('update user profile route response', res);
-        updateUserProfile(res.data);
-      })
-      .catch((err) => {
-        // console.log('error in update user profile route', err);
-      });
+    try {
+      const res = await axios.put(`/api/userProfile/` + user.id, data);
+
+      updateUserProfile(res.data);
+    } catch (err) {
+      // console.log('error in update user profile route', err);
+      result = 'error';
+    }
     reset();
     onClose();
     set_edit_mode(false);
+    return result;
   }
   return onSubmit;
 };

@@ -97,13 +97,16 @@ const ExpEditModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
     formState: { errors, isSubmitting },
   } = useForm();
   useEffect(() => {
-    if (mode === Mode.EDIT) {
+    if (mode === Mode.EDIT && item) {
       reset({
         ...item,
         from: item.from.split('T')[0],
         to: item.to ? item.to.split('T')[0] : '',
       });
       setCurrent(item.current);
+    } else {
+      setCurrent(false);
+      reset({});
     }
   }, [isOpen]);
   return (

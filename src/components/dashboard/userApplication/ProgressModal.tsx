@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-const ProgressModal = ({ isOpen, onOpen, onClose }: any) => {
+const ProgressModal = ({ isOpen, onOpen, onClose, job }: any) => {
   const renderCircle = (text: string, full: boolean) => {
     return full ? (
       <Box
@@ -85,18 +85,22 @@ const ProgressModal = ({ isOpen, onOpen, onClose }: any) => {
           <VStack>
             <HStack p={'1.5rem'} gap={3}>
               <Box pt={1}>
-                <Avatar name={'google'} size={'md'} colorScheme={'black'} />
+                <Avatar
+                  name={job?.title || 'google'}
+                  size={'md'}
+                  colorScheme={'black'}
+                />
               </Box>
               <VStack alignItems={'flex-start'} spacing={1}>
                 <Heading fontSize={'xl'} fontWeight={600}>
-                  UI/UX Designer
+                  {job?.title}
                 </Heading>
                 <Heading
                   fontSize={'15px'}
                   fontWeight={500}
                   color="blackAlpha.600"
                 >
-                  Google, New York
+                  {job?.company.name}, {job?.location}
                 </Heading>
               </VStack>
             </HStack>
@@ -110,35 +114,40 @@ const ProgressModal = ({ isOpen, onOpen, onClose }: any) => {
             my={'4rem'}
           >
             {renderCircle('Applied', true)}
-            <Box border={'2px solid red'} flex={1} />
-            {renderCircle('Application Seen', true)}
-            <Box border={'2px solid red'} flex={1} />
-            {renderCircle('Shortlisted', true)}
-            <Box border={'2px solid red'} flex={1} />
+            <Box border={'2px solid red'} borderColor="red.300" flex={1} />
+            {renderCircle('Application Seen', false)}
+            <Box border={'2px solid red'} borderColor="red.300" flex={1} />
+            {renderCircle('Shortlisted', false)}
+            <Box border={'2px solid red'} borderColor="red.300" flex={1} />
             {renderCircle('Interview', false)}
-            <Box border={'2px solid red'} flex={1} />
+            <Box border={'2px solid red'} borderColor="red.300" flex={1} />
             {renderCircle('Status Review', false)}
-            <Box border={'2px solid red'} flex={1} />
+            <Box border={'2px solid red'} borderColor="red.300" flex={1} />
             {renderCircle('Hired', false)}
           </HStack>
           <VStack my="4rem" display={{ base: 'flex', md: 'none' }}>
             <HStack alignItems={'flex-start'} w="full">
               <HStack w="full">
                 {renderCircle('Applied', true)}
-                <Box border={'2px solid red'} flex={1} />
-                {renderCircle('Application Seen', true)}
-                <Box border={'2px solid red'} flex={1} />
+                <Box border={'2px solid red'} borderColor="red.300" flex={1} />
+                {renderCircle('Application Seen', false)}
+                <Box border={'2px solid red'} borderColor="red.300" flex={1} />
               </HStack>
               <VStack>
-                {renderCircle('Shortlisted', true)}
-                <Box border={'2px solid red'} h={'50px'} mt="10px !important" />
+                {renderCircle('Shortlisted', false)}
+                <Box
+                  border={'2px solid red'}
+                  borderColor="red.300"
+                  h={'50px'}
+                  mt="10px !important"
+                />
               </VStack>
             </HStack>
             <HStack w="full">
               {renderCircle('Hired', false)}
-              <Box border={'2px solid red'} flex={1} />
+              <Box border={'2px solid red'} borderColor="red.300" flex={1} />
               {renderCircle('Status Review', false)}
-              <Box border={'2px solid red'} flex={1} />
+              <Box border={'2px solid red'} borderColor="red.300" flex={1} />
               {renderCircle('Interview', false)}
             </HStack>
           </VStack>

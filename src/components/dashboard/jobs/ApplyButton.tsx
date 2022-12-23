@@ -20,14 +20,12 @@ export const ApplyButton = ({ job }: { job: IJobs }) => {
       status: ApplicantStatus.NOTVIEWED,
     };
     try {
-      const newApplicant: Applicant = await axios.post(
-        '/api/applicant/' + job.id,
-        data
-      );
+      const newApplicant = await axios.post('/api/applicant/' + job.id, data);
+      console.log(newApplicant);
       let ogApplicant = userProfile.Applicant || [];
       const newUser = {
         ...userProfile,
-        Applicant: [...ogApplicant, { jobId: job.id }],
+        Applicant: [...ogApplicant, { ...newApplicant.data }],
       };
       updateUserProfile(newUser);
       msg = 'Successfully Applied.';

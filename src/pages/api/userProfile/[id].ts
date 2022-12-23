@@ -61,6 +61,17 @@ async function getUserProfileById(
         Applicant: {
           select: {
             jobId: true,
+            job: {
+              select: {
+                title: true,
+                location: true,
+                company: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
           },
         },
       },

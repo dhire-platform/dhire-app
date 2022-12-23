@@ -58,7 +58,7 @@ async function addNewApplicant(
       status: ApplicantStatus;
     };
   try {
-    const applicant = await prisma.applicant.create({
+    let applicant = await prisma.applicant.create({
       data: {
         jobId: id,
         user_id,
@@ -68,7 +68,24 @@ async function addNewApplicant(
         status,
       },
     });
-    res.status(200).json(applicant);
+    let Newapplicant = await prisma.applicant.findUnique({
+      where: { id: applicant.id },
+      select: {
+        jobId: true,
+        job: {
+          select: {
+            title: true,
+            location: true,
+            company: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    res.status(200).json(Newapplicant);
   } catch (e) {
     res.status(400).json({ error: (e as Error).message });
   }

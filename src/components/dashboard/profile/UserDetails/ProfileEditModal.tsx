@@ -46,7 +46,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
-
+  const toast = useToast();
   const {
     handleSubmit,
     register,
@@ -55,7 +55,20 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   } = useForm({});
 
   const onSubmit = useProfileEdit({ isOpen, onClose, reset });
-
+  const submitData = async (data: any) => {
+    let result = await onSubmit(data);
+    toast({
+      position: 'top',
+      title: result === 'error' ? 'Error!' : 'DONE !!',
+      description: result === 'error' ? '' : 'Successfully Added.',
+      status: result,
+      duration: 1000,
+      isClosable: true,
+      containerStyle: {
+        marginTop: '10%',
+      },
+    });
+  };
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -71,7 +84,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
       <ModalContent>
         <ModalHeader>Edit your Profile</ModalHeader>
         <ModalCloseButton />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(submitData)}>
           <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
             {/*userName */}
             {router.pathname === '/profile' && (
@@ -194,6 +207,8 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                       children={socials[key as keyof ISocial]}
                     />
                     <Input
+                      placeholder="https://abc.com/xyz"
+                      _placeholder={{ color: 'blackAlpha.500', fontSize: 'sm' }}
                       {...register(key)}
                       defaultValue={
                         userProfile.social

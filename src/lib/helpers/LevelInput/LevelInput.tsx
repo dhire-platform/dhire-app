@@ -1,5 +1,6 @@
 import {
   Heading,
+  HStack,
   Input,
   InputGroup,
   InputRightAddon,
@@ -28,7 +29,7 @@ export const LevelInput = ({
   };
   return (
     <>
-      <Stack wrap={'wrap'} spacing={0} gap={1}>
+      <HStack wrap={'wrap'} spacing={0} gap={1}>
         {tags.map((tag: Tag, index: number) => {
           return (
             <Tag key={index} w="fit-content">
@@ -39,7 +40,7 @@ export const LevelInput = ({
             </Tag>
           );
         })}
-      </Stack>
+      </HStack>
       <InputGroup size="sm" mb={3} display="flex">
         <Select
           size="sm"
