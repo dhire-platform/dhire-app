@@ -19,6 +19,7 @@ import {
   IProject,
   IRecruiterProfile,
   ICompany,
+  IUsers,
 } from 'src/interfaces/store/data/data.index';
 import { roleEnum } from 'src/lib/enums/enums';
 
@@ -59,8 +60,17 @@ const recruiterProfile: IRecruiterProfile = {
   website: undefined,
   social: social,
 };
+const users: IUsers[] = [];
 const company: ICompany = {};
 export const useProfileStore = create<IProfileStore>((set, get) => ({
+  users: users,
+  updateUsers: (data: IUsers[]) => {
+    set(
+      produce((state) => {
+        state.users = data;
+      })
+    );
+  },
   user: user,
   createNewUser: (data: IUser): Promise<IStoreDataResponse> => {
     return new Promise((resolve, reject) => {

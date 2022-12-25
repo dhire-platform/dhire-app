@@ -34,7 +34,7 @@ export type IJobs = {
   from: Date;
   id?: string;
   companyId?: string; // this is company id
-  company?: { name: string };
+  company?: { name: string; logo?: string };
   jobLevel?: JobLevel; //else
   jobType: JobType[];
   minSalary?: number; //compare

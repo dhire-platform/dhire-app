@@ -19,6 +19,7 @@ export default async function getUserByWallet(
   const {
     updateCompany,
     updateUser,
+    updateUsers,
     updateUserProfile,
     updateRecruiterProfile,
   } = useProfileStore();
@@ -30,7 +31,7 @@ export default async function getUserByWallet(
     console.log('does user exist - ', res.data);
 
     if (!res.data) return undefined;
-
+    updateUsers([]);
     const userProfileResponse = await axios.get(
       '/api/userProfile/' + res.data.id
     );

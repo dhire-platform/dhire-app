@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   chakra,
   Checkbox,
@@ -25,6 +26,10 @@ import { useFilter } from 'src/lib/hooks/useFilter';
 import { useJobStore } from 'src/app/store/job/jobStore';
 import { JobLevel, JobType } from 'src/lib/enums/enums';
 import axios from 'axios';
+import {
+  WalletConnectButton,
+  WalletMultiButton,
+} from '@solana/wallet-adapter-react-ui';
 
 const Jobs = () => {
   const { job, updateJob } = useJobStore();
@@ -254,6 +259,7 @@ const Jobs = () => {
             w="full"
             p={{ base: '0px', md: '1rem' }}
             flexDirection="column"
+            justifyContent={'flex-start'}
           >
             <Stack
               fontWeight="400"
@@ -314,7 +320,15 @@ const Jobs = () => {
             ) : loaded || job.length > 0 ? (
               currentData.map((item, index) => <Card key={index} {...item} />)
             ) : (
-              <Text>Loading...</Text>
+              <Text
+                color="blackAlpha.600"
+                fontWeight={800}
+                fontSize={'2rem'}
+                mb="auto"
+                mt="2rem"
+              >
+                Loading Jobs...
+              </Text>
             )}
             <Pagination
               onPageChange={(page: number) => {

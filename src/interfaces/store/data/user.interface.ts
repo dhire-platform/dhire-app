@@ -7,3 +7,9 @@ export interface IUser {
   name?: string;
   username?: string;
 }
+
+export interface IUsers {
+  name: string;
+  username: string;
+  UserProfile: [{ bio: string; image?: string }];
+}

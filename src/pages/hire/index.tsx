@@ -9,14 +9,19 @@ import {
   Icon,
   Image,
   keyframes,
+  Spinner,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
 import HireNavBar from 'src/components/navigation/navbar/HireNav';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UserCard from 'src/components/hire/UserCard';
 import Pagination from 'src/components/Pagination/Pagination';
+import { useProfileStore } from 'src/app/store/profile/profileStore';
+import axios from 'axios';
+import { IUsers } from '@/interfaces/store/data/user.interface';
+import { NewUserCard } from 'src/components/hire/NewUserCard';
 const animationKeyframes = keyframes`
   from {
     background-position: 0 0;
@@ -29,23 +34,57 @@ const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
 
 const index = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const { users, updateUsers } = useProfileStore();
+  const getAllUsers = async () => {
+    const { data } = await axios.get('/api/user');
+    updateUsers(data);
+  };
+  useEffect(() => {
+    if (!users.length) getAllUsers();
+  }, [users]);
   return (
-    <Container
-      maxW="full"
-      zIndex={2}
-      p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
-    >
-      <Flex
-        w="full"
-        bg="rgba(255,255,255,0.4)"
-        border="2px solid #A0D6E3"
-        borderRadius="8px"
-        my="2rem"
-        p="2rem"
-        flexWrap="wrap"
-        justifyContent={'space-evenly'}
+    <Container maxW="full" zIndex={2} px={0}>
+      <Heading
+        py="4rem"
+        mx={'auto'}
+        textAlign="center"
+        maxW="60rem"
+        fontWeight={'800'}
+        letterSpacing="-0.03em"
+        lineHeight={['54px', '72px', '80px']}
+        fontSize={['48px', '60px', '74px']}
       >
-        <HStack width={'full'} justifyContent="flex-end">
+        Hire the best{' '}
+        <Box
+          as="span"
+          bgGradient="linear( to-r, #6AADF1, #81F2F8, #7D8FFF, #6AADF1)"
+          bgClip="text"
+          backgroundPosition={'-100%'}
+          backgroundSize={'300%'}
+          animation={animation1}
+        >
+          Talent
+        </Box>
+      </Heading>
+      <Box
+        w="100%"
+        bg="white"
+        p={{ base: '1rem 1rem', sm: '1rem 2rem', md: '1rem 3rem' }}
+      >
+        <Flex
+          w="full"
+          bg="rgba(255,255,255,0.4)"
+          border="2px solid #A0D6E3"
+          borderRadius="8px"
+          my="2rem"
+          p="2rem"
+          gap={'30px'}
+          flexWrap="wrap"
+          justifyContent={'space-evenly'}
+        >
+          {users.length ? (
+            <>
+              {/* <HStack width={'full'} justifyContent="flex-end">
           <Pagination
             onPageChange={(page: number) => {
               setCurrentPage(page);
@@ -55,16 +94,20 @@ const index = () => {
             totalCount={6}
             pageSize={3}
           />
-        </HStack>
-        {/*  <UserCard />
-        <UserCard />
-        <UserCard />
-        <UserCard />
-        <UserCard />
-        // coming soon
-        <UserCard /> */}
-        <Heading>Coming Soon...</Heading>
-      </Flex>
+        </HStack> */}
+              {users.map((user: IUsers, index: any) => {
+                return <NewUserCard key={index} user={user} />;
+              })}
+            </>
+          ) : (
+            <Spinner
+              borderColor="#A0D6E3"
+              w={['40px', '50px', '80px']}
+              h={['40px', '50px', '80px']}
+            />
+          )}
+        </Flex>
+      </Box>
     </Container>
   );
 };
