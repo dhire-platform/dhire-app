@@ -21,7 +21,6 @@ import {
   Checkbox,
 } from '@chakra-ui/react';
 import React from 'react';
-import Data from './Data.json';
 import { useState, useEffect, useMemo } from 'react';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import axios from 'axios';
@@ -82,10 +81,10 @@ const index = () => {
   useEffect(() => {
     if (!users.length && !loaded) {
       setLoaded(true);
-      //getAllUsers();
-      let data = JSON.stringify(Data);
+      getAllUsers();
+      /* let data = JSON.stringify(Data);
       setFilteredData(JSON.parse(data));
-      updateUsers(JSON.parse(data));
+      updateUsers(JSON.parse(data)); */
     } else if (users.length && !loaded) {
       setLoaded(true);
       setFilteredData(users);
