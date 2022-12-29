@@ -1,4 +1,5 @@
 import { IWallet } from 'src/interfaces/store/data/wallet.interface';
+import { ISkill } from './skills.interface';
 
 export interface IUser {
   id?: string;
@@ -11,5 +12,13 @@ export interface IUser {
 export interface IUsers {
   name: string;
   username: string;
-  UserProfile: [{ bio: string; image?: string }];
+  UserProfile: [
+    {
+      bio: string;
+      image?: string;
+      skills: ISkill[];
+      location: string;
+      createdAt: Date;
+    }
+  ];
 }

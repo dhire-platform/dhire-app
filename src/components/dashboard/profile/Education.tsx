@@ -74,29 +74,6 @@ const Education = () => {
         role="group"
         pos="relative"
       >
-        <HStack pos="absolute" right={0} top={2}>
-          {iconRender(
-            <FiEdit2 size="18px" />,
-            () => {
-              setMode(Mode.EDIT);
-              setSelected(experience);
-              onOpen();
-            },
-            'edit education'
-          )}
-          {iconRender(
-            <IoCloseSharp size="18px" />,
-            () =>
-              deleteField(
-                { del: index, type: 'exp' },
-                toast,
-                user,
-                userProfile,
-                updateUserProfile
-              ),
-            'delete experience'
-          )}
-        </HStack>
         <Box pt={1}>
           <Avatar
             name={experience?.company}
@@ -108,7 +85,6 @@ const Education = () => {
         <Stack
           w="full"
           spacing={5}
-          direction={'column'}
           pb="1.5rem"
           borderBottom={
             userProfile.experience?.length === index + 1
@@ -117,7 +93,32 @@ const Education = () => {
           }
         >
           <Stack dir="column">
-            <Heading fontSize={'xl'}>{experience.company}</Heading>
+            <HStack>
+              <Heading fontSize={'xl'}>{experience.company}</Heading>
+              <HStack alignSelf={'flex-start'}>
+                {iconRender(
+                  <FiEdit2 size="18px" />,
+                  () => {
+                    setMode(Mode.EDIT);
+                    setSelected(experience);
+                    onOpen();
+                  },
+                  'edit education'
+                )}
+                {iconRender(
+                  <IoCloseSharp size="18px" />,
+                  () =>
+                    deleteField(
+                      { del: index, type: 'exp' },
+                      toast,
+                      user,
+                      userProfile,
+                      updateUserProfile
+                    ),
+                  'delete experience'
+                )}
+              </HStack>
+            </HStack>
             {(experience.to || experience.current) && experience.from && (
               <HStack fontSize={'14px'} color="blackAlpha.600">
                 <Text as="span">
@@ -169,35 +170,37 @@ const Education = () => {
         pb={'40px'}
         borderBottom={'1px solid rgba(0,0,0,0.09)'}
       >
-        <HStack pos="absolute" right={0} top={4}>
-          {iconRender(
-            <FiEdit2 size="18px" />,
-            () => {
-              setMode(Mode.EDIT);
-              setSelected(edu);
-              onEduOpen();
-            },
-            'edit education'
-          )}
-          {iconRender(
-            <IoCloseSharp size="18px" />,
-            () =>
-              deleteField(
-                { del: index, type: 'edu' },
-                toast,
-                user,
-                userProfile,
-                updateUserProfile
-              ),
-            'Delete Education'
-          )}
-        </HStack>
         <VStack alignItems={'flex-start'}>
-          <Heading
-            mt={0}
-            fontSize={{ base: 'lg', lg: '1.4rem' }}
-            color="blackAlpha.800"
-          >{`${edu.degree} , ${edu.school} ${edu.location || ''}`}</Heading>
+          <HStack>
+            <Heading
+              mt={0}
+              fontSize={{ base: 'lg', lg: '1.3rem' }}
+              color="blackAlpha.800"
+            >{`${edu.degree} , ${edu.school} ${edu.location || ''}`}</Heading>
+            <HStack alignSelf={'flex-start'}>
+              {iconRender(
+                <FiEdit2 size="18px" />,
+                () => {
+                  setMode(Mode.EDIT);
+                  setSelected(edu);
+                  onEduOpen();
+                },
+                'edit education'
+              )}
+              {iconRender(
+                <IoCloseSharp size="18px" />,
+                () =>
+                  deleteField(
+                    { del: index, type: 'edu' },
+                    toast,
+                    user,
+                    userProfile,
+                    updateUserProfile
+                  ),
+                'Delete Education'
+              )}
+            </HStack>
+          </HStack>
 
           {
             <HStack fontSize={'14px'} color="blackAlpha.600">
@@ -266,6 +269,7 @@ const Education = () => {
               justify="space-between"
               align={'start'}
               w="full"
+              pb="1rem"
               role="group"
               minH="40px"
             >

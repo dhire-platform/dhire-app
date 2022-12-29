@@ -41,8 +41,7 @@ const Recruiter = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const router = useRouter();
-  const { user, recruiterProfile, company } = useProfileStore();
-  const { job } = useJobStore();
+  const { user } = useProfileStore();
   const nav_width = { base: '50px', lg: '150px' };
   useEffect(() => {
     if (user.type === roleEnum.RECRUIT) router.push('/profile/' + user.id);

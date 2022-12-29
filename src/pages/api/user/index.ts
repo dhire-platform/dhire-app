@@ -38,6 +38,9 @@ async function getAllUsers(req: NextApiRequest, res: NextApiResponse) {
           select: {
             bio: true,
             image: true,
+            skills: true,
+            location: true,
+            createdAt: true,
           },
         },
       },

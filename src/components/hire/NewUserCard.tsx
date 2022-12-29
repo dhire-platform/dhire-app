@@ -3,20 +3,23 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   Heading,
   HStack,
   Icon,
   Stack,
+  Tag,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { IUsers } from '@/interfaces/store/data/user.interface';
-type userCardProps = { key: number; user: IUsers };
-export const NewUserCard = ({ key, user }: userCardProps) => {
+
+type userCardProps = { key_index: number; user: IUsers };
+export const NewUserCard = ({ key_index, user }: userCardProps) => {
   return (
     <Center
-      key={key}
+      key={key_index}
       boxShadow="0px 35px 41px 10px rgba(0, 0, 0, 0.03)"
       bg={'white'}
       w="300px"
@@ -34,12 +37,12 @@ export const NewUserCard = ({ key, user }: userCardProps) => {
           <Avatar
             size="lg"
             name={user?.name}
-            colorScheme="black"
-            src={user.UserProfile[0]?.image || user.name}
+            colorScheme="blue"
+            src={user.UserProfile[0]?.image}
           />
           <Stack
-            gap="0"
-            justify={'center'}
+            spacing={0}
+            justifyContent={'center'}
             align="start"
             w="full"
             direction={'column'}
@@ -47,15 +50,23 @@ export const NewUserCard = ({ key, user }: userCardProps) => {
             <Heading color={'black'} fontSize="xl">
               {user?.name}{' '}
             </Heading>
-            <HStack color="blackAlpha.500" gap={3}>
-              <Text as="span">@{user?.username}</Text>
-            </HStack>
+
+            <Text color="blackAlpha.500" as="span">
+              @{user?.username}
+            </Text>
           </Stack>
         </Stack>
       </Stack>
+      <Flex mt={4} w="full" wrap={'wrap'} gap={2}>
+        {user.UserProfile[0]?.skills?.map((skill, index) => (
+          <Tag key={index} fontSize={'13px'}>
+            {skill.name}
+          </Tag>
+        ))}
+      </Flex>
       <Heading
         fontWeight="400"
-        fontSize={{ base: '13px', lg: '14px' }}
+        fontSize={{ base: '14px', lg: '15px' }}
         noOfLines={3}
         color={'blackAlpha.800'}
         w="100%"

@@ -13,6 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { RiTwitterFill, RiLinkedinFill } from 'react-icons/ri';
 import { SiDiscord } from 'react-icons/si';
 
@@ -42,10 +43,15 @@ const Footer = () => {
   const router = useRouter();
   return (
     <Container
+      zIndex={4}
       maxW="full"
       p="0"
       m="0"
-      bg={router.pathname === '/jobs' ? '#FCFCFC' : ''}
+      bg={
+        router.pathname === '/jobs' || router.pathname === '/hire'
+          ? '#FCFCFC'
+          : ''
+      }
     >
       <Container maxW="85rem" pt="6rem" px="2rem">
         <Box w="100%" h="0.09rem" bg="gray.500" />
@@ -80,13 +86,17 @@ const Footer = () => {
           >
             <VStack alignItems={'start'}>
               <Heading fontSize="2xl">Candidates</Heading>
-              <Text color="#686868">Apply for job</Text>
-              <Text color="#686868">Candidate FAQ</Text>
+              <Text color="#686868" cursor={'pointer'}>
+                <Link href={'/jobs'}>Apply for job</Link>
+              </Text>
+              {/* <Text color="#686868">Candidate FAQ</Text> */}
             </VStack>
             <VStack alignItems={'start'}>
               <Heading fontSize="2xl">Employers</Heading>
-              <Text color="#686868">Hire Talent</Text>
-              <Text color="#686868">Employer FAQ</Text>
+              <Text color="#686868" cursor={'pointer'}>
+                <Link href={'/hire'}>Hire Talent</Link>
+              </Text>
+              {/* <Text color="#686868">Employer FAQ</Text> */}
             </VStack>
             <VStack alignItems={'start'}>
               <Heading fontSize="2xl">Blog</Heading>

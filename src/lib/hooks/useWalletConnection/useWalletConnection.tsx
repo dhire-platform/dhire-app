@@ -49,7 +49,9 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
         connected: false,
         loading: false,
       });
-      router.push('/');
+      if (router.pathname === '/jobs' || router.pathname === '/hire')
+        router.push(router.pathname);
+      else router.push('/');
       return;
     } else {
       updateWallet({

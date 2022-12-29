@@ -60,13 +60,22 @@ const Layout: React.FC<Props> = ({ children, data, setData }) => {
           bg="white"
           rounded="md"
           p="0.5rem 2rem"
-          transform={'translateY(4.5rem)'}
+          transform={{ base: 'translateY(3.7rem)', md: 'translateY(4.5rem)' }}
           zIndex={'2'}
+          minW={['90%', '90%', '80%', '70%']}
+          maxW={'800px'}
         >
-          <HStack fontSize={'md'} w="42rem">
-            <HStack w="60%">
-              <Icon as={FiSearch} w={7} h={7} color="gray.300" />
+          <HStack fontSize={'md'} justifyContent="space-between">
+            <HStack>
+              <Icon
+                as={FiSearch}
+                w={{ base: 4, md: 7 }}
+                h={{ base: 4, md: 7 }}
+                color="gray.300"
+              />
               <chakra.input
+                fontSize={{ base: '12px', md: 'md' }}
+                w={['70px', 'auto']}
                 onChange={(event: { target: { value: any } }) => {
                   setData({
                     filter_type: 'title',
@@ -78,15 +87,24 @@ const Layout: React.FC<Props> = ({ children, data, setData }) => {
                   });
                 }}
                 placeholder="Search Job..."
-                w="100%"
                 _active={{ outline: '0' }}
                 _focus={{ outline: '0' }}
               />
             </HStack>
-            <HStack fontSize={'md'} w="30%">
-              <Box h="4rem" w="6px" color="gray.500"></Box>
-              <Icon as={RiMapPin2Line} w={7} h={7} color="gray.300" />
+            <HStack fontSize={{ base: '10px', sm: '12px', md: 'md' }}>
+              <Box
+                h={{ base: '2rem', md: '4rem' }}
+                w="6px"
+                color="gray.500"
+              ></Box>
+              <Icon
+                as={RiMapPin2Line}
+                w={[5, 5, 7]}
+                h={[5, 5, 7]}
+                color="gray.300"
+              />
               <chakra.select
+                w={['70px', 'auto']}
                 bg="white"
                 name="location"
                 placeholder="Select option"

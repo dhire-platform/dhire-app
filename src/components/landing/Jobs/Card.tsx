@@ -10,7 +10,9 @@ import {
   Image,
   useDimensions,
   Avatar,
+  Button,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 //import Image from 'next/image';
 import React, { RefObject, useRef } from 'react';
 import { RiMapPin2Line } from 'react-icons/ri';
@@ -18,7 +20,6 @@ import { IJobs } from '@/interfaces/store/data/job.interface';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { BsBuilding } from 'react-icons/bs';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 const Card: React.FC<IJobs> = (props) => {
   const elementRef = useRef() as RefObject<HTMLElement>;
@@ -153,36 +154,11 @@ const Card: React.FC<IJobs> = (props) => {
             ))}
         </Box>
         {!wallet.connected && (
-          <>
-            <Box
-              pos="absolute"
-              bottom={5}
-              right={8}
-              display={{ base: 'none', md: 'block' }}
-            >
-              <WalletMultiButton
-                style={{
-                  background: 'transparent',
-                  color: 'black',
-                  border: '1px solid black',
-                }}
-              >
-                More Info
-              </WalletMultiButton>
-            </Box>
-            <Box display={{ base: 'black', md: 'none' }}>
-              <WalletMultiButton
-                style={{
-                  background: 'transparent',
-                  color: 'black',
-                  border: '1px solid black',
-                  fontSize: '14px',
-                }}
-              >
-                More Info
-              </WalletMultiButton>
-            </Box>
-          </>
+          <Button alignSelf={'flex-end'} variant={'outline'} w="fit-content">
+            <Link href={{ pathname: '/jobs/[id]', query: { id: props.id } }}>
+              More info
+            </Link>
+          </Button>
         )}
       </Stack>
     </Container>

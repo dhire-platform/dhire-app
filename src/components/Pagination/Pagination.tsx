@@ -33,11 +33,11 @@ const Pagination = ({
   }
 
   const onNext = () => {
-    onPageChange(currentPage + 1);
+    if (currentPage < paginationRange?.length) onPageChange(currentPage + 1);
   };
 
   const onPrevious = () => {
-    onPageChange(currentPage - 1);
+    if (currentPage > 1) onPageChange(currentPage - 1);
   };
 
   // let lastPage = paginationRange[paginationRange.length - 1];

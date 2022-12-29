@@ -1,16 +1,13 @@
 import config from '@/config/general.config';
-import { Center, Container, Spinner, useDisclosure } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import { useProfileStore } from 'src/app/store/profile/profileStore';
 import ChooseUs from 'src/components/landing/Home/ChooseUs';
 import Hero from 'src/components/landing/Home/Hero/Hero';
 import Scroll from 'src/components/landing/Home/Hero/Scroll';
 import Philosophy from 'src/components/landing/Home/Philosophy';
 import Section1 from 'src/components/landing/Home/Sections/Section1';
 import Section2 from 'src/components/landing/Home/Sections/Section2';
-import CreateUserModal from 'src/components/modals/CreateUserModal';
 import SEO from 'src/components/SEO/SEO';
-import { IProfileStore } from '@/interfaces/store/profileStore.interface';
 
 const Home: NextPage = () => {
   return (
