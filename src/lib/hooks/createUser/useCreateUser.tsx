@@ -39,6 +39,7 @@ export const useCreateAccount = (onClose: any) => {
     const createdNewUserProfile = (await createNewUserProfile({
       userId: createdUserStoreResponse.data.id,
       image: submittedData.image,
+      email: submittedData.email,
     })) as {
       data: IUserProfile;
       success: boolean;

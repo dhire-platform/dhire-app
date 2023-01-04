@@ -132,6 +132,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
       set(
         produce((draft) => {
           draft.userProfile.image = data.image;
+          draft.userProfile.email = data.email;
         })
       );
       const userData = {
@@ -139,6 +140,7 @@ export const useProfileStore = create<IProfileStore>((set, get) => ({
         name: get().user.name,
         bio: data.bio,
         image: data.image,
+        email: data.email,
       };
       axios
         .post(`/api/userProfile`, userData)

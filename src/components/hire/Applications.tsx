@@ -23,6 +23,8 @@ import UserCard from 'src/components/hire/UserCard';
 import Pagination from 'src/components/Pagination/Pagination';
 import { IJobs } from '@/interfaces/store/data/job.interface';
 import PostJobModal from '../modals/PostJobModal';
+import { NewUserCard } from './NewUserCard';
+import { IUsers } from '@/interfaces/store/data/user.interface';
 const animationKeyframes = keyframes`
     from {
       background-position: 0 0;
@@ -95,14 +97,17 @@ export const Applications = ({ openUser, applicantDetails }: props) => {
                       flexWrap="wrap"
                       justifyContent={{ lg: 'flex-start' }}
                       gap={{ base: '20px', lg: '10px 40px ' }}
+                      alignItems={'stretch'}
                     >
-                      {applicantDetails.applicants.map((applicant, index) => (
-                        <UserCard
-                          key={index}
-                          user={applicant}
-                          openUser={openUser}
-                        />
-                      ))}
+                      {applicantDetails.applicants.map((data, index) => {
+                        return (
+                          <UserCard
+                            key={index}
+                            applicant={data}
+                            openUser={openUser}
+                          />
+                        );
+                      })}
                     </Flex>
                   </>
                 ) : (

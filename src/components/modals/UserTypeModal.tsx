@@ -79,7 +79,7 @@ const UserTypeModal = ({
                   <Input
                     isRequired
                     id="name"
-                    placeholder="Tushar"
+                    placeholder="name"
                     mb={4}
                     border="none"
                     borderBottom="1px solid #C3B9B9"

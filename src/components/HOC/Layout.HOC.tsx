@@ -76,7 +76,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       />
       <Navbar />
       {children}
-      <Footer />
+      {!wallet.connected ? <Footer /> : ''}
     </Container>
   );
 };

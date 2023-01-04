@@ -89,6 +89,7 @@ async function updateUserProfile(
 ) {
   console.log(req.body);
   const {
+    email,
     bio,
     image,
     skills,
@@ -101,6 +102,7 @@ async function updateUserProfile(
     social,
   } = req.body as {
     walletId: string;
+    email?: string;
     bio?: string;
     image?: string;
     skills?: Skill[];
@@ -118,6 +120,7 @@ async function updateUserProfile(
         userId: id,
       },
       data: {
+        email,
         bio,
         image,
         skills,

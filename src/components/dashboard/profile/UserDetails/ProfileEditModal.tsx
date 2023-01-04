@@ -4,6 +4,7 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Icon,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -23,6 +24,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { AiOutlineMail } from 'react-icons/ai';
 import {
   BsGithub,
   BsInstagram,
@@ -124,6 +126,38 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               </FormControl>
             )}
 
+            {/* EMAIL */}
+            <FormControl isRequired>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <InputGroup>
+                <InputLeftAddon>
+                  <Icon as={AiOutlineMail} />
+                </InputLeftAddon>
+                <Input
+                  isRequired
+                  defaultValue={userProfile.email}
+                  type="text"
+                  id="email"
+                  placeholder="abc@xyz.com"
+                  {...register('email', {
+                    required: 'Enter your e-mail',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: 'Enter a valid e-mail address',
+                    },
+                  })}
+                />
+              </InputGroup>
+              <ErrorMessage
+                errors={errors}
+                name="email"
+                render={({ message }) => (
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
+                    {message}
+                  </Text>
+                )}
+              />
+            </FormControl>
             {/*Profile Picture URL */}
             <FormControl>
               <FormLabel htmlFor="image">Profile Picture</FormLabel>

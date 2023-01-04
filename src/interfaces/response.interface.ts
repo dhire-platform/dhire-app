@@ -1,4 +1,5 @@
 import { SkillLevel } from 'src/lib/enums/enums';
+import { IUser } from './store/data/user.interface';
 
 export type skill = {
   name: string;
@@ -54,6 +55,8 @@ export interface getByWalletResponse {
 export interface UserProfile {
   achievement: string | undefined;
   userId: string;
+  user?: IUser;
+  email?: string;
   bio?: string;
   image?: string;
   skills?: skill[];
@@ -63,4 +66,5 @@ export interface UserProfile {
   education: EducationType[];
   projects: ProjectType[];
   social?: SocialType;
+  createdAt?: Date;
 }

@@ -4,7 +4,7 @@ import {
   JobType,
   SalaryType,
 } from 'src/lib/enums/enums';
-import { skill } from '../../response.interface';
+import { skill, UserProfile } from '../../response.interface';
 
 export type IJob = {
   id: string;
@@ -20,6 +20,7 @@ export type IJob = {
 };
 export type Applicant = {
   user_id?: string;
+  user: UserProfile;
   jobId?: string;
   interview_step?: string;
   next_interview_date?: Date;

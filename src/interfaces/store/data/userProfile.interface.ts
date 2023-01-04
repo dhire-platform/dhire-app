@@ -7,6 +7,7 @@ import { IExperience } from './experience.interface';
 
 export interface IUserProfile {
   userId?: string;
+  email?: string;
   bio?: string; // done
   image?: string; // done
   skills?: ISkill[]; // done
