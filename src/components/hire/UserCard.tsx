@@ -35,7 +35,7 @@ type userCardProps = { openUser: any; key: number; applicant: Applicant };
 const UserCard = ({ openUser, key, applicant }: userCardProps) => {
   const [bookmark, setBookmark] = useState(false);
   const { user } = applicant;
-  const currentJob = user.experience?.filter((job) => job.current);
+  const currentJob = user?.experience?.filter((job) => job.current) || [];
   return (
     <VStack
       key={key}
@@ -58,13 +58,13 @@ const UserCard = ({ openUser, key, applicant }: userCardProps) => {
         <HStack justifyContent="flex-start" pos="relative">
           <Avatar
             size="lg"
-            name={user.user?.name}
+            name={user?.user?.name}
             colorScheme="blue"
-            src={user.image}
+            src={user?.image}
           />
           <VStack alignItems="left" spacing={0}>
             <Heading as="h2" fontSize={['1.2rem', '1.3rem']} fontWeight={500}>
-              {user.user?.name}
+              {user?.user?.name}
             </Heading>
             <HStack
               fontSize={['12px', '14px']}
@@ -72,7 +72,7 @@ const UserCard = ({ openUser, key, applicant }: userCardProps) => {
               color="gray.500"
             >
               <Text as="span">
-                {user.experience.length
+                {user?.experience.length
                   ? currentJob[0]?.designation ||
                     user.experience[0]?.designation
                   : 'No experience'}
@@ -107,7 +107,7 @@ const UserCard = ({ openUser, key, applicant }: userCardProps) => {
             </Text>
           </HStack> */}
           <HStack>
-            {user.skills?.slice(0, 4).map((skill, index) => (
+            {user?.skills?.slice(0, 4).map((skill, index) => (
               <Tag key={index} fontSize={'13px'}>
                 {skill.name}
               </Tag>
@@ -118,20 +118,20 @@ const UserCard = ({ openUser, key, applicant }: userCardProps) => {
             <Text>
               Email:{' '}
               <Text as="span" color="gray.600">
-                {user.email || 'not provided'}
+                {user?.email || 'not provided'}
               </Text>
             </Text>
           </HStack>
           <HStack>
             <Icon as={TbAsterisk} w={3} h={3} />
-            <Text>About:</Text> <Text>{user.bio?.slice(0, 20)}...</Text>
+            <Text>About:</Text> <Text>{user?.bio?.slice(0, 20)}...</Text>
           </HStack>
           <HStack>
             <Icon as={TbAsterisk} w={3} h={3} />
             <Text>
               Preffered Location:{' '}
               <Text as="span" color="gray.600">
-                {user.location || 'none'}
+                {user?.location || 'none'}
               </Text>
             </Text>
           </HStack>

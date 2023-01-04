@@ -217,36 +217,38 @@ const CreateUserModal = ({
               />
             </FormControl>
             {/*email */}
-            <FormControl isRequired>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <InputGroup>
-                <InputLeftAddon>
-                  <Icon as={AiOutlineMail} />
-                </InputLeftAddon>
-                <Input
-                  isRequired
-                  type="text"
-                  id="email"
-                  placeholder="abc@xyz.com"
-                  {...register('email', {
-                    required: 'Enter your e-mail',
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                      message: 'Enter a valid e-mail address',
-                    },
-                  })}
+            {userType === roleEnum.RECRUIT && (
+              <FormControl isRequired>
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon>
+                    <Icon as={AiOutlineMail} />
+                  </InputLeftAddon>
+                  <Input
+                    isRequired
+                    type="text"
+                    id="email"
+                    placeholder="abc@xyz.com"
+                    {...register('email', {
+                      required: 'Enter your e-mail',
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: 'Enter a valid e-mail address',
+                      },
+                    })}
+                  />
+                </InputGroup>
+                <ErrorMessage
+                  errors={errors}
+                  name="email"
+                  render={({ message }) => (
+                    <Text fontSize="sm" color="red.500" py="0.5rem">
+                      {message}
+                    </Text>
+                  )}
                 />
-              </InputGroup>
-              <ErrorMessage
-                errors={errors}
-                name="email"
-                render={({ message }) => (
-                  <Text fontSize="sm" color="red.500" py="0.5rem">
-                    {message}
-                  </Text>
-                )}
-              />
-            </FormControl>
+              </FormControl>
+            )}
 
             {/*Profile Picture URL */}
             <FormControl>

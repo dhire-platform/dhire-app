@@ -20,7 +20,7 @@ export type IJob = {
 };
 export type Applicant = {
   user_id?: string;
-  user: UserProfile;
+  user?: UserProfile;
   jobId?: string;
   interview_step?: string;
   next_interview_date?: Date;
