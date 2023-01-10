@@ -29,7 +29,7 @@ export interface EducationType {
 
 export interface ProjectType {
   title: string;
-  link?: string;
+  link?: string[];
   from?: string;
   to?: string;
   current?: boolean;

@@ -166,7 +166,7 @@ type EducationType {
 
 type ProjectType {
   title       String?
-  link        String?
+  link        String[]
   from        DateTime?
   to          DateTime?
   current     Boolean?
