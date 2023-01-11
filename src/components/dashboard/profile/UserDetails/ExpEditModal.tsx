@@ -217,7 +217,7 @@ const ExpEditModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
                 defaultChecked={item && item.current}
               >
                 {' '}
-                current{' '}
+                Current{' '}
               </Checkbox>
             </FormControl>
             {/* Job Description */}

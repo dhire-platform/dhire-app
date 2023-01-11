@@ -151,7 +151,7 @@ const UserCard = ({ openUser, key, applicant }: userCardProps) => {
           border="1px solid #444"
           color="gray.600"
           size={['xs', 'sm', 'sm', 'md']}
-          onClick={() => openUser(applicant.user_id)}
+          onClick={() => openUser(applicant)}
         >
           View More
         </Button>

@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Container,
@@ -6,6 +7,7 @@ import {
   HStack,
   Icon,
   Image,
+  Link,
   Stack,
   Tag,
   TagLabel,
@@ -18,15 +20,89 @@ import {
   BsHourglassSplit,
   BsTrophy,
 } from 'react-icons/bs';
-import { HiAcademicCap } from 'react-icons/hi';
+import { HiAcademicCap, HiLocationMarker, HiOutlineMail } from 'react-icons/hi';
 import { FaUserTie } from 'react-icons/fa';
 import { TbTools } from 'react-icons/tb';
 import { MdLocationOn } from 'react-icons/md';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import ChakraTagInput from 'src/lib/helpers/ChakraTagInput';
+import { UserProfile } from '@/interfaces/response.interface';
+import { changeToMonth } from 'src/lib/helpers/Date/changeToMonth';
+import { BsGithub, BsLink } from 'react-icons/bs';
+import { IExperience } from '@/interfaces/store/data/experience.interface';
+import { IProject } from '@/interfaces/store/data/projects.interface';
+import { ImCross } from 'react-icons/im';
+const socials = {
+  link: <BsLink color="rgba(0,0,0,0.6)" size="18px" />,
+  github: <BsGithub color="rgba(0,0,0,0.6)" size="18px" />,
+};
+const renderExp = (exp: IExperience, i: number) => {
+  return (
+    <HStack
+      key={i}
+      gap={[0, 5]}
+      alignItems="flex-start"
+      borderBottom="1px solid #D7D7D7"
+      py={[5, 9]}
+    >
+      <Avatar
+        size={['lg', 'lg']}
+        name={exp.company}
+        colorScheme="blue"
+        src={exp.image}
+      />
+      <VStack alignItems={'flex-start'} spacing={[3, 5]}>
+        <VStack alignItems={'flex-start'} spacing={[0, 1]}>
+          <Heading fontSize={['lg', '1.5rem']}>{exp.company}</Heading>
+          {exp.location && (
+            <HStack
+              color="#A8A8A8"
+              fontSize={{ base: '12px', lg: '14px' }}
+              spacing={0}
+            >
+              <Icon
+                as={HiLocationMarker}
+                fontSize="18px"
+                mr={1}
+                display={{ base: 'none', md: 'block' }}
+              />
+              <Text>{exp.location}</Text>
+            </HStack>
+          )}
+          <HStack
+            fontSize={{ base: '12px', lg: '14px' }}
+            color="blackAlpha.600"
+          >
+            <Text as="span">{changeToMonth(new Date(exp.from || ''))} </Text>
+            <Text as="span" color={'black'}>
+              -
+            </Text>
+            <Text as="span">
+              {exp.current ? 'Current' : changeToMonth(new Date(exp.to || ''))}
+            </Text>
+          </HStack>
+        </VStack>
+        <VStack alignItems={'flex-start'} spacing={1} fontSize={['sm', 'md']}>
+          <Text color="gray.600" fontWeight={600}>
+            {exp.designation}
+          </Text>
+          <Text color="blackAlpha.700" w={{ lg: '90%' }}>
+            {exp.description}
+          </Text>
+        </VStack>
+      </VStack>
+    </HStack>
+  );
+};
 
-const UserApplication = ({ setUserDetails, userDetails }: any) => {
+const UserApplication = ({
+  setUserDetails,
+  userDetails,
+}: {
+  setUserDetails: any;
+  userDetails?: UserProfile;
+}) => {
   return (
     <>
       <Icon
@@ -58,11 +134,17 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
             px={['10px', '30px']}
           >
             <Box p={1} bg="white" rounded={'full'}>
-              <Image
+              {/* <Image
                 src="https://xsgames.co/randomusers/avatar.php?g=female"
                 w={['80px', '100px']}
                 h={['80px', '100px']}
                 borderRadius={'50%'}
+              /> */}
+              <Avatar
+                size={['lg', 'xl']}
+                name={userDetails?.user?.name}
+                colorScheme="blue"
+                src={userDetails?.image}
               />
             </Box>
           </VStack>
@@ -89,15 +171,18 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
               fontSize={['13px', 'md']}
             >
               <Heading fontSize={['1.7rem', '2rem']}>
-                Tushar Rao{/* userDetails.user.name */}
+                {userDetails?.user?.name}
               </Heading>
-              <Text color="#8e8e8e">
-                Product, Design, Research{/* ...userDetails.skills */}
-              </Text>
-              <Text color="#A8A8A8">
-                San Francisco Bay Area, United States
-                {/* userDetails.location */}
-              </Text>
+              <HStack color="#8e8e8e">
+                <Icon as={HiOutlineMail} fontSize="20px" />
+                <Text>{userDetails?.email || '----'}</Text>
+              </HStack>
+              {userDetails?.location && (
+                <HStack color="#A8A8A8">
+                  <Icon as={HiLocationMarker} fontSize="20px" />
+                  <Text>{userDetails?.location}</Text>
+                </HStack>
+              )}
             </VStack>
             <Button rounded={'none'} w={['110px', '150px']} size={['sm', 'md']}>
               <HStack as="span">
@@ -113,6 +198,7 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
           <VStack
             py={8}
             alignItems="flex-start"
+            w="full"
             borderBottom="1px solid #D7D7D7"
           >
             <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
@@ -120,15 +206,7 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
             </Heading>
             <Text color="gray.500" fontSize={['sm', 'md']}>
               {' '}
-              {/* userDetails.bio */}
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil
-              quas asperiores unde illum sequi repellat, officiis necessitatibus
-              laborum? Dicta, nemo inventore. Iure laudantium odit autem
-              nesciunt sint consequatur quas distinctio! Lorem ipsum dolor, sit
-              amet consectetur adipisicing elit. Nihil quas asperiores unde
-              illum sequi repellat, officiis necessitatibus laborum? Dicta, nemo
-              inventore. Iure laudantium odit autem nesciunt sint consequatur
-              quas distinctio!
+              {userDetails?.bio}
             </Text>
           </VStack>
 
@@ -146,71 +224,20 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
               w={{ base: 'full', lg: '40%' }}
               py={[5, 8]}
               pr={5}
-              spacing={3}
+              spacing={0}
               borderRight={{ lg: '1px solid #D7D7D7' }}
             >
               <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
                 Experience
               </Heading>
-              <VStack>
-                <HStack
-                  gap={[0, 5]}
-                  alignItems="flex-start"
-                  borderBottom="1px solid #D7D7D7"
-                  py={[5, 9]}
-                >
-                  <Icon as={FcGoogle} fontSize={['3rem', '4rem']} />
-                  <VStack alignItems={'flex-start'} spacing={[3, 5]}>
-                    <VStack alignItems={'flex-start'} spacing={[0, 1]}>
-                      <Heading fontSize={['lg', '1.5rem']}>Google</Heading>
-                      <Text color={'#8e8e8e'} fontSize={['sm', 'md']}>
-                        Aug 2022 - Present{/* exp.from - exp.to */}
-                      </Text>
-                    </VStack>
-                    <VStack
-                      alignItems={'flex-start'}
-                      spacing={1}
-                      fontSize={['sm', '15px']}
-                    >
-                      <Text color="gray.600" fontWeight={600}>
-                        Lead UX Designer {/* exp.company */}
-                      </Text>
-                      <Text color="blackAlpha.700" w={{ lg: '90%' }}>
-                        Design full feature of batmobile autopilot. Userfloe,
-                        high feadility mockup.{/* exp.description */}
-                      </Text>
-                    </VStack>
+              <VStack w="full" minH="full">
+                {userDetails?.experience?.map((exp, i) => renderExp(exp, i))}
+                {!userDetails?.experience?.length && (
+                  <VStack color={'blackAlpha.400'} m="auto">
+                    <Icon as={ImCross} w="60px" h="60px" />
+                    <Heading fontSize={'1.4rem'}>no experience</Heading>
                   </VStack>
-                </HStack>
-                <HStack
-                  gap={[0, 5]}
-                  alignItems="flex-start"
-                  borderBottom="1px solid #D7D7D7"
-                  py={[5, 9]}
-                >
-                  <Icon as={FcGoogle} fontSize={['3rem', '4rem']} />
-                  <VStack alignItems={'flex-start'} spacing={[3, 5]}>
-                    <VStack alignItems={'flex-start'} spacing={[0, 1]}>
-                      <Heading fontSize={['lg', '1.5rem']}>Google</Heading>
-                      <Text color={'#8e8e8e'} fontSize={['sm', 'md']}>
-                        Aug 2022 - Present
-                      </Text>
-                    </VStack>
-                    <VStack
-                      alignItems={'flex-start'}
-                      spacing={1}
-                      fontSize={['13px', '15px']}
-                    >
-                      <Text color="gray.600" fontWeight={600}>
-                        Lead UX Designer
-                      </Text>
-                      <Text color="blackAlpha.700" w={{ lg: '90%' }}>
-                        Design full feature of batmobile autopilot. Userfloe,
-                        high feadility mockup.
-                      </Text>
-                    </VStack>
-                  </VStack>
-                </HStack>
+                )}
               </VStack>
             </VStack>
 
@@ -225,11 +252,14 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
                 borderBottom="1px solid #D7D7D7"
               >
                 <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
-                  Eductaion
+                  Achievements
                 </Heading>
                 <Text color="gray.500" fontSize={['sm', 'md']}>
-                  CBSC Animation, AAFT Chhattisgarh, Raipur 2022.
-                  {/* edu.degree, edu.school, edu.location */}
+                  {userDetails?.achievement || (
+                    <Text as="span" color="#8e8e8e">
+                      No achievement
+                    </Text>
+                  )}
                 </Text>
               </Stack>
 
@@ -246,17 +276,17 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
                   Skills
                 </Heading>
                 <HStack flexWrap={'wrap'} spacing={0} gap={3}>
-                  {(() => {
-                    let tags = [];
-                    for (let i = 0; i < 20; i++) {
-                      tags.push(
-                        <Tag background="blackAlpha.100" px={5} py={'5px'}>
-                          <TagLabel fontSize={['12px', '15px']}>html</TagLabel>
-                        </Tag>
-                      );
-                    }
-                    return tags;
-                  })()}
+                  {userDetails?.skills?.map((skill, i) => (
+                    <Tag key={i} background="blackAlpha.100" px={3} py={'5px'}>
+                      <TagLabel fontSize={['12px', '15px']}>
+                        {skill.level[0] + skill.level.slice(1).toLowerCase()}:{' '}
+                        {skill.name}
+                      </TagLabel>
+                    </Tag>
+                  ))}
+                  {!userDetails?.skills?.length && (
+                    <Text color="#8e8e8e">No skill</Text>
+                  )}
                 </HStack>
               </Stack>
 
@@ -269,17 +299,72 @@ const UserApplication = ({ setUserDetails, userDetails }: any) => {
                 gap={5}
               >
                 <Heading fontWeight={600} fontSize={['22px', '25px', '1.8rem']}>
-                  Achievements
+                  Projects
                 </Heading>
-                <Text color="gray.500" fontSize={['sm', 'md']}>
-                  {' '}
-                  {/* userDetails.achievement */}
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Nihil quas asperiores unde illum sequi repellat, officiis
-                  necessitatibus laborum? Dicta, nemo inventore. Iure laudantium
-                  odit autem nesciunt sint consequatur quas distinctio! Lorem
-                  ipsum dolor, sit amet consectetur adipisicing elit.
-                </Text>
+                <VStack>
+                  {userDetails?.projects?.map((project, i) => (
+                    <VStack
+                      alignItems={'flex-start'}
+                      spacing={1}
+                      key={i}
+                      role="group"
+                      pos="relative"
+                      w="100%"
+                      py={'10px'}
+                      borderBottom={
+                        userDetails.projects?.length === i + 1
+                          ? ''
+                          : '1px solid rgba(0,0,0,0.2)'
+                      }
+                    >
+                      <Heading
+                        fontSize={{ base: 'lg', lg: '1.4rem' }}
+                        color="blackAlpha.800"
+                      >
+                        {project.title}
+                      </Heading>
+                      <HStack
+                        fontSize={{ base: '12px', lg: '14px' }}
+                        color="blackAlpha.600"
+                      >
+                        <Text as="span">
+                          {changeToMonth(new Date(project.from || ''))}{' '}
+                        </Text>
+                        <Text as="span" color={'black'}>
+                          -
+                        </Text>
+                        <Text as="span">
+                          {project.current
+                            ? 'Current'
+                            : changeToMonth(new Date(project.to || ''))}
+                        </Text>
+                      </HStack>
+                      <Text
+                        my={{ base: '5px !important', lg: '15px !important' }}
+                        fontWeight="400"
+                        noOfLines={3}
+                        fontSize={{ base: '12px', lg: '14px' }}
+                        color="blackAlpha.700"
+                      >
+                        {project.description}
+                      </Text>
+                      <HStack wrap={'wrap'}>
+                        {project.link?.map((link, i) => {
+                          return (
+                            <Link href={link} key={i} isExternal>
+                              {link.includes('github')
+                                ? socials.github
+                                : socials.link}
+                            </Link>
+                          );
+                        })}
+                      </HStack>
+                    </VStack>
+                  ))}
+                  {!userDetails?.projects?.length && (
+                    <Text color="#8e8e8e">No project</Text>
+                  )}
+                </VStack>
               </VStack>
             </Stack>
           </HStack>

@@ -30,12 +30,12 @@ import { BiArrowBack, BiHome, BiHomeAlt } from 'react-icons/bi';
 import JobsList from 'src/components/dashboard/recruiter/JobList';
 import { useJobStore } from 'src/app/store/job/jobStore';
 import { BsBriefcase } from 'react-icons/bs';
-import { IJobs } from '@/interfaces/store/data/job.interface';
+import { Applicant, IJobs } from '@/interfaces/store/data/job.interface';
 import { IUserProfile } from '@/interfaces/store/data/userProfile.interface';
 import { JobDetails } from 'src/components/hire/JobDetails';
 
 const Recruiter = () => {
-  const [userDetails, setUserDetails] = useState<IUserProfile>();
+  const [userDetails, setUserDetails] = useState<Applicant>();
   const [applicantDetails, setApplicantDetails] = useState<IJobs>();
   const [jobDetails, setJobDetails] = useState<IJobs>();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -144,7 +144,7 @@ const Recruiter = () => {
                   {userDetails ? (
                     <UserApplication
                       setUserDetails={setUserDetails}
-                      userDetails={userDetails}
+                      userDetails={userDetails.user}
                     />
                   ) : applicantDetails ? (
                     <Applications

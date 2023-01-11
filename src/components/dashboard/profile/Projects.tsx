@@ -112,7 +112,7 @@ const Projects = () => {
               pl={[0, 0, 0, 5]}
               my={[2, 2, 3, 4]}
             >
-              {userProfile.projects.map((project, index) => (
+              {userProfile.projects?.map((project, index) => (
                 <VStack
                   alignItems={'flex-start'}
                   spacing={1}
@@ -127,7 +127,12 @@ const Projects = () => {
                       : '1px solid rgba(0,0,0,0.2)'
                   }
                 >
-                  <HStack flexDir={'row-reverse'} spacing={0}>
+                  <HStack
+                    flexDir={'row-reverse'}
+                    justifyContent="space-between"
+                    spacing={0}
+                    w="full"
+                  >
                     <HStack>
                       {iconRender(
                         <FiEdit2 size="18px" />,
@@ -170,20 +175,9 @@ const Projects = () => {
                     </Text>
                     <Text as="span">
                       {project.current
-                        ? 'Present'
+                        ? 'Current'
                         : changeToMonth(new Date(project.to))}
                     </Text>
-                  </HStack>
-                  <HStack wrap={'wrap'}>
-                    {project.link?.map((link, i) => {
-                      return (
-                        <Link href={link} key={i} isExternal>
-                          {link.includes('github')
-                            ? socials.github
-                            : socials.link}
-                        </Link>
-                      );
-                    })}
                   </HStack>
                   <Text
                     my={{ base: '5px !important', lg: '15px !important' }}
@@ -195,6 +189,17 @@ const Projects = () => {
                   >
                     {project.description}
                   </Text>
+                  <HStack wrap={'wrap'}>
+                    {project.link?.map((link, i) => {
+                      return (
+                        <Link href={link} key={i} isExternal>
+                          {link.includes('github')
+                            ? socials.github
+                            : socials.link}
+                        </Link>
+                      );
+                    })}
+                  </HStack>
                 </VStack>
               ))}
             </Flex>
