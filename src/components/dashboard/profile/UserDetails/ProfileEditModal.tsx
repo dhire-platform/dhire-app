@@ -4,6 +4,7 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Icon,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -23,6 +24,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { AiOutlineMail } from 'react-icons/ai';
 import {
   BsGithub,
   BsInstagram,
@@ -46,7 +48,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   const router = useRouter();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
-
+  const toast = useToast();
   const {
     handleSubmit,
     register,
@@ -55,7 +57,20 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
   } = useForm({});
 
   const onSubmit = useProfileEdit({ isOpen, onClose, reset });
-
+  const submitData = async (data: any) => {
+    let result = await onSubmit(data);
+    toast({
+      position: 'top',
+      title: result === 'error' ? 'Error!' : 'DONE !!',
+      description: result === 'error' ? '' : 'Successfully Added.',
+      status: result,
+      duration: 1000,
+      isClosable: true,
+      containerStyle: {
+        marginTop: '10%',
+      },
+    });
+  };
   return (
     <Modal
       closeOnOverlayClick={false}
@@ -71,7 +86,7 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
       <ModalContent>
         <ModalHeader>Edit your Profile</ModalHeader>
         <ModalCloseButton />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(submitData)}>
           <ModalBody display="flex" flexDirection={'column'} gap="1rem" pb={6}>
             {/*userName */}
             {router.pathname === '/profile' && (
@@ -111,6 +126,38 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
               </FormControl>
             )}
 
+            {/* EMAIL */}
+            <FormControl isRequired>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <InputGroup>
+                <InputLeftAddon>
+                  <Icon as={AiOutlineMail} />
+                </InputLeftAddon>
+                <Input
+                  isRequired
+                  defaultValue={userProfile.email}
+                  type="text"
+                  id="email"
+                  placeholder="abc@xyz.com"
+                  {...register('email', {
+                    required: 'Enter your e-mail',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: 'Enter a valid e-mail address',
+                    },
+                  })}
+                />
+              </InputGroup>
+              <ErrorMessage
+                errors={errors}
+                name="email"
+                render={({ message }) => (
+                  <Text fontSize="sm" color="red.500" py="0.5rem">
+                    {message}
+                  </Text>
+                )}
+              />
+            </FormControl>
             {/*Profile Picture URL */}
             <FormControl>
               <FormLabel htmlFor="image">Profile Picture</FormLabel>
@@ -194,6 +241,8 @@ const EditProfileComponent = ({ isOpen, onOpen, onClose }: any) => {
                       children={socials[key as keyof ISocial]}
                     />
                     <Input
+                      placeholder="https://abc.com/xyz"
+                      _placeholder={{ color: 'blackAlpha.500', fontSize: 'sm' }}
                       {...register(key)}
                       defaultValue={
                         userProfile.social

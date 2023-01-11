@@ -5,6 +5,7 @@ import {
   Checkbox,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -15,6 +16,9 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tag,
+  TagCloseButton,
+  TagLabel,
   Text,
   Textarea,
   useToast,
@@ -25,9 +29,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { Mode } from 'src/lib/enums/enums';
+import { EditableList } from 'src/lib/helpers/EditableInput/EditableList';
 
 const EditProjectModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
   const [current, setCurrent] = useState(false);
+  const [links, setLinks] = useState<string[]>([]);
   const { user, userProfile, updateUserProfile } = useProfileStore();
   const toast = useToast();
   const initialRef = useRef(null);
@@ -41,6 +47,7 @@ const EditProjectModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
     let project: IProject = {
       ...values,
       ...dateDetails,
+      link: links,
       from: new Date(values.from),
     };
     if (
@@ -93,6 +100,7 @@ const EditProjectModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
         from: item.from.split('T')[0],
         to: item.to ? item.to.split('T')[0] : '',
       });
+      if (item.link?.length) setLinks(item.link);
       setCurrent(item.current);
     }
   }, [isOpen]);
@@ -137,9 +145,30 @@ const EditProjectModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
 
             {/* link*/}
             <FormControl>
-              <FormLabel htmlFor="link">Project link</FormLabel>
-              <InputGroup>
-                <InputLeftAddon>URL:</InputLeftAddon>
+              <FormLabel htmlFor="link">Project links</FormLabel>
+
+              <EditableList
+                list={links}
+                setList={setLinks}
+                type={'url'}
+                placeholder="https://www.abcd.com"
+              />
+              <HStack wrap={'wrap'} spacing={0} gap={1}>
+                {links.map((link, i) => (
+                  <Tag key={i}>
+                    <TagLabel>{link}</TagLabel>
+                    <TagCloseButton
+                      onClick={() => {
+                        let newtags = links.filter(
+                          (item, index) => index !== i
+                        );
+                        setLinks(newtags);
+                      }}
+                    />
+                  </Tag>
+                ))}
+              </HStack>
+              {/* <InputLeftAddon>URL:</InputLeftAddon>
                 <Input
                   type="url"
                   id="link"
@@ -151,8 +180,7 @@ const EditProjectModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
                       message: 'Enter a Valid URL',
                     },
                   })}
-                />
-              </InputGroup>
+                /> */}
               <ErrorMessage
                 errors={errors}
                 name="link"
@@ -202,7 +230,7 @@ const EditProjectModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
                 defaultChecked={item && item.current}
               >
                 {' '}
-                current{' '}
+                Current{' '}
               </Checkbox>
             </FormControl>
 

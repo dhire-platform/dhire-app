@@ -10,6 +10,7 @@ import { useWalletConnection } from 'src/lib/hooks/useWalletConnection/useWallet
 import UserTypeModal from '../modals/UserTypeModal';
 import { roleEnum } from 'src/lib/enums/enums';
 import { useWallet } from '@solana/wallet-adapter-react';
+import Footer from '../navigation/footer';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
@@ -75,6 +76,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       />
       <Navbar />
       {children}
+      {!wallet.connected ? <Footer /> : ''}
     </Container>
   );
 };

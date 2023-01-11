@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Center,
@@ -8,6 +9,7 @@ import {
   Icon,
   Image,
   keyframes,
+  Tag,
   Text,
   VStack,
 } from '@chakra-ui/react';
@@ -29,10 +31,11 @@ const animationKeyframes = keyframes`
     `;
 const animation1 = `${animationKeyframes} 2s infinite alternate-reverse`;
 const animation2 = `${animationKeyframes} 3s infinite alternate-reverse`;
-type userCardProps = { openUser: any; key: number; user: Applicant };
-const UserCard = ({ openUser, key, user }: userCardProps) => {
+type userCardProps = { openUser: any; key: number; applicant: Applicant };
+const UserCard = ({ openUser, key, applicant }: userCardProps) => {
   const [bookmark, setBookmark] = useState(false);
-
+  const { user } = applicant;
+  const currentJob = user?.experience?.filter((job) => job.current) || [];
   return (
     <VStack
       key={key}
@@ -44,6 +47,8 @@ const UserCard = ({ openUser, key, user }: userCardProps) => {
     >
       <VStack
         w="100%"
+        flex={1}
+        justifyContent={'space-between'}
         bg="white"
         borderRadius="8px 8px 0 0"
         spacing={5}
@@ -51,26 +56,30 @@ const UserCard = ({ openUser, key, user }: userCardProps) => {
         alignItems="left"
       >
         <HStack justifyContent="flex-start" pos="relative">
-          <Image
-            src="https://xsgames.co/randomusers/avatar.php?g=female"
-            w={['50px', '60px']}
-            h={['50px', '60px']}
-            borderRadius={'50%'}
+          <Avatar
+            size="lg"
+            name={user?.user?.name}
+            colorScheme="blue"
+            src={user?.image}
           />
           <VStack alignItems="left" spacing={0}>
             <Heading as="h2" fontSize={['1.2rem', '1.3rem']} fontWeight={500}>
-              Kia Antonoc {/* user.user.name */}
+              {user?.user?.name}
             </Heading>
             <HStack
               fontSize={['12px', '14px']}
               fontWeight={500}
               color="gray.500"
             >
-              <Text as="span">Java Developer</Text>
-              {/* user.bio.slice(0,10)...  / user.experience[0].designation*/}
+              <Text as="span">
+                {user?.experience.length
+                  ? currentJob[0]?.designation ||
+                    user.experience[0]?.designation
+                  : 'No experience'}
+              </Text>
+
               <Box w={'5px'} h={'5px'} rounded="full" bg="gray.600"></Box>
               <Text as="span">5 years</Text>
-              {/* user.experience[0].to - user.experience[0].from */}
             </HStack>
           </VStack>
 
@@ -90,32 +99,39 @@ const UserCard = ({ openUser, key, user }: userCardProps) => {
           fontWeight={500}
           fontSize={['12px', '14px']}
         >
+          {/* USER VERIFIED
           <HStack color="blue" animation={animation1}>
             <Icon as={MdVerified} w={4} h={4} />
             <Text as="span" fontWeight={600}>
-              Verified{/* user.verified */}
+              { user.verified }
             </Text>
+          </HStack> */}
+          <HStack>
+            {user?.skills?.slice(0, 4).map((skill, index) => (
+              <Tag key={index} fontSize={'13px'}>
+                {skill.name}
+              </Tag>
+            ))}
           </HStack>
           <HStack>
             <Icon as={TbAsterisk} w={3} h={3} />
             <Text>
-              Current job:{' '}
+              Email:{' '}
               <Text as="span" color="gray.600">
-                Product Designer at Figma{/* user.experience(current) */}
+                {user?.email || 'not provided'}
               </Text>
             </Text>
           </HStack>
           <HStack>
             <Icon as={TbAsterisk} w={3} h={3} />
-            <Text>3 years of experience</Text>{' '}
-            {/* new Date() - user.experience[0].from */}
+            <Text>About:</Text> <Text>{user?.bio?.slice(0, 20)}...</Text>
           </HStack>
           <HStack>
             <Icon as={TbAsterisk} w={3} h={3} />
             <Text>
               Preffered Location:{' '}
               <Text as="span" color="gray.600">
-                CA, LA{/* user.location */}
+                {user?.location || 'none'}
               </Text>
             </Text>
           </HStack>
@@ -135,7 +151,7 @@ const UserCard = ({ openUser, key, user }: userCardProps) => {
           border="1px solid #444"
           color="gray.600"
           size={['xs', 'sm', 'sm', 'md']}
-          onClick={() => openUser(user.user_id)}
+          onClick={() => openUser(applicant)}
         >
           View More
         </Button>

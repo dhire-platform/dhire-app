@@ -35,7 +35,7 @@ const EditEducationModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
   const toast = useToast();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
-
+  console.log(item);
   const onSubmit = async (values: any) => {
     // useToast when date.to < date.from
     let dateDetails = current
@@ -90,13 +90,17 @@ const EditEducationModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
     formState: { errors, isSubmitting },
   } = useForm({});
   useEffect(() => {
-    if (mode === Mode.EDIT) {
+    if (mode === Mode.EDIT && item) {
+      console.log('edit');
       reset({
         ...item,
         from: item.from.split('T')[0],
         to: item.to ? item.to.split('T')[0] : '',
       });
       setCurrent(item.current);
+    } else {
+      setCurrent(false);
+      reset({});
     }
   }, [isOpen]);
   return (
@@ -218,7 +222,7 @@ const EditEducationModal = ({ isOpen, onOpen, onClose, mode, item }: any) => {
                 defaultChecked={item && item.current}
               >
                 {' '}
-                current{' '}
+                Current{' '}
               </Checkbox>
             </FormControl>
 

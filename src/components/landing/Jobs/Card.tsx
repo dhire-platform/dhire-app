@@ -9,20 +9,26 @@ import {
   Text,
   Image,
   useDimensions,
+  Avatar,
+  Button,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 //import Image from 'next/image';
 import React, { RefObject, useRef } from 'react';
 import { RiMapPin2Line } from 'react-icons/ri';
 import { IJobs } from '@/interfaces/store/data/job.interface';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
+import { BsBuilding } from 'react-icons/bs';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 const Card: React.FC<IJobs> = (props) => {
   const elementRef = useRef() as RefObject<HTMLElement>;
+  const wallet = useWallet();
   const dimensions = useDimensions(elementRef);
   const { user, userProfile, company: companyProfile } = useProfileStore();
   const recruiter = user.type;
   const card_style =
-    recruiter === 'RECRUITER'
+    recruiter !== 'APPLICANT'
       ? {}
       : {
           _hover: {
@@ -78,13 +84,17 @@ const Card: React.FC<IJobs> = (props) => {
               maxW="4rem"
               position="relative"
             >
-              <Image
-                src={'https://xsgames.co/randomusers/avatar.php?g=female'}
-                alt="Job Logo"
-                rounded={'full'}
-                //layout="fill"
-                objectFit="contain"
-              />
+              {props.company?.logo ? (
+                <Image
+                  src={props.company?.logo}
+                  alt="Job Logo"
+                  rounded={'full'}
+                  //layout="fill"
+                  objectFit="contain"
+                />
+              ) : (
+                <Avatar h="100%" w="100%" name={title} />
+              )}
             </Center>
             <Stack mt="0" mr="auto" w="150%" direction={'column'} spacing={1}>
               <Heading
@@ -100,7 +110,11 @@ const Card: React.FC<IJobs> = (props) => {
                 direction="row"
                 color="gray.400"
               >
-                <Text>{companyProfile.name || company?.name}</Text>
+                <Stack direction="row" align={'center'}>
+                  <Icon as={BsBuilding} w={4} h={4} color="gray.400" />
+                  <Text as="span">{companyProfile.name || company?.name}</Text>
+                </Stack>
+
                 {/* company name */}
                 <Stack direction="row" align={'center'}>
                   <Icon as={RiMapPin2Line} w={4} h={4} color="gray.400" />
@@ -139,6 +153,13 @@ const Card: React.FC<IJobs> = (props) => {
               </Tag>
             ))}
         </Box>
+        {!wallet.connected && (
+          <Button alignSelf={'flex-end'} variant={'outline'} w="fit-content">
+            <Link href={{ pathname: '/jobs/[id]', query: { id: props.id } }}>
+              More info
+            </Link>
+          </Button>
+        )}
       </Stack>
     </Container>
   );

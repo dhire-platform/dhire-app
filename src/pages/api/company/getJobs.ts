@@ -47,7 +47,20 @@ async function getJobsByCompanyId(
       select: {
         jobPosts: {
           include: {
-            applicants: true,
+            applicants: {
+              include: {
+                user: {
+                  include: {
+                    user: {
+                      select: {
+                        name: true,
+                        username: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },

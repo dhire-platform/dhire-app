@@ -6,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  HStack,
   IconButton,
   Input,
   InputGroup,
@@ -21,6 +22,7 @@ import {
 import axios from 'axios';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
+import { IoClose } from 'react-icons/io5';
 import { MdDone } from 'react-icons/md';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import { SkillLevel } from 'src/lib/enums/enums';
@@ -115,23 +117,51 @@ const SkillsComponent = () => {
               />
             </FormLabel>
           </FormControl>
-          <IconButton
-            onClick={() => submitHandler()}
-            disabled={submit}
-            variant={'unstyled'}
-            _hover={{
-              bg: 'blackAlpha.100',
-            }}
-            p="0.1rem"
-            size="sm"
-            display="flex"
-            opacity={hover ? 1 : 0}
-            alignItems="center"
-            justifyContent={'center'}
-            color="blackAlpha.600"
-            aria-label="add experience"
-            icon={<MdDone size="18px" />}
-          />
+          <HStack>
+            <IconButton
+              onClick={() => {
+                setEdit(false);
+                setSkill('');
+                setSkillLevel(SkillLevel.BEGINNER);
+                setSubmit(false);
+                setAllSkills(
+                  userProfile.skills?.map((skill: any) => skill) || []
+                );
+              }}
+              disabled={submit}
+              variant={'unstyled'}
+              _hover={{
+                bg: 'blackAlpha.100',
+              }}
+              p="0.1rem"
+              size="sm"
+              display="flex"
+              opacity={hover ? 1 : 0}
+              alignItems="center"
+              justifyContent={'center'}
+              color="blackAlpha.600"
+              aria-label="add experience"
+              icon={<IoClose size="18px" />}
+            />
+
+            <IconButton
+              onClick={() => submitHandler()}
+              disabled={submit}
+              variant={'unstyled'}
+              _hover={{
+                bg: 'blackAlpha.100',
+              }}
+              p="0.1rem"
+              size="sm"
+              display="flex"
+              opacity={hover ? 1 : 0}
+              alignItems="center"
+              justifyContent={'center'}
+              color="blackAlpha.600"
+              aria-label="add experience"
+              icon={<MdDone size="18px" />}
+            />
+          </HStack>
         </Stack>
       ) : userProfile.skills?.[0] ? (
         <>

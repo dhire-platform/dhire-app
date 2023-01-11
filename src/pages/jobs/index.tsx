@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   chakra,
   Checkbox,
@@ -25,9 +26,11 @@ import { useFilter } from 'src/lib/hooks/useFilter';
 import { useJobStore } from 'src/app/store/job/jobStore';
 import { JobLevel, JobType } from 'src/lib/enums/enums';
 import axios from 'axios';
+import { JobDetails } from 'src/components/hire/JobDetails';
 
 const Jobs = () => {
   const { job, updateJob } = useJobStore();
+
   const [loaded, setLoaded] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filteredData, setFilteredData] = useState<IJobs[]>([]);
@@ -35,9 +38,6 @@ const Jobs = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [sliderValue2, setSliderValue2] = useState(5);
   const [filters, setFilters] = useState<IFilter[]>([]);
-  const { ref, inView, entry } = useInView({
-    threshold: 0.4,
-  });
 
   const PageSize = 6;
   const currentData = useMemo(() => {
@@ -91,7 +91,6 @@ const Jobs = () => {
       >
         <Stack
           flexDir={{ base: 'column', lg: 'row-reverse' }}
-          ref={ref}
           position="sticky"
           mx="auto"
           maxW="100%"
@@ -254,6 +253,7 @@ const Jobs = () => {
             w="full"
             p={{ base: '0px', md: '1rem' }}
             flexDirection="column"
+            justifyContent={'flex-start'}
           >
             <Stack
               fontWeight="400"
@@ -312,9 +312,21 @@ const Jobs = () => {
                 <Text color={'gray.400'}>Try something else</Text>
               </Center>
             ) : loaded || job.length > 0 ? (
-              currentData.map((item, index) => <Card key={index} {...item} />)
+              currentData.map((item, index) => (
+                <Box key={index} w={'full'}>
+                  <Card key={index} {...item} />
+                </Box>
+              ))
             ) : (
-              <Text>Loading...</Text>
+              <Text
+                color="blackAlpha.600"
+                fontWeight={800}
+                fontSize={'2rem'}
+                mb="auto"
+                mt="2rem"
+              >
+                Loading Jobs...
+              </Text>
             )}
             <Pagination
               onPageChange={(page: number) => {

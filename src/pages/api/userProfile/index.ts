@@ -3,7 +3,7 @@ import {
   ExperienceType,
   ProjectType,
   Skill,
-  SocialType
+  SocialType,
 } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
@@ -18,6 +18,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
 
   const {
     userId,
+    email,
     bio,
     image,
     skills,
@@ -29,6 +30,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
     social,
   } = req.body as {
     userId: string;
+    email?: string;
     bio?: string;
     image?: string;
     skills?: Skill[];
@@ -47,6 +49,7 @@ async function createUserProfile(req: NextApiRequest, res: NextApiResponse) {
             id: userId,
           },
         },
+        email,
         bio,
         image,
         skills,

@@ -7,21 +7,27 @@ import {
   HStack,
   Icon,
   Stack,
+  Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { BiMessageDetail } from 'react-icons/bi';
-import { TbBellRinging } from 'react-icons/tb';
+import { TbBell, TbBellRinging } from 'react-icons/tb';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import ProgressModal from './ProgressModal';
 
 const Profile = () => {
   const { user, userProfile } = useProfileStore();
+  const [selected, setSelected] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const renderJob = () => {
+  const renderJob = (job: any) => {
     return (
       <HStack
-        onClick={onOpen}
+        onClick={() => {
+          setSelected(job);
+          onOpen();
+        }}
         cursor="pointer"
         _hover={{
           transform: 'scale(1.015)',
@@ -35,14 +41,18 @@ const Profile = () => {
         gap={3}
       >
         <Box pt={1}>
-          <Avatar name={'google'} size={'md'} colorScheme={'black'} />
+          <Avatar
+            name={job?.title || 'google'}
+            size={'md'}
+            colorScheme={'black'}
+          />
         </Box>
         <VStack alignItems={'flex-start'} spacing={1}>
           <Heading fontSize={'xl'} fontWeight={600}>
-            UI/UX Designer
+            {job.title}
           </Heading>
           <Heading fontSize={'15px'} fontWeight={500} color="blackAlpha.600">
-            Google, New York
+            {job.company.name}, {job.location}
           </Heading>
         </VStack>
       </HStack>
@@ -50,7 +60,12 @@ const Profile = () => {
   };
   return (
     <Container h="fit-content" maxW="full" p="0" pb="10%">
-      <ProgressModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <ProgressModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        job={selected}
+      />
       <VStack spacing={0}>
         <Box
           zIndex={2}
@@ -72,7 +87,7 @@ const Profile = () => {
           w={{ base: '100%', lg: '90%' }}
           my="1rem"
           maxW="6xl"
-          bg="white"
+          bg="whiteAlpha.700"
           p={{ base: '4rem 1rem', sm: '4rem' }}
           pb="2rem"
           rounded="md"
@@ -88,15 +103,15 @@ const Profile = () => {
             color="blackAlpha.600"
           >
             <Icon
-              as={TbBellRinging}
+              as={TbBell}
               cursor="pointer"
               _hover={{ color: 'blackAlpha.800' }}
             />
-            <Icon
+            {/* <Icon
               as={BiMessageDetail}
               cursor="pointer"
               _hover={{ color: 'blackAlpha.800' }}
-            />
+            /> */}
           </HStack>
           <VStack
             pb="2rem"
@@ -120,17 +135,33 @@ const Profile = () => {
               flexDir="row"
               flexWrap={'wrap'}
               spacing={0}
+              w="full"
               gap={{ base: '40px', sm: '20px', lg: '40px' }}
               justifyContent="space-evenly"
+              alignItems={'center'}
             >
-              {renderJob()}
-              {renderJob()}
-              {renderJob()}
-              {renderJob()}
-              {renderJob()}
-              {renderJob()}
+              {(() => {
+                let jobs: any = [];
+
+                if (userProfile.Applicant?.length) {
+                  userProfile.Applicant?.map((applicant) => {
+                    console.log(applicant);
+                    jobs.push(renderJob(applicant.job));
+                  });
+                }
+                return jobs.length ? (
+                  jobs
+                ) : (
+                  <Text fontSize="1.2rem" color="blackAlpha.600">
+                    Not applied for any job yet.
+                  </Text>
+                );
+              })()}
             </Stack>
-            <Button alignSelf={'center'}>View More</Button>
+            {userProfile.Applicant?.length &&
+              userProfile.Applicant?.length > 6 && (
+                <Button alignSelf={'center'}>View More</Button>
+              )}
           </VStack>
         </Stack>
       </VStack>

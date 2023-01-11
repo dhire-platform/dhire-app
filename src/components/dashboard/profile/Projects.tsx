@@ -8,6 +8,7 @@ import {
   Heading,
   HStack,
   IconButton,
+  Link,
   Stack,
   Tag,
   Text,
@@ -26,7 +27,11 @@ import { deleteField } from './useDeleteField';
 import EditProjectModal from './UserDetails/ProjectEditModal';
 import { Mode } from 'src/lib/enums/enums';
 import { FiEdit2 } from 'react-icons/fi';
-
+import { BsGithub, BsLink } from 'react-icons/bs';
+const socials = {
+  link: <BsLink color="rgba(0,0,0,0.6)" size="18px" />,
+  github: <BsGithub color="rgba(0,0,0,0.6)" size="18px" />,
+};
 const Projects = () => {
   const { userProfile, user, updateUserProfile } = useProfileStore();
   const { onOpen, isOpen, onClose } = useDisclosure();
@@ -107,10 +112,10 @@ const Projects = () => {
               pl={[0, 0, 0, 5]}
               my={[2, 2, 3, 4]}
             >
-              {userProfile.projects.map((project, index) => (
+              {userProfile.projects?.map((project, index) => (
                 <VStack
                   alignItems={'flex-start'}
-                  spacing={[0]}
+                  spacing={1}
                   key={index}
                   role="group"
                   pos="relative"
@@ -122,35 +127,42 @@ const Projects = () => {
                       : '1px solid rgba(0,0,0,0.2)'
                   }
                 >
-                  <HStack pos="absolute" right={0} top={4}>
-                    {iconRender(
-                      <FiEdit2 size="18px" />,
-                      () => {
-                        setMode(Mode.EDIT);
-                        setSelected(project);
-                        onOpen();
-                      },
-                      'edit project'
-                    )}
-                    {iconRender(
-                      <IoCloseSharp size="18px" />,
-                      () =>
-                        deleteField(
-                          { del: index, type: 'project' },
-                          toast,
-                          user,
-                          userProfile,
-                          updateUserProfile
-                        ),
-                      'Delete project'
-                    )}
-                  </HStack>
-                  <Heading
-                    fontSize={{ base: 'lg', lg: '1.4rem' }}
-                    color="blackAlpha.800"
+                  <HStack
+                    flexDir={'row-reverse'}
+                    justifyContent="space-between"
+                    spacing={0}
+                    w="full"
                   >
-                    {project.title}
-                  </Heading>
+                    <HStack>
+                      {iconRender(
+                        <FiEdit2 size="18px" />,
+                        () => {
+                          setMode(Mode.EDIT);
+                          setSelected(project);
+                          onOpen();
+                        },
+                        'edit project'
+                      )}
+                      {iconRender(
+                        <IoCloseSharp size="18px" />,
+                        () =>
+                          deleteField(
+                            { del: index, type: 'project' },
+                            toast,
+                            user,
+                            userProfile,
+                            updateUserProfile
+                          ),
+                        'Delete project'
+                      )}
+                    </HStack>
+                    <Heading
+                      fontSize={{ base: 'lg', lg: '1.4rem' }}
+                      color="blackAlpha.800"
+                    >
+                      {project.title}
+                    </Heading>
+                  </HStack>
                   <HStack
                     fontSize={{ base: '12px', lg: '14px' }}
                     color="blackAlpha.600"
@@ -163,28 +175,31 @@ const Projects = () => {
                     </Text>
                     <Text as="span">
                       {project.current
-                        ? 'Present'
+                        ? 'Current'
                         : changeToMonth(new Date(project.to))}
                     </Text>
                   </HStack>
-
-                  <Text
-                    color={'blackAlpha.700'}
-                    fontSize={{ base: '12px', lg: '14px' }}
-                  >
-                    {project.link}
-                  </Text>
-
                   <Text
                     my={{ base: '5px !important', lg: '15px !important' }}
                     fontWeight="400"
-                    noOfLines={2}
+                    noOfLines={3}
                     fontSize={{ base: '12px', lg: '14px' }}
                     color="blackAlpha.700"
                     w={{ base: '80%', sm: '100%', lg: '80%' }}
                   >
                     {project.description}
                   </Text>
+                  <HStack wrap={'wrap'}>
+                    {project.link?.map((link, i) => {
+                      return (
+                        <Link href={link} key={i} isExternal>
+                          {link.includes('github')
+                            ? socials.github
+                            : socials.link}
+                        </Link>
+                      );
+                    })}
+                  </HStack>
                 </VStack>
               ))}
             </Flex>

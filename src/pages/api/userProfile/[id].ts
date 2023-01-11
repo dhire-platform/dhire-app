@@ -61,6 +61,17 @@ async function getUserProfileById(
         Applicant: {
           select: {
             jobId: true,
+            job: {
+              select: {
+                title: true,
+                location: true,
+                company: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -78,6 +89,7 @@ async function updateUserProfile(
 ) {
   console.log(req.body);
   const {
+    email,
     bio,
     image,
     skills,
@@ -90,6 +102,7 @@ async function updateUserProfile(
     social,
   } = req.body as {
     walletId: string;
+    email?: string;
     bio?: string;
     image?: string;
     skills?: Skill[];
@@ -107,6 +120,7 @@ async function updateUserProfile(
         userId: id,
       },
       data: {
+        email,
         bio,
         image,
         skills,

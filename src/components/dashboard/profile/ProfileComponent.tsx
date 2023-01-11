@@ -1,9 +1,11 @@
 import { ISocial } from '@/interfaces/store/data/socials.interface';
 import {
   Avatar,
+  Box,
   Center,
   Heading,
   HStack,
+  Icon,
   IconButton,
   Link,
   Stack,
@@ -23,6 +25,7 @@ import { useState } from 'react';
 import { FiEdit2 } from 'react-icons/fi';
 import { useProfileStore } from 'src/app/store/profile/profileStore';
 import EditProfileComponent from './UserDetails/ProfileEditModal';
+import { MdOutlineLocationOn } from 'react-icons/md';
 const socials = {
   youtube: <BsYoutube color="#A0AEC0" size="18px" />,
   twitter: <BsTwitter color="#A0AEC0" size="18px" />,
@@ -79,13 +82,19 @@ const ProfileComponent = () => {
             >
               <Heading color={'black'} fontSize="xl">
                 {user?.name}{' '}
-                {userProfile?.location?.trim()
-                  ? `(${userProfile?.location.trim()})`
-                  : ''}
               </Heading>
-              <Text marginBlock="0" margin="0" color="blackAlpha.500">
-                @{user?.username}
-              </Text>
+              <HStack color="blackAlpha.500" gap={3}>
+                <Text as="span">@{user?.username}</Text>
+
+                {userProfile?.location?.trim() ? (
+                  <Center>
+                    <Icon as={MdOutlineLocationOn} fontSize="18px" />
+                    <Text as="span">{userProfile?.location.trim()}</Text>
+                  </Center>
+                ) : (
+                  ''
+                )}
+              </HStack>
             </Stack>
           </Stack>
           <IconButton
@@ -117,9 +126,12 @@ const ProfileComponent = () => {
         </Heading>
         {userProfile.social && (
           <HStack mt={4} gap={1}>
-            {Object.keys(userProfile.social).map(
-              (k, i) =>
-                userProfile.social && (
+            {Object.keys(userProfile.social).map((k, i) => {
+              if (
+                userProfile.social &&
+                userProfile.social[k as keyof ISocial]
+              ) {
+                return (
                   <Link
                     href={userProfile.social[k as keyof ISocial]}
                     key={i}
@@ -127,8 +139,9 @@ const ProfileComponent = () => {
                   >
                     {socials[k as keyof ISocial]}
                   </Link>
-                )
-            )}
+                );
+              }
+            })}
           </HStack>
         )}
       </Center>

@@ -91,14 +91,12 @@ const Achievement = () => {
               gap="1rem"
               pb={6}
             >
-              <FormControl isRequired>
+              <FormControl>
                 <Textarea
                   id="achievement"
                   placeholder="About You"
                   defaultValue={userProfile.achievement}
-                  {...register('achievement', {
-                    required: 'This is Required',
-                  })}
+                  {...register('achievement')}
                 />
                 <ErrorMessage
                   errors={errors}
@@ -141,43 +139,79 @@ const Achievement = () => {
         color="blackAlpha.200"
         role="group"
       >
-        <Stack
-          alignContent={'start'}
-          direction={'row'}
-          w="full"
-          justifyContent={'space-between'}
-        >
-          <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
-            Achievement
-          </Heading>
-          <IconButton
-            onClick={onOpen}
-            variant={'unstyled'}
-            _hover={{
-              bg: 'blackAlpha.100',
-            }}
-            p="0.1rem"
-            size="sm"
-            display={'flex'}
-            opacity={0}
-            _groupHover={{ opacity: 1 }}
-            alignItems="center"
-            justifyContent={'center'}
-            color="blackAlpha.600"
-            aria-label="add experience"
-            icon={<FiEdit2 size="18px" />}
-          />
-        </Stack>
-        <Flex color={'black'} w="100%">
-          <Text
-            w={'100%'}
-            fontWeight="400"
-            fontSize={{ base: '12px', lg: '14px' }}
-            color="blackAlpha.700"
+        {userProfile.achievement?.trim() ? (
+          <>
+            <Stack
+              alignContent={'start'}
+              direction={'row'}
+              w="full"
+              justifyContent={'space-between'}
+            >
+              <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
+                Achievement
+              </Heading>
+              <IconButton
+                onClick={onOpen}
+                variant={'unstyled'}
+                _hover={{
+                  bg: 'blackAlpha.100',
+                }}
+                p="0.1rem"
+                size="sm"
+                display={'flex'}
+                opacity={0}
+                _groupHover={{ opacity: 1 }}
+                alignItems="center"
+                justifyContent={'center'}
+                color="blackAlpha.600"
+                aria-label="add experience"
+                icon={<FiEdit2 size="18px" />}
+              />
+            </Stack>
+            <Flex color={'black'} w="100%">
+              <Text
+                w={'100%'}
+                fontWeight="400"
+                fontSize={{ base: '12px', lg: '14px' }}
+                color="blackAlpha.700"
+              >
+                {userProfile.achievement}
+              </Text>
+            </Flex>
+          </>
+        ) : (
+          <Stack
+            border={'1px dashed'}
+            borderColor="gray.200"
+            p="4rem 1rem"
+            rounded="md"
+            align={'center'}
+            direction={'column'}
+            w="full"
           >
-            {userProfile.achievement}
-          </Text>
-        </Flex>
+            <Heading color={'black'} fontSize="xl">
+              Achievement
+            </Heading>
+            <Text pb="1rem" color="blackAlpha.400" textAlign={'center'}>
+              You have not added any achievement yet.
+            </Text>
+            <Box
+              onClick={() => {
+                reset({});
+                onOpen();
+              }}
+              as="button"
+              outline="1px solid gray"
+              p="0.2rem 0.6rem"
+              rounded="sm"
+              fontSize={'xs'}
+              my="1rem"
+              color="black"
+            >
+              Add Achievement
+            </Box>
+          </Stack>
+        )}
       </Center>
     </>
   );

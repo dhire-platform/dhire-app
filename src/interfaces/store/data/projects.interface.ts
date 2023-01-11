@@ -1,6 +1,6 @@
 export interface IProject {
   title?: string;
-  link?: string;
+  link?: string[];
   from: Date;
   to: Date;
   current?: boolean;

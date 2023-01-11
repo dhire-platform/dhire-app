@@ -74,29 +74,6 @@ const Education = () => {
         role="group"
         pos="relative"
       >
-        <HStack pos="absolute" right={0} top={2}>
-          {iconRender(
-            <FiEdit2 size="18px" />,
-            () => {
-              setMode(Mode.EDIT);
-              setSelected(experience);
-              onOpen();
-            },
-            'edit education'
-          )}
-          {iconRender(
-            <IoCloseSharp size="18px" />,
-            () =>
-              deleteField(
-                { del: index, type: 'exp' },
-                toast,
-                user,
-                userProfile,
-                updateUserProfile
-              ),
-            'delete experience'
-          )}
-        </HStack>
         <Box pt={1}>
           <Avatar
             name={experience?.company}
@@ -108,7 +85,6 @@ const Education = () => {
         <Stack
           w="full"
           spacing={5}
-          direction={'column'}
           pb="1.5rem"
           borderBottom={
             userProfile.experience?.length === index + 1
@@ -117,7 +93,32 @@ const Education = () => {
           }
         >
           <Stack dir="column">
-            <Heading fontSize={'xl'}>{experience.company}</Heading>
+            <HStack>
+              <Heading fontSize={'xl'}>{experience.company}</Heading>
+              <HStack alignSelf={'flex-start'}>
+                {iconRender(
+                  <FiEdit2 size="18px" />,
+                  () => {
+                    setMode(Mode.EDIT);
+                    setSelected(experience);
+                    onOpen();
+                  },
+                  'edit education'
+                )}
+                {iconRender(
+                  <IoCloseSharp size="18px" />,
+                  () =>
+                    deleteField(
+                      { del: index, type: 'exp' },
+                      toast,
+                      user,
+                      userProfile,
+                      updateUserProfile
+                    ),
+                  'delete experience'
+                )}
+              </HStack>
+            </HStack>
             {(experience.to || experience.current) && experience.from && (
               <HStack fontSize={'14px'} color="blackAlpha.600">
                 <Text as="span">
@@ -169,35 +170,37 @@ const Education = () => {
         pb={'40px'}
         borderBottom={'1px solid rgba(0,0,0,0.09)'}
       >
-        <HStack pos="absolute" right={0} top={4}>
-          {iconRender(
-            <FiEdit2 size="18px" />,
-            () => {
-              setMode(Mode.EDIT);
-              setSelected(edu);
-              onEduOpen();
-            },
-            'edit education'
-          )}
-          {iconRender(
-            <IoCloseSharp size="18px" />,
-            () =>
-              deleteField(
-                { del: index, type: 'edu' },
-                toast,
-                user,
-                userProfile,
-                updateUserProfile
-              ),
-            'Delete Education'
-          )}
-        </HStack>
         <VStack alignItems={'flex-start'}>
-          <Heading
-            mt={0}
-            fontSize={{ base: 'lg', lg: '1.4rem' }}
-            color="blackAlpha.800"
-          >{`${edu.degree} , ${edu.school} ${edu.location || ''}`}</Heading>
+          <HStack>
+            <Heading
+              mt={0}
+              fontSize={{ base: 'lg', lg: '1.3rem' }}
+              color="blackAlpha.800"
+            >{`${edu.degree} , ${edu.school} ${edu.location || ''}`}</Heading>
+            <HStack alignSelf={'flex-start'}>
+              {iconRender(
+                <FiEdit2 size="18px" />,
+                () => {
+                  setMode(Mode.EDIT);
+                  setSelected(edu);
+                  onEduOpen();
+                },
+                'edit education'
+              )}
+              {iconRender(
+                <IoCloseSharp size="18px" />,
+                () =>
+                  deleteField(
+                    { del: index, type: 'edu' },
+                    toast,
+                    user,
+                    userProfile,
+                    updateUserProfile
+                  ),
+                'Delete Education'
+              )}
+            </HStack>
+          </HStack>
 
           {
             <HStack fontSize={'14px'} color="blackAlpha.600">
@@ -259,98 +262,149 @@ const Education = () => {
         p="1.5rem"
         alignItems="start"
       >
-        <VStack justify="space-between" align={'start'} w="full">
-          <Stack
-            direction={'row'}
-            justify="space-between"
-            align={'start'}
-            w="full"
-            role="group"
-            minH="40px"
-          >
-            <Heading
-              color={'black'}
-              fontSize={{ base: 'xl', lg: '1.7rem' }}
-              borderBottom="1px solid"
-              borderColor={'blackAlpha.200'}
-              w={{ base: '100%', md: '80%' }}
-              pb={'10px'}
+        {userProfile.education?.length ? (
+          <VStack justify="space-between" align={'start'} w="full">
+            <Stack
+              direction={'row'}
+              justify="space-between"
+              align={'start'}
+              w="full"
+              pb="1rem"
+              role="group"
+              minH="40px"
             >
+              <Heading
+                color={'black'}
+                fontSize={{ base: 'xl', lg: '1.7rem' }}
+                borderBottom="1px solid"
+                borderColor={'blackAlpha.200'}
+                w={{ base: '100%', md: '80%' }}
+                pb={'10px'}
+              >
+                Education
+              </Heading>
+              {iconRender(
+                <VscAdd size="18px" />,
+                () => {
+                  setMode(Mode.CREATTE);
+                  setSelected(undefined);
+                  onEduOpen();
+                },
+                'add education'
+              )}
+            </Stack>{' '}
+            {userProfile.education?.map((edu: IEducation, index: number) =>
+              educationRender(edu, index)
+            )}
+          </VStack>
+        ) : (
+          <Stack
+            border={'1px dashed'}
+            borderColor="gray.200"
+            p="4rem 1rem"
+            rounded="md"
+            align={'center'}
+            direction={'column'}
+            w="full"
+          >
+            <Heading color={'black'} fontSize="xl">
               Education
             </Heading>
-            {iconRender(
-              <VscAdd size="18px" />,
-              () => {
-                setMode(Mode.CREATTE);
+            <Text pb="1rem" color="blackAlpha.400" textAlign={'center'}>
+              You have not added any education yet.
+            </Text>
+            <Box
+              onClick={() => {
+                setSelected(undefined);
                 onEduOpen();
-              },
-              'add education'
-            )}
-          </Stack>{' '}
-          {userProfile.education?.map((edu: IEducation, index: number) =>
-            educationRender(edu, index)
-          )}
-        </VStack>
-        <Stack w="100%" direction="column">
-          <Stack
-            h="2.5rem"
-            direction={'row'}
-            alignItems="center"
-            justify={'space-between'}
-            role="group"
-          >
-            <Heading color={'black'} fontSize={{ base: 'xl', lg: '1.7rem' }}>
-              Experience
-            </Heading>
-            {iconRender(
-              <VscAdd size="18px" />,
-              () => {
-                setMode(Mode.CREATTE);
-                onOpen();
-              },
-              'Add experience'
-            )}
+              }}
+              as="button"
+              outline="1px solid gray"
+              p="0.2rem 0.6rem"
+              rounded="sm"
+              fontSize={'xs'}
+              my="1rem"
+              color="black"
+            >
+              Add Education
+            </Box>
           </Stack>
-          <Flex
-            w="100%"
-            py={'1.5rem'}
-            gap="0.7rem"
-            wrap="wrap"
-            flexDir={'column'}
-            color={'black'}
-            maxW="36rem"
-          >
-            {userProfile.experience?.length ? (
-              experience?.map((experience: IExperience, index) =>
-                experienceRender(experience, index)
-              )
-            ) : (
+        )}
+
+        <Stack w="100%" direction="column">
+          {userProfile.experience?.length ? (
+            <>
               <Stack
-                border={'1px dashed'}
-                borderColor="gray.200"
-                p="4rem 1rem"
-                rounded="md"
-                align={'center'}
-                direction={'column'}
-                w="full"
+                h="2.5rem"
+                direction={'row'}
+                alignItems="center"
+                justify={'space-between'}
+                role="group"
               >
-                <Text pb="1rem" color="blackAlpha.400" textAlign={'center'}>
-                  You have not added any experiences yet.
-                </Text>
-                <Box
-                  onClick={onOpen}
-                  as="button"
-                  outline="1px solid gray"
-                  p="0.2rem 0.6rem"
-                  rounded="sm"
-                  fontSize={'xs'}
-                  my="1rem"
+                <Heading
+                  color={'black'}
+                  fontSize={{ base: 'xl', lg: '1.7rem' }}
                 >
-                  Add Experience
-                </Box>
+                  Experience
+                </Heading>
+                {iconRender(
+                  <VscAdd size="18px" />,
+                  () => {
+                    setMode(Mode.CREATTE);
+                    setSelected(undefined);
+                    onOpen();
+                  },
+                  'Add experience'
+                )}
               </Stack>
-            )}
-          </Flex>
+
+              <Flex
+                w="100%"
+                py={'1.5rem'}
+                gap="0.7rem"
+                wrap="wrap"
+                flexDir={'column'}
+                color={'black'}
+                maxW="36rem"
+              >
+                {experience?.map((experience: IExperience, index) =>
+                  experienceRender(experience, index)
+                )}
+              </Flex>
+            </>
+          ) : (
+            <Stack
+              border={'1px dashed'}
+              borderColor="gray.200"
+              p="4rem 1rem"
+              rounded="md"
+              align={'center'}
+              direction={'column'}
+              w="full"
+            >
+              <Heading color={'black'} fontSize="xl">
+                Experience
+              </Heading>
+              <Text pb="1rem" color="blackAlpha.400" textAlign={'center'}>
+                You have not added any experiences yet.
+              </Text>
+              <Box
+                onClick={() => {
+                  setSelected(undefined);
+                  onOpen();
+                }}
+                as="button"
+                outline="1px solid gray"
+                p="0.2rem 0.6rem"
+                rounded="sm"
+                fontSize={'xs'}
+                my="1rem"
+                color="black"
+              >
+                Add Experience
+              </Box>
+            </Stack>
+          )}
         </Stack>
       </Center>
     </>

@@ -26,6 +26,7 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
     updateUserProfile,
     updateRecruiterProfile,
     updateCompany,
+    updateUsers,
   } = useProfileStore();
   const {
     removePersistanceUser,
@@ -48,7 +49,9 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
         connected: false,
         loading: false,
       });
-      router.push('/');
+      if (router.pathname === '/jobs' || router.pathname === '/hire')
+        router.push(router.pathname);
+      else router.push('/');
       return;
     } else {
       updateWallet({
@@ -57,6 +60,7 @@ export const useWalletConnection = (isOpen: boolean, onOpen: () => void) => {
         walletId: wallet.publicKey?.toBase58(),
         walletName: 'find the wallet name',
       });
+      updateUsers([]);
       console.log('wallet connected');
       axios
         .get(`/api/user/${wallet.publicKey?.toBase58()}`)

@@ -80,7 +80,7 @@ async function postNewJob(req: NextApiRequest, res: NextApiResponse) {
 async function getAllJobs(req: NextApiRequest, res: NextApiResponse) {
   try {
     const jobs = await prisma.jobPost.findMany({
-      include: { company: { select: { name: true } } },
+      include: { company: { select: { name: true, logo: true } } },
     });
     res.status(200).json(jobs);
   } catch (e) {

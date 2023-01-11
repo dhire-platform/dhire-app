@@ -4,7 +4,7 @@ import {
   JobType,
   SalaryType,
 } from 'src/lib/enums/enums';
-import { skill } from '../../response.interface';
+import { skill, UserProfile } from '../../response.interface';
 
 export type IJob = {
   id: string;
@@ -20,6 +20,7 @@ export type IJob = {
 };
 export type Applicant = {
   user_id?: string;
+  user?: UserProfile;
   jobId?: string;
   interview_step?: string;
   next_interview_date?: Date;
@@ -34,7 +35,7 @@ export type IJobs = {
   from: Date;
   id?: string;
   companyId?: string; // this is company id
-  company?: { name: string };
+  company?: { name: string; logo?: string };
   jobLevel?: JobLevel; //else
   jobType: JobType[];
   minSalary?: number; //compare

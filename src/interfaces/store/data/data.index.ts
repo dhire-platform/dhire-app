@@ -1,4 +1,4 @@
-import { IUser } from 'src/interfaces/store/data/user.interface';
+import { IUser, IUsers } from 'src/interfaces/store/data/user.interface';
 import {
   IUserProfile,
   IRecruiterProfile,
@@ -12,6 +12,7 @@ import { IProject } from 'src/interfaces/store/data/projects.interface';
 import { ICompany } from 'src/interfaces/store/data/company.interface';
 import { IJobs } from 'src/interfaces/store/data/job.interface';
 export type {
+  IUsers,
   IUser,
   IUserProfile,
   IRecruiterProfile,
